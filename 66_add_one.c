@@ -2,6 +2,8 @@
  * Note: The returned array must be malloced, assume caller calls free().
  */
 #include <stdio.h>
+
+
 int reverse(int *point, int size){
     int res = 0;
     for (int i =1;i<=size;i++){
