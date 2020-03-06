@@ -14,7 +14,7 @@ public:
         if (0 == N) return 0;
         if (dp[K][N]!=0) return dp[K][N];
 
-        int res = INT_MAX;
+        int res = ~(1<<31);
         int l=1, r=N+1; // broken 单调递增（i-1: 随i增，单调递增）；notBroken 单调递减（N-i: 随i增，单调递减）。因此这里可以用二分来求相交点
         while (l < r) {
             int mid = (l+r)/2;
@@ -33,4 +33,4 @@ public:
         dp[K][N] = res;
         return res;
     }
-}
+};
