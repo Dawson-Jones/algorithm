@@ -2,7 +2,6 @@
 
 
 class Solution:
-
     def countNumbersWithUniqueDigits(self, n: int) -> int:
         if n>10:
             return 0

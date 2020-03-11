@@ -6,8 +6,7 @@ int fib(int n){
     int res;
     if (n<2)
         return n;
-    for (int i = 0; i < n-1; i++)
-    {
+    for (int i = 0; i < n-1; i++){
         res = (first + second);
         first = second;
         second = res;
@@ -15,8 +14,7 @@ int fib(int n){
     return res;
 }
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]){
     int count = fib(45);
     printf("%d\n", count);
     return 0;

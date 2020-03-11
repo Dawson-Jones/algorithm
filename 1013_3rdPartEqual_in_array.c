@@ -36,6 +36,7 @@ bool canThreePartsEqualSum(int* A, int ASize){
     return 0;
 }
 */
+
 bool canThreePartsEqualSum(int* A, int ASize){
     // sum/3 得到指定值, 遍历找到指定值作为part1, 遍历剩下的部分, 找到part2, 返回True, 否则False
     int sum(int *array, int size);
