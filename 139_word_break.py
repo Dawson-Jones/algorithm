@@ -16,8 +16,8 @@ class Solution:
             for j in range(1, str_len+1):
                 if dp[i] and s[i:j] in wordDict:
                     dp[j] = True
-                if dp[str_len]:
-                    return True
+            if dp[str_len]:  # 最后一个dp已经是true了, 直接return避免循环
+                return True
         return dp[str_len]
     
 if __name__ == "__main__":
