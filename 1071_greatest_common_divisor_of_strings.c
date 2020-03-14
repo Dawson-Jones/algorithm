@@ -1,3 +1,5 @@
+// 两个字符串最大公约数
+
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
