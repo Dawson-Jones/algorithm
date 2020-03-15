@@ -11,7 +11,6 @@ import (
 )
 
 // 纯递归
-// 贪心加递归可能会好一些
 func coinChange(coins []int, amount int) int {
 	var dp []int
 	dp = append(dp, 0)
