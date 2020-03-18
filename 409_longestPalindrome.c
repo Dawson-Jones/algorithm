@@ -15,6 +15,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include<math.h>
+#define COUNT 54
+
+// COUNT 54 不会冲撞, 但是52会冲撞
+// TODO: 如果hash冲撞了, next目前是指向了null, 怎么让next连接到一个新的struct?
+// 目前的想法是malloc一块内存, 但是问题是后来我们怎么去释放...难道要记录哪块内存是malloc的?
 
 typedef struct hashmap{
     char c;
@@ -42,6 +47,7 @@ void init(dict *bucket){
     bucket->num = 0;
     bucket->next = NULL;
 }
+
 int getNumSum(dict *bucket){
     if(bucket==NULL){
         return 0;
@@ -60,33 +66,31 @@ int all_even(dict *bucket){
 
 int longestPalindrome(char * s){
     if(*s=='\0') return 0;
-    dict alphabet[52];
+    dict alphabet[COUNT];
     // init dict
-    for(int i=0;i<52;i++){
+    for(int i=0;i<COUNT;i++){
         init(&alphabet[i]);
     }
 
     while (*s!='\0'){
-        int positon = *s % 52;
+        int positon = *s % COUNT;
         put(*s, &alphabet[positon]);
         s++;
     }
 
     int res = 0;
-    for(int i=0;i<52;i++){
-        if(all_even(&alphabet[i])){
-            res = 1;
-        }
-    }
 
-    for(int i=0;i<52;i++){
+    for(int i=0;i<COUNT;i++){
+        if(all_even(&alphabet[i])&&res%2==0){
+            res += 1;
+        }
         res += getNumSum(&alphabet[i]);
     }
     return res;
 }
 
 int main(int argc, char const *argv[]){
-    char s[10000];
+    char s[1000];
     scanf("%s", s);
     int res = longestPalindrome(s);
     printf("longest substring is: %d\n", res);
