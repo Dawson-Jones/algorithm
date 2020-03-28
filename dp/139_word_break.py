@@ -6,6 +6,7 @@
 拆分时可以重复使用字典中的单词。
 你可以假设字典中没有重复的单词。
 """
+
 class Solution:
     # def wordBreak(self, s: str, wordDict: List[str]) -> bool:
     def wordBreak(self, s: str, wordDict: list) -> bool:
@@ -20,6 +21,7 @@ class Solution:
                 return True
         return dp[str_len]
     
+
 if __name__ == "__main__":
     # s = "applepenapple"
     # wordDict = ["apple", "pen"]

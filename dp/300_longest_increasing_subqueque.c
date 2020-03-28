@@ -12,7 +12,7 @@
 
 int lengthOfLIS(int* nums, int numsSize){
     if (numsSize==0) return 0;
-    int dp[numsSize];
+    int dp[numsSize];  // 至目前元素, 最长的子序列长度
     for(int i=0;i<numsSize;i++)
         dp[i] = 1;
 
@@ -21,6 +21,7 @@ int lengthOfLIS(int* nums, int numsSize){
         for(int j=0;j<i;j++)
             if(nums[j]<nums[i])
                 dp[i] = dp[i]>dp[j]+1?dp[i]:dp[j]+1;
+
         longest = longest>dp[i]?longest:dp[i];
     }
     return longest;
