@@ -3,7 +3,7 @@
 int mypow(int num, int times){
     int res = 1;
     for(int i=0;i<times;i++)
-        res *=num;
+        res *= num;
     return res;
 }
 
