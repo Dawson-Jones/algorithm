@@ -13,16 +13,16 @@ trap(const int *height, int heightSize) {
     int res = 0;
     int stack[heightSize];
     stack[0] = 0;
-    int cur = 0;
+    int cur = 0;  // 栈的 index
     for (int i = 1; i < heightSize; ++i) {
         while (cur >= 0 && height[stack[cur]] <= height[i]) {
-            int tempHeight = height[stack[cur--]];
+            int tempHeight = height[stack[cur--]];  // 最低点的高度, 最低点出栈, 😂
             if (cur < 0) break;
             int h = height[stack[cur]] > height[i] ? height[i] : height[stack[cur]];  // 计算出两边比较小的高度
             h -= tempHeight;  // 盛水的高度
             res += h * (i - stack[cur] - 1);
         }
-        stack[++cur] = i;
+        stack[++cur] = i;  // 入栈
     }
     return res;
 }
