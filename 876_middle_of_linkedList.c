@@ -16,16 +16,10 @@ struct ListNode {
 };
 
 struct ListNode* middleNode(struct ListNode* head){
-    int count = 0;
-    struct ListNode* cur = head;
-    while(cur!=NULL){
-        count++;
-        cur = cur->next;
+    struct ListNode *res = head->next;
+    while(head&& head->next){
+        head = head->next->next;
+        res = res->next;
     }
-    int mid = count/2;
-    while(mid){
-        head = head->next;
-        mid--;
-    }
-    return head;
+    return res;
 }
