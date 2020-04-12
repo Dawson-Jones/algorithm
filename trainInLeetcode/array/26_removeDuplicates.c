@@ -6,27 +6,22 @@
 
 #include<stdio.h>
 
-int removeDuplicates(int* nums, int numsSize){
-    if (numsSize<2) return numsSize;
+int removeDuplicates(int *nums, int numsSize) {
+    if (numsSize <= 1) return numsSize;
     int slow = 0;
     int fast = 1;
-    while (fast<numsSize){
-        if(nums[slow]==nums[fast])
-            fast++;
-        else{
-            slow++;
-            nums[slow] = nums[fast];
-            fast++;
-        }
+    while (fast < numsSize) {
+        if (nums[slow] != nums[fast])
+            nums[++slow] = nums[fast];
+        fast++;
     }
     return ++slow;
 }
 
-int main(int argc, char const *argv[])
-{
-    int arr[12] = {1,2,2,3,3,4,4,4,6,8,8,9};
+int main(int argc, char const *argv[]) {
+    int arr[12] = {1, 2, 2, 3, 3, 4, 4, 4, 6, 8, 8, 9};
     int res = removeDuplicates(arr, 12);
-    for(int i =0;i<res;i++)
+    for (int i = 0; i < res; i++)
         printf("%d\n", arr[i]);
     return 0;
 }
