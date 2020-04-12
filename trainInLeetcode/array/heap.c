@@ -13,14 +13,14 @@ int heapTopPop(int *heap, int size) {
     int top = *heap;
     heap[0] = heap[size - 1];
     int index = 0;
-    int leftSubNode;
-    int rightSubNode;
+    int leftSubIndex;
+    int rightSubIndex;
     int next;
     while (1) {
-        leftSubNode = (index + 1) * 2 - 1;
-        rightSubNode = leftSubNode + 1;
-        if (rightSubNode >= size ||
-            heap[index] > heap[next = heap[leftSubNode] > heap[rightSubNode] ? leftSubNode : rightSubNode])
+        leftSubIndex = (index + 1) * 2 - 1;
+        rightSubIndex = leftSubIndex + 1;
+        if (rightSubIndex >= size ||
+            heap[index] > heap[next = heap[leftSubIndex] > heap[rightSubIndex] ? leftSubIndex : rightSubIndex])
             break;
 
         swap(&heap[index], &heap[next]);
@@ -47,17 +47,18 @@ int main() {
     int size = sizeof(array) / sizeof(int);
     qsort(array, size, sizeof(int), cmp);  // 排序一个最大堆
 
-    heapAdd(5, array, size);
-    for (int i = 0; i < size + 1; i++) {
+    int top = heapTopPop(array, size);
+    for (int i = 0; i < size - 1; i++) {
         printf("%d ", array[i]);
     }
     printf("\n");
+    printf("--> %d\n", top);
 
-    int top = heapTopPop(array, size + 1);
+    heapAdd(5, array, size - 1);
     for (int i = 0; i < size; i++) {
         printf("%d ", array[i]);
     }
     printf("\n");
-    printf("--> %d", top);
+
     return 0;
 }
