@@ -35,9 +35,8 @@ bool isSymmetric(struct TreeNode *root) {
     int stackCount = 1;
     while (stackCount--) {
         if (!stack[stackCount][0] || !stack[stackCount][1]){
-            if (!stack[stackCount][0] && !stack[stackCount][1]){
-                continue;
-            } else return false;
+            if (!stack[stackCount][0] && !stack[stackCount][1]) continue;
+            else return false;
         }
 
         if ((stack[stackCount][0]->val) != (stack[stackCount][1]->val)) return false;
