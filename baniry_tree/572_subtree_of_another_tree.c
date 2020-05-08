@@ -20,7 +20,6 @@ s 的一个子树包括 s 的一个节点和这个节点的所有子孙。s 也�
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "utils/utilsLib.h"
 
 bool check(struct TreeNode *o, struct TreeNode *t) {
     if (!o && !t) return true;
