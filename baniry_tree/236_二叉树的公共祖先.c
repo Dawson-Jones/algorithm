@@ -1,4 +1,4 @@
-#include "utils/utilsLib.h"
+#include "../utils/utilsLib.h"
 
 struct TreeNode *lowestCommonAncestor(struct TreeNode* root, struct TreeNode* p, struct TreeNode* q){
     if (!root || root == p || root == q) return root;
