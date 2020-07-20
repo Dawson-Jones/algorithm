@@ -44,7 +44,7 @@ int minDistance(char *word1, char *word2) {
             } else {
                 // dp[i-1][j-1]     替换操作
                 // dp[i-1][j]       word1 的删除操作
-                // dp[i][j-1]       word1 的插入操作, 和word2 的删除操作是等价的
+                // dp[i][j-1]       word1 的插入操作, 和 word2 的删除操作是等价的
                 dp[i][j] = min(dp[i][j - 1], dp[i - 1][j], dp[i - 1][j - 1]) + 1;
             }
         }
