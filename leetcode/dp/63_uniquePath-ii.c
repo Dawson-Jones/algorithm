@@ -15,27 +15,26 @@
 #include <stdio.h>
 
 int uniquePathsWithObstacles(int **obstacleGrid, int obstacleGridSize, int *obstacleGridColSize) {
-    if (obstacleGrid[1][0] == 1) return 0;
+    if (obstacleGrid[0][0]) return 0;
     unsigned int dp[obstacleGridSize][obstacleGridColSize[0]];
     dp[0][0] = 1;
-    for (int i = 1; i < obstacleGridSize; ++i) {
-        dp[i][0] = obstacleGrid[i][0] == 1 ? 0 : dp[i - 1][0];
-    }
-    for (int i = 1; i < obstacleGridColSize[0]; ++i) {
-        dp[0][i] = obstacleGrid[0][i] == 1 ? 0 : dp[0][i - 1];
-    }
-    for (int i = 1; i < obstacleGridSize; ++i) {
-        for (int j = 1; j < obstacleGridColSize[0]; ++j) {
-            dp[i][j] = obstacleGrid[i][j] == 1 ? 0 : dp[i - 1][j] + dp[i][j - 1];
-        }
-    }
+    for (int i = 1; i < obstacleGridSize; ++i)
+        dp[i][0] = obstacleGrid[i][0] ? 0 : dp[i - 1][0];
+
+    for (int i = 1; i < obstacleGridColSize[0]; ++i)
+        dp[0][i] = obstacleGrid[0][i] ? 0 : dp[0][i - 1];
+
+    for (int i = 1; i < obstacleGridSize; ++i)
+        for (int j = 1; j < obstacleGridColSize[0]; ++j)
+            dp[i][j] = obstacleGrid[i][j] ? 0 : dp[i - 1][j] + dp[i][j - 1];
+
     return dp[obstacleGridSize - 1][obstacleGridColSize[0] - 1];
 }
 
 
 int
 main() {
-    int *temp = {3,3,3};
+    int temp[3] = {3,3,3};
     int l1[3] = {0, 0, 0};
     int l2[3] = {0, 1, 0};
     int l3[3] = {0, 0, 0};
