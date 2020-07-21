@@ -1,5 +1,5 @@
 /*
-不相邻子数组的最大值,
+不相邻子数组的最大值
 
 输入: [1,2,3,1]
 输出: 4
@@ -10,14 +10,16 @@
 
 int rob(int *nums, int numsSize) {
     if (!numsSize) return 0;
-    int pre = 0;
-    int cur = nums[0];
+    int prev = 0;
+    int cur = *nums;
+    
+    int temp;
     for (int i = 1; i < numsSize; ++i) {
-        int temp = pre + nums[i] > cur ? pre + nums[i] : cur;
-        pre = cur;
-        cur = temp;
+        temp = prev + nums[i];
+        prev = cur;
+        cur = temp > cur ? temp : cur;
     }
-    return cur;
+    return  cur;
 }
 
 int main() {
