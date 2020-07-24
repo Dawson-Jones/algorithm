@@ -9,7 +9,7 @@
 */
 
 int expandFromCenter(char *s, int left, int right, int N){
-    while(left>=0&&right<N&&s[left]==s[right]){
+    while(left>=0&&right<N&&s[left--]==s[right++]){
             left--;
             right++;
         }

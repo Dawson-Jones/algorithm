@@ -8,18 +8,15 @@
 """
 
 class Solution:
-    # def wordBreak(self, s: str, wordDict: List[str]) -> bool:
     def wordBreak(self, s: str, wordDict: list) -> bool:
         str_len = len(s)
         dp: list = (str_len+1) * [False]
         dp[0] = True
         for i in range(str_len):
-            for j in range(1, str_len+1):
+            for j in range(i+1, str_len+1):
                 if dp[i] and s[i:j] in wordDict:
                     dp[j] = True
-            if dp[str_len]:  # 最后一个dp已经是true了, 直接return避免循环
-                return True
-        return dp[str_len]
+        return dp[-1]
     
 
 if __name__ == "__main__":
