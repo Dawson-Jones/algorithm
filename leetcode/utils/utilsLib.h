@@ -14,6 +14,7 @@
 #include <limits.h>
 #include <memory.h>
 #include <stdarg.h>
+#include <math.h>
 
 struct TreeNode {
     int val;

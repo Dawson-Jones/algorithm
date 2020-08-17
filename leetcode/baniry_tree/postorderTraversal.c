@@ -9,11 +9,11 @@ struct TreeNode {
 };
 
 int* postorderTraversal(struct TreeNode* root, int* returnSize){
-    void recurTree(struct TreeNode*, int*, int*);
+    void recurTree(struct TreeNode *, int *, int *);
     int length = 0;
-    int *arr = (int*)calloc(4, 100);
-    if(arr==NULL) exit(1);
-    if(root==NULL){
+    int *arr = (int *) calloc(4, 100);
+    if (!arr) exit(1);
+    if (!root) {
         *returnSize = 0;
         return arr;
     }
@@ -21,13 +21,15 @@ int* postorderTraversal(struct TreeNode* root, int* returnSize){
     *returnSize = length;
     return arr;
 }
-void recurTree(struct TreeNode* root, int* arr, int *length){
-    if(root->left!=NULL)
+
+void recurTree(struct TreeNode *root, int *arr, int *length) {
+    if (root->left)
         recurTree(root->left, arr, length);
-    if(root->right!=NULL)
+
+    if (root->right)
         recurTree(root->right, arr, length);
-    arr[*length] = root->val;
-    (*length)++; 
+
+    arr[(*length)++] = root->val;
 }
 
 int main(int argc, char const *argv[])
