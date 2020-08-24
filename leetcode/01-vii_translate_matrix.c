@@ -35,14 +35,14 @@ void rotate(int **matrix, int matrixSize, int *matrixColSize) {
     }
 }
 
-int
-main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[]) {
     int matrix[4][4] = {
             {5,  1,  9,  11},
             {2,  4,  8,  10},
             {13, 3,  6,  7},
             {15, 14, 12, 16},
     };
+
     int colSize[4] = {4, 4, 4, 4};
     rotate(matrix, 4, colSize);
     for (int i = 0; i < 4; ++i) {

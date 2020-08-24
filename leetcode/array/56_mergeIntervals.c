@@ -14,12 +14,13 @@
 //    return *(int *) b - *(int *) a;
 //}
 
-int compare(const void **a, const void **b){
-	return *(int*)a[0] > *(int*)b[0];
+int compare(const void **a, const void **b) {
+    return *(int *) a[0] > *(int *) b[0];
 }
 
 int **merge(int **intervals, int intervalsSize, int *intervalsColSize, int *returnSize, int **returnColumnSizes) {
     qsort(intervals, intervalsSize, sizeof(int **), compare);
+
     int mergeCount = 0;
     int pos = 0;
     for (int i = 1; i < intervalsSize; ++i) {
@@ -36,7 +37,6 @@ int **merge(int **intervals, int intervalsSize, int *intervalsColSize, int *retu
     for (int j = 0; j < *returnSize; ++j) {
         // *returnColumnSizes[j] = 2;
         returnColumnSizes[0][j] = 2;
-
     }
     return intervals;
 }
