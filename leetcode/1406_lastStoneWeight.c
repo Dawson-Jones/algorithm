@@ -26,11 +26,14 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
-// 删除堆顶
+
+/* 删除堆顶
+ *
+ */
 int heapTopPop(int *heap, int size) {
     if (size == 1) { return heap[0]; }
-    int top = *heap;
-    heap[0] = heap[size - 1];
+    int top = *heap;                    // 要返回的
+    heap[0] = heap[size - 1];           // 把最后一个元素移到最前然后依次和
     int index = 0;
     int leftSubNode;
     int rightSubNode;
@@ -38,7 +41,9 @@ int heapTopPop(int *heap, int size) {
     while (1) {
         leftSubNode = (index + 1) * 2 - 1;
         rightSubNode = leftSubNode + 1;
-        if (rightSubNode >= size || heap[index] > heap[next = heap[leftSubNode] > heap[rightSubNode] ? leftSubNode : rightSubNode]) break;
+        next = heap[leftSubNode] > heap[rightSubNode] ? leftSubNode : rightSubNode;     // 找到左右字节点比较大的那个
+        if (rightSubNode >= size || heap[index] > heap[next]) 
+            break;
         swap(&heap[index], &heap[next]);
         index = next;
     }
@@ -50,7 +55,7 @@ void heapAdd(int ele, int *heap, int size) {
     heap[size] = ele;
     int index = size;
     int parentIndex;
-    while (parentIndex = (index + 1) / 2 - 1, parentIndex >= 0 && heap[index] > heap[parentIndex]) {
+    while ((parentIndex = (index + 1) / 2 - 1) >= 0 && heap[index] > heap[parentIndex]) {
         swap(&heap[index], &heap[parentIndex]);
         index = parentIndex;
     }
