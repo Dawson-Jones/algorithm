@@ -26,5 +26,5 @@ int maxDepth(struct TreeNode *root) {
 }
 
 int main(){
-    // 这个题没思考直接写出来了, 🐂🍺!!!
+    // 这个题没思考直接写出来了, 🐮🍺!!!
 }

@@ -7,6 +7,7 @@ struct TreeNode {
     struct TreeNode *left;
     struct TreeNode *right;
 };
+
 void recurTree(struct TreeNode* root, int* arr, int *length){
     arr[*length] = root->val;
     
