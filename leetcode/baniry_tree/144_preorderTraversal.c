@@ -30,12 +30,12 @@ void recurTree(struct TreeNode *root, int *arr, int *length) {
        arr++;
      * 这样的操作不可以
 
-     * 因为, arr本身是一个指针'变量', 而不是指针变量的指针,
-     * 而在递归的过程中, 传递的是arr这个变量,
-     * 所以在遍历left的时候left中修改的arr, 并不会修改到right上
+     * 因为, arr 本身是一个指针'变量', 而不是指针变量的指针,
+     * 而在递归的过程中, 传递的是 arr 这个变量,
+     * 所以在遍历 left 的时候 left 中修改的 arr, 并不会修改到 right 上
     */
 
-    (*length)++;  // 这个地方不能用 *length++
+    (*length)++;
     if (root->left)
         recurTree(root->left, arr, length);
     if (root->right)
