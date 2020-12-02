@@ -18,11 +18,13 @@ void my_swap(int *v, int i, int j){
 
 void my_qsort(int v[], int left, int right){
     int i, last;
-    if (left>=right)
+    if (left >= right)
         return;
+
     last = left;
-    for(i = left+1;i<=right;i++)
-        if(v[i]<v[left])
+
+    for(i = left+1; i <= right; i++)
+        if(v[i] < v[left])
             my_swap(v, ++last, i);
 
     my_swap(v, left, last);
@@ -40,7 +42,9 @@ int main(int argc, char const *argv[])
     int arr[] = {4,6,3,8,5,2,7,4};
     int size = sizeof(arr) / sizeof(arr[0]);
     sortArray(arr, size, &size);
-    for(int i=0;i<size;i++)
+
+    for(int i=0; i<size; i++)
         printf("%d\n", arr[i]);
+
     return 0;
 }

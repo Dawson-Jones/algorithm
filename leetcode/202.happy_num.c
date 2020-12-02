@@ -13,7 +13,7 @@
 12 + 02 + 02 = 1
 */
 
-#include<stdio.h>
+#include <stdio.h>
 
 int getNext(int n){
     int sum = 0;
@@ -31,7 +31,7 @@ int isHappy(int n){
         next1 = getNext(next1);
         next2 = getNext(getNext(next2));
     }
-    return (next1==1)?1:0;
+    return next1 == 1 ? 1 : 0;
 }
 
 int main(){
