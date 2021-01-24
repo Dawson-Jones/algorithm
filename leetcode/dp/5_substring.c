@@ -8,41 +8,42 @@
 给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
 */
 
-int expandFromCenter(char *s, int left, int right, int N){
-    while(left>=0&&right<N&&s[left--]==s[right++]){
-            left--;
-            right++;
-        }
-    return right-left-1;
+int expand(const char *s, int left, int right) {
+    while (left >= 0 && s[right] != '\0' && s[left] == s[right]) {
+        left--;
+        right++;
+    }
+    return right - left - 1;
 }
 
-char *longestPalindrome(char *s){
-    int N = strlen(s);              // N 字符串长度
-    if(!N) return "";
-    int start_p = 0;
-    int end_p = 0;        
+char *longestPalindrome(char *s) {
+    int odd_len, even_len;
+    int st = 0;
+    int ed = 0;
+    int i;
 
-    for(int i=0;i<N;i++){
-        int odd_len = expandFromCenter(s, i, i, N);
-        int even_len = expandFromCenter(s, i, i+1, N);
-        if(odd_len>end_p-start_p) {
-            start_p = i-odd_len/2;
-            end_p = i+odd_len/2;
+    for (i = 0; s[i] != '\0'; ++i) {
+        odd_len = expand(s, i, i);
+        even_len = expand(s, i, i + 1);
+
+        if (odd_len > ed - st) {
+            st = i - odd_len / 2;
+            ed = st + odd_len;
         }
-        if(even_len>end_p-start_p){
-            start_p = i-even_len/2+1;
-            end_p = i+even_len/2;
+
+        if (even_len > ed - st) {
+            st = i - even_len / 2 + 1;
+            ed = st + even_len;
         }
     }
-    *(s+end_p+1) = '\0';
-    return s+start_p;
+
+    *(s + ed) = '\0';
+    return s + st;
 }
 
-int main(int argc, char const *argv[])
-{
-    char s[1000];
-    scanf("%s", s);
-    char *res = longestPalindrome(s);
-    printf("longest substring is: %s\n", res);
+int main() {
+//    char s[] = "babad";
+    char s[] = "sjfodsasdoffdoa";
+    printf("res: %s\n", longestPalindrome(s));
     return 0;
 }

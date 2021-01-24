@@ -23,7 +23,6 @@ int maxProfit(int *prices, int pricesSize) {
                 buy = prev;
                 have_stock = 1;
             }
-
         } else {
             if (prices[i] < prev) {
                 sell = prev;

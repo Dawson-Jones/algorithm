@@ -18,10 +18,12 @@
 
  */
 
-#include "utils/travelPreOrder.h"
+#include "utils/utilsLib.h"
 
 struct TreeNode *
-recursive(int *cur_preOrderIndex, int *preOrder, int *PSposSet, int *NGposSet, int inOrderSt, int inOrderEd) {
+recursive(int *cur_preOrderIndex, int *preOrder, int *PSposSet, int *NGposSet, int inOrderSt, int inOrderEd,
+          int preOrderEd) {
+    if (*cur_preOrderIndex > preOrderEd) return 0;
     struct TreeNode *vertex = (struct TreeNode *) malloc(sizeof(struct TreeNode));
     vertex->val = preOrder[*cur_preOrderIndex];
     int cur_in_order_index;
@@ -34,16 +36,18 @@ recursive(int *cur_preOrderIndex, int *preOrder, int *PSposSet, int *NGposSet, i
     (*cur_preOrderIndex)++;
     if (cur_in_order_index <= inOrderSt) vertex->left = 0;
     else {
-        vertex->left = recursive(cur_preOrderIndex, preOrder, PSposSet, NGposSet, inOrderSt, cur_in_order_index - 1);
+        vertex->left = recursive(cur_preOrderIndex, preOrder, PSposSet, NGposSet, inOrderSt, cur_in_order_index - 1,
+                                 preOrderEd);
     }
     if (cur_in_order_index >= inOrderEd) vertex->right = 0;
     else {
-        vertex->right = recursive(cur_preOrderIndex, preOrder, PSposSet, NGposSet, cur_in_order_index + 1, inOrderEd);
+        vertex->right = recursive(cur_preOrderIndex, preOrder, PSposSet, NGposSet, cur_in_order_index + 1, inOrderEd,
+                                  preOrderEd);
     }
     return vertex;
 }
 
-struct TreeNode *buildTree(int *preorder, int preorderSize, const int *inorder, int inorderSize) {
+struct TreeNode *buildTree(int *preorder, int preorderSize, int *inorder, int inorderSize) {
     int PSposSet[3000];
     int NGposSet[3000];
     for (int i = 0; i < inorderSize; ++i) {
@@ -54,7 +58,7 @@ struct TreeNode *buildTree(int *preorder, int preorderSize, const int *inorder, 
         }
     }
     int cur_pre_order_index = 0;
-    return recursive(&cur_pre_order_index, preorder, PSposSet, NGposSet, 0, inorderSize - 1);
+    return recursive(&cur_pre_order_index, preorder, PSposSet, NGposSet, 0, inorderSize - 1, preorderSize - 1);
 }
 
 int main() {

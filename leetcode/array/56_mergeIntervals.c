@@ -9,10 +9,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// 其实这个是对的
-//int compare(const void *a, const void *b) {
-//    return *(int *) b - *(int *) a;
-//}
 
 int compare(const void **a, const void **b) {
     return *(int *) a[0] > *(int *) b[0];

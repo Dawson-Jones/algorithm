@@ -31,7 +31,8 @@ void swap(int *a, int *b) {
  *
  */
 int heapTopPop(int *heap, int size) {
-    if (size == 1) { return heap[0]; }
+    if (size == 1) return heap[0];
+
     int top = *heap;                    // 要返回的
     heap[0] = heap[size - 1];           // 把最后一个元素移到最前然后依次和
     int index = 0;
