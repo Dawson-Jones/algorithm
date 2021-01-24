@@ -24,26 +24,29 @@ struct TreeNode *
 recursive(int *cur_preOrderIndex, int *preOrder, int *PSposSet, int *NGposSet, int inOrderSt, int inOrderEd,
           int preOrderEd) {
     if (*cur_preOrderIndex > preOrderEd) return 0;
+    
     struct TreeNode *vertex = (struct TreeNode *) malloc(sizeof(struct TreeNode));
     vertex->val = preOrder[*cur_preOrderIndex];
-    int cur_in_order_index;
-    if (preOrder[*cur_preOrderIndex] < 0) {
-        cur_in_order_index = NGposSet[-preOrder[*cur_preOrderIndex]];
-    } else {
-        cur_in_order_index = PSposSet[preOrder[*cur_preOrderIndex]];
 
-    }
-    (*cur_preOrderIndex)++;
-    if (cur_in_order_index <= inOrderSt) vertex->left = 0;
-    else {
-        vertex->left = recursive(cur_preOrderIndex, preOrder, PSposSet, NGposSet, inOrderSt, cur_in_order_index - 1,
+    int cur_inorder_index;
+    if (preOrder[*cur_preOrderIndex] < 0)
+        cur_inorder_index = NGposSet[-preOrder[*cur_preOrderIndex]];
+    else
+        cur_inorder_index = PSposSet[preOrder[*cur_preOrderIndex]];
+
+    (*cur_preOrderIndex)++;     // 用来递归的下一个 preorder 目标值
+    if (cur_inorder_index <= inOrderSt) 
+        vertex->left = 0;
+    else
+        vertex->left = recursive(cur_preOrderIndex, preOrder, PSposSet, NGposSet, inOrderSt, cur_inorder_index - 1,
                                  preOrderEd);
-    }
-    if (cur_in_order_index >= inOrderEd) vertex->right = 0;
-    else {
-        vertex->right = recursive(cur_preOrderIndex, preOrder, PSposSet, NGposSet, cur_in_order_index + 1, inOrderEd,
+
+    if (cur_inorder_index >= inOrderEd)
+        vertex->right = 0;
+    else
+        vertex->right = recursive(cur_preOrderIndex, preOrder, PSposSet, NGposSet, cur_inorder_index + 1, inOrderEd,
                                   preOrderEd);
-    }
+
     return vertex;
 }
 
@@ -51,14 +54,14 @@ struct TreeNode *buildTree(int *preorder, int preorderSize, int *inorder, int in
     int PSposSet[3000];
     int NGposSet[3000];
     for (int i = 0; i < inorderSize; ++i) {
-        if (inorder[i] < 0) {
+        if (inorder[i] < 0)
             NGposSet[-inorder[i]] = i;
-        } else {
+        else
             PSposSet[inorder[i]] = i;
-        }
     }
-    int cur_pre_order_index = 0;
-    return recursive(&cur_pre_order_index, preorder, PSposSet, NGposSet, 0, inorderSize - 1, preorderSize - 1);
+
+    int cur_preorder_index = 0;
+    return recursive(&cur_preorder_index, preorder, PSposSet, NGposSet, 0, inorderSize - 1, preorderSize - 1);
 }
 
 int main() {
