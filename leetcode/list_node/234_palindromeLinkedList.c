@@ -11,39 +11,49 @@
 
 #include "utils/utilsLib.h"
 
-bool isPalindrome(struct ListNode* head){
-    if (!head) return true;
-    struct ListNode *slow = head;
-    struct ListNode *fast = head;
+struct ListNode *reverse(struct ListNode *head) {
+    struct ListNode *tmp;
+    struct ListNode *pre = NULL;
 
-    while (fast->next && fast->next->next) {
+    while (head) {
+        tmp = head->next;
+        head->next = pre;
+        pre = head;
+        head = tmp;
+    }
+    
+    return pre;
+}
+
+bool compare_listnode(struct ListNode *a, struct ListNode *b) {
+    while (b) {
+        if (a->val != b->val)
+            return false;
+        
+        a = a->next;
+        b = b->next;
+    }
+    
+    return true;
+}
+
+bool isPalindrome(struct ListNode* head){
+    if (!head || !head->next) return head;
+    
+    struct ListNode *slow, *fast;
+    slow = fast = head;
+    while (fast && fast->next) {
         slow = slow->next;
         fast = fast->next->next;
     }
-
-    // reversal the second half part of list node
-    struct ListNode *head2 = slow->next;
-    slow->next = NULL;
-    struct ListNode *follower = NULL;
-    struct ListNode *temp;
-    while (head2) {
-        temp = head2;
-        head2 = head2->next;
-        temp->next = follower;
-        follower = temp;
-    } // follower is vertex
-
-    // compare this two list node
-    while (follower) {
-        if (head->val != follower->val) {
-            return false;
-        }
-        head = head->next;
-        follower = follower->next;
-    }
-
-    return true;
+    
+    fast = slow;
+//    slow->next = NULL;
+    fast = reverse(fast);
+    
+    return compare_listnode(head, fast);
 }
+
 
 int main() {
     struct ListNode ln2 = {2, NULL};
