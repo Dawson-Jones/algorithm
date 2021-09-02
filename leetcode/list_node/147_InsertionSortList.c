@@ -3,40 +3,42 @@
  */
 #include "utils/utilsLib.h"
 
-struct ListNode* insertionSortList(struct ListNode* head){
-    if (!head) return head;
-    struct ListNode *cursor1 = head->next;
-    head->next = NULL;
-    struct ListNode *current_node;
+struct ListNode *find_median(struct ListNode *left, struct ListNode *right, int flag) {
+    struct ListNode *pre, *slow, *fast;
+    pre = slow = fast = left;
+    while (fast != right && fast->next != right) {
+        pre = slow;
+        slow = slow->next;
+        fast = fast->next->next;
+    }
 
-    while (cursor1) {
-        current_node = cursor1;
-        cursor1 = cursor1->next;
+    if (flag)
+        pre->next = NULL;
 
-        if (current_node->val < head->val) {
-            current_node->next = head;
-            head = current_node;
-            continue;
-        }
+    return slow;
+}
 
-        struct ListNode *cursor2 = head;
-        bool flag = 0;
-        while (cursor2->next) {
-            if (current_node->val < cursor2->next->val) {
-                struct ListNode *temp = cursor2->next;
-                cursor2->next = current_node;
-                current_node->next = temp;
-                flag = 1;
-                break;
-            }
-            cursor2 = cursor2->next;
-        }
+struct ListNode *merge_listnode(struct ListNode *l1, struct ListNode *l2) {
+    struct ListNode tmp;
+    struct ListNode *cur = &tmp;
 
-        if (!flag) {
-            cursor2->next = current_node;
-            current_node->next = NULL;
+    while (l1 && l2) {
+        if (l1->val < l2->val) {
+            cur = cur->next = l1;
+            l1 = l1->next;
+        } else {
+            cur = cur->next = l2;
+            l2 = l2->next;
         }
     }
 
-    return head;
+    cur->next = l1 ? l1 : l2;
+    return tmp.next;
+}
+
+struct ListNode* sortList(struct ListNode* head){
+    if (!(head && head->next)) return head;
+
+    struct ListNode *mid = find_median(head, NULL, 1);
+    return merge_listnode(sortList(head), sortList(mid));
 }

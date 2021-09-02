@@ -3,6 +3,7 @@
         "string": "cpp",
         "iosfwd": "cpp",
         "vector": "cpp",
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "ios": "c"
     }
 }
