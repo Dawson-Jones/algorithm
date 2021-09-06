@@ -17,15 +17,15 @@
 #include "utils/utilsLib.h"
 
 
-int recursive(struct TreeNode *cur_node) {
-    if (!cur_node) return 1;
-    int left_level = recursive(cur_node->left);
-    int right_level = recursive(cur_node->right);
+int dfs(struct TreeNode *cur_node) {
+    if (!cur_node) return 0;
+    int l = dfs(cur_node->left);
+    int r = dfs(cur_node->right);
 
-    if (left_level == -1 || right_level == -1 || abs(left_level - right_level) > 1)
+    if (l == -1 || r == -1 || abs(l - r) > 1)
         return -1;
 
-    return left_level > right_level ? left_level + 1 : right_level + 1;
+    return 1 + (l > r ? l : r);
 }
 
 bool isBalanced(struct TreeNode* root) {
