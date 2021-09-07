@@ -4,6 +4,7 @@
         "iosfwd": "cpp",
         "vector": "cpp",
         "iterator": "cpp",
-        "ios": "c"
+        "ios": "c",
+        "__split_buffer": "cpp"
     }
 }
