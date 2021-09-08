@@ -22,19 +22,20 @@ struct TreeNode {
 
 void travel(struct TreeNode *vertex, int level, int *res, int *returnSize){
     if (!vertex) return;
-    if (level > *returnSize){
+    if (level > *returnSize)
         res[(*returnSize)++] = vertex->val;
-    }
+
     travel(vertex->right, level+1, res, returnSize);
     travel(vertex->left, level+1, res, returnSize);
 }
 
 int *rightSideView(struct TreeNode *root, int *returnSize) {
     *returnSize = 0;
-    int *res = (int *)malloc(1000 * sizeof(int));
-    if (!res) exit(1);
+    int *res = (int *) malloc(1000 * sizeof(int));
+    if (!res) 
+        exit(1);
+
     travel(root, 1, res, returnSize);
     return res;
-
 }
 
