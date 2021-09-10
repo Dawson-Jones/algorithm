@@ -6,16 +6,16 @@ import (
 )
 
 func maxProfit(prices []int) int {
-	curMaxBenefit := 0
-	if len(prices) == 0{
-		return curMaxBenefit
+	hold := prices[0];
+	profit := 0
+	for _, price := range prices {
+		if price - hold > 0 {
+			profit = int(math.Max(float64(price-hold), float64(profit)))
+		} else {
+			hold = price
+		}
 	}
-	curMinPrice := prices[0]
-	for _, v:= range prices{
-		curMinPrice = int(math.Min(float64(curMinPrice), float64(v)))
-		curMaxBenefit = int(math.Max(float64(curMaxBenefit), float64(v-curMinPrice)))
-	}
-	return curMaxBenefit
+	return profit
 }
 
 func main() {
