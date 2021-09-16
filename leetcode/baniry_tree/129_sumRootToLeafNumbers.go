@@ -20,20 +20,19 @@ package main
 因此，数字总和 = 495 + 491 + 40 = 1026.
 */
 
-
-func Travel(vertex *TreeNode, curSum int, res *int) {
-	if vertex == nil {
-		return
+func dfs(root *TreeNode, pre int) int {
+	if root == nil {
+		return 0
 	}
-	if vertex.Left == nil && vertex.Right == nil {
-		*res += curSum*10 + vertex.Val
+	
+	pre = pre * 10 + root.Val
+	if root.Left == nil && root.Right == nil {
+		return pre
 	}
-	Travel(vertex.Left, curSum*10+vertex.Val, res)
-	Travel(vertex.Right, curSum*10+vertex.Val, res)
+	
+	return dfs(root.Left, pre) + dfs(root.Right, pre)
 }
 
 func sumNumbers(root *TreeNode) int {
-	var res = 0
-	Travel(root, 0, &res)
-	return res
+	return dfs(root, 0)
 }

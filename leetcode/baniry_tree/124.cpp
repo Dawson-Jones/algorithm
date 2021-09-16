@@ -8,8 +8,8 @@ public:
 
         int left = helper(root->left);
         int right = helper(root->right);
-        res = max(max(max(max(left + root->val, right + root->val), left + right + root->val), root->val), res);
-        return max(max(left + root->val, right + root->val), root->val);
+        res = max({left + root->val, right + root->val, left + right + root->val, root->val, res});
+        return max({left + root->val, right + root->val, root->val});
     }
 
     int maxPathSum(TreeNode *root) {
