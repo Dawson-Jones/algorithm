@@ -23,11 +23,14 @@ void my_qsort(int v[], int left, int right){
 
     last = left;
 
+    // 有这句可能会避免极端情况
+    // swap(nums, st, st + (ed - st) / 2);
+
     for(i = left+1; i <= right; i++)
         if(v[i] < v[left])
             my_swap(v, ++last, i);
-
     my_swap(v, left, last);
+
     my_qsort(v, left, last-1);
     my_qsort(v, last+1, right);
 }
