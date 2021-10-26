@@ -13,7 +13,8 @@ int maxSubArray(int *nums, int numsSize) {
     int cur_max = *nums;
     for (int i = 1; i < numsSize; ++i) {
         res += nums[i];
-        if (res < nums[i]) res = nums[i];
+        if (res < nums[i])
+            res = nums[i];
         cur_max = cur_max > res ? cur_max : res;
     }
     return cur_max;

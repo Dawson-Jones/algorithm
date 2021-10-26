@@ -25,7 +25,9 @@ struct TreeNode {
 };
 
 struct TreeNode *invertTree(struct TreeNode *root) {
-    if (root == 0) return root;
+    if (root == 0) 
+    	return root;
+
     struct TreeNode *temp = root->left;
     root->left = root->right;
     root->right = temp;
