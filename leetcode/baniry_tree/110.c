@@ -1,3 +1,4 @@
+// 前一种更好
 int max_depth(struct TreeNode *root, int depth) {
     if (!root)
         return depth;
