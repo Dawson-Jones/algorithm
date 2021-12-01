@@ -22,15 +22,15 @@ void my_swap(int *x, int *y) {
 }
 
 void my_qsort(int *nums, int l, int r) {
-    if (l = r)
+    if (l >= r)
         return;
 
     int i = l + 1;
     int j = r;
     for (; i <= j; ++i) {
-        if (nums[i] nums[l])
-          	// 这里之所以需要i--, 是不知道交换的 j 是不是比 l 大
-          	// 所以让 i 停在原地
+        if (nums[i] > nums[l])
+            // 这里之所以需要i--, 是不知道交换的 j 是不是比 l 大
+            // 所以让 i 停在原地
             my_swap(&nums[i--], &nums[j--]);
     }
     my_swap(&nums[l], &nums[i - 1]);
@@ -38,6 +38,7 @@ void my_qsort(int *nums, int l, int r) {
     my_qsort(nums, l, i - 2);
     my_qsort(nums, i, r);
 }
+
 
 int *sortArray(int *nums, int numsSize) {
     my_qsort(nums, 0, numsSize - 1);
