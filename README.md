@@ -2,65 +2,6 @@
 
 [toc]
 
-## 优先队列
-
-### 剑指 offer 41. 数据流中的中位数
-
-> 如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
->
-> 例如，
->
-> [2,3,4] 的中位数是 3
->
-> [2,3] 的中位数是 (2 + 3) / 2 = 2.5
->
-> 设计一个支持以下两种操作的数据结构：
->
-> void addNum(int num) - 从数据流中添加一个整数到数据结构中。
-> double findMedian() - 返回目前所有元素的中位数。
-
-**思路**:
-
-建立一个大根堆, 一个小根堆
-
-**代码**:
-
-```cpp
-class MedianFinder {
-public:
-    priority_queue<int, vector<int, less<intque_min;		// 小根堆
-    priority_queue<int, vector<int, greater<intque_max;	// 大根堆
-    MedianFinder() { }
-
-    void addNum(int num) {
-        if (que_min.empty() || num <= que_min.top()) {
-            que_min.push(num);
-            if (que_max.size() + 1 < que_min.size()) {
-                que_max.push(que_min.top());
-                que_min.pop();
-            }
-        } else {
-            que_max.push(num);
-            if (que_max.size() que_min.size()) {
-                que_min.push(que_max.top());
-                que_max.pop();
-            }
-        }
-    }
-
-    double findMedian() {
-        if (que_min.size() que_max.size())
-            return que_min.top();
-        else
-            return (que_min.top() + que_max.top()) / 2.;
-    }
-};
-```
-
-**follow up**
-
-
-
 ## 排序
 
 ### 快排
@@ -394,6 +335,8 @@ public:
 };
 ```
 
+
+
 ### 剑指 Offer 51. 数组中的逆序
 
 > 在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。
@@ -447,6 +390,65 @@ public:
 
     int reversePairs(vector<int> &nums) {
         return merge(nums, 0, nums.size() - 1);
+    }
+};
+```
+
+**follow up**
+
+
+
+## 优先队列
+
+### 剑指 offer 41. 数据流中的中位数
+
+> 如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+>
+> 例如，
+>
+> [2,3,4] 的中位数是 3
+>
+> [2,3] 的中位数是 (2 + 3) / 2 = 2.5
+>
+> 设计一个支持以下两种操作的数据结构：
+>
+> void addNum(int num) - 从数据流中添加一个整数到数据结构中。
+> double findMedian() - 返回目前所有元素的中位数。
+
+**思路**:
+
+建立一个大根堆, 一个小根堆
+
+**代码**:
+
+```cpp
+class MedianFinder {
+public:
+    priority_queue<int, vector<int, less<intque_min;		// 小根堆
+    priority_queue<int, vector<int, greater<intque_max;	// 大根堆
+    MedianFinder() { }
+
+    void addNum(int num) {
+        if (que_min.empty() || num <= que_min.top()) {
+            que_min.push(num);
+            if (que_max.size() + 1 < que_min.size()) {
+                que_max.push(que_min.top());
+                que_min.pop();
+            }
+        } else {
+            que_max.push(num);
+            if (que_max.size() que_min.size()) {
+                que_min.push(que_max.top());
+                que_max.pop();
+            }
+        }
+    }
+
+    double findMedian() {
+        if (que_min.size() que_max.size())
+            return que_min.top();
+        else
+            return (que_min.top() + que_max.top()) / 2.;
     }
 };
 ```
