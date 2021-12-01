@@ -72,7 +72,7 @@ void my_swap(int *x, int *y) {
 }
 
 void my_qsort(int nums[], int l, int r) {
-    if (l = r)
+    if (l >= r)
         return;
     int i = l + 1;
     int t = l;
@@ -225,17 +225,17 @@ int findKthLargest(int* nums, int numsSize, int k){
 ```cpp
 class Solution {
 public:
-    vector<intgetLeastNumbers(vector<int& arr, int k) {
-        vector <intvec(k, 0);
+    vector<int> getLeastNumbers(vector<int> &arr, int k) {
+        vector<int> vec(k, 0);
         if (k == 0)
             return vec;
-        priority_queue<intQ;
+        priority_queue<int> Q;
         for (int i = 0; i < k; ++i) {
             Q.push(arr[i]);
         }
 
         for (int i = k; i < arr.size(); ++i) {
-            if (Q.top() arr[i]) {
+            if (Q.top() > arr[i]) {
                 Q.pop();
                 Q.push(arr[i]);
             }
@@ -319,16 +319,16 @@ int* exchange(int* nums, int numsSize, int* returnSize){
 ```cpp
 class Solution {
 public:
-    string minNumber(vector<int& nums) {
+    string minNumber(vector<int> &nums) {
         string x_str, y_str;
-        sort(nums.begin(), nums.end(), [&](int &x, int &y){
+        sort(nums.begin(), nums.end(), [&](int &x, int &y) {
             x_str = to_string(x);
             y_str = to_string(y);
             return x_str + y_str < y_str + x_str;
         });
-        
+
         string res;
-        for (auto num : nums) {
+        for (auto num: nums) {
             res += to_string(num);
         }
         return res;
@@ -425,9 +425,9 @@ public:
 ```cpp
 class MedianFinder {
 public:
-    priority_queue<int, vector<int, less<intque_min;		// 小根堆
-    priority_queue<int, vector<int, greater<intque_max;	// 大根堆
-    MedianFinder() { }
+    priority_queue<int, vector<int>, less<int>> que_min;
+    priority_queue<int, vector<int>, greater<int>> que_max;
+    MedianFinder() = default;
 
     void addNum(int num) {
         if (que_min.empty() || num <= que_min.top()) {
@@ -438,7 +438,7 @@ public:
             }
         } else {
             que_max.push(num);
-            if (que_max.size() que_min.size()) {
+            if (que_max.size() > que_min.size()) {
                 que_min.push(que_max.top());
                 que_max.pop();
             }
@@ -446,7 +446,7 @@ public:
     }
 
     double findMedian() {
-        if (que_min.size() que_max.size())
+        if (que_min.size() > que_max.size())
             return que_min.top();
         else
             return (que_min.top() + que_max.top()) / 2.;
@@ -518,41 +518,6 @@ int findMin(int* nums, int numsSize) {
 
 ### 154. 寻找旋转排序数组中的最小值 II
 
-> 本题相比[153. 寻找旋转排序数组中的最小值](#153. 寻找旋转排序数组中的最小值)多了可重复元素
->
-
-**思路**:
-
-当中点值和右边相同时
-
-由于它们的值相同，所以无论右边是不是最小值，都有一个它的「替代品」
-
-因此我们可以忽略二分查找区间的右端点。
-
-**代码**: 
-
-```c
-int findMin(int* nums, int numsSize) {
-    int low = 0;
-    int high = numsSize - 1;
-    while (low < high) {
-        int pivot = low + (high - low) / 2;
-        if (nums[pivot] < nums[high]) {
-            high = pivot;
-        } else if (nums[pivot] nums[high]) {
-            low = pivot + 1;
-        } else {	// 相等
-            high -= 1;
-        }
-    }
-    return nums[low];
-}
-```
-
-**follow up**
-
-
-
 ### 剑指 offer 11. 旋转数组的最小数字
 
 > 把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的一个旋转，输出旋转数组的最小元素。例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一个旋转，该数组的最小值为1。  
@@ -568,11 +533,15 @@ int findMin(int* nums, int numsSize) {
 
 **思路**:
 
-见[154. 寻找旋转排序数组中的最小值 II](#154. 寻找旋转排序数组中的最小值 II)
+当中点值和右边相同时
+
+由于它们的值相同，所以无论右边是不是最小值，都有一个它的「替代品」
+
+因此我们可以忽略二分查找区间的右端点。
 
 **代码**:
 
-```
+```c
 int findMin(int* nums, int numsSize) {
     int low = 0;
     int high = numsSize - 1;
@@ -580,7 +549,7 @@ int findMin(int* nums, int numsSize) {
         int pivot = low + (high - low) / 2;
         if (nums[pivot] < nums[high]) {
             high = pivot;
-        } else if (nums[pivot] nums[high]) {
+        } else if (nums[pivot] > nums[high]) {
             low = pivot + 1;
         } else {	// 相等
             high -= 1;
@@ -639,19 +608,19 @@ int findMin(int* nums, int numsSize) {
 **代码**:
 
 ```c
-char firstUniqChar(char* s){
-    int len=strlen(s);
-    if(len==0)
+char firstUniqChar(char *s) {
+    int len = strlen(s);
+    if (len == 0)
         return ' ';
-    if(len==1)
+    if (len == 1)
         return s[0];
     int map[26];
     memset(map, 0, sizeof(map));
 
-    for(int i=0;i<len;i++)
-        map[s[i]-'a']++;
-    for(int i=0;i<len;i++)
-        if(map[s[i]-'a']==1)
+    for (int i = 0; i < len; i++)
+        map[s[i] - 'a']++;
+    for (int i = 0; i < len; i++)
+        if (map[s[i] - 'a'] == 1)
             return s[i];
     return ' ';
 }
@@ -671,12 +640,12 @@ TODO: morris 遍历
 
 ```c
 void recur(struct TreeNode *cur, int *res, int *returnSize) {
-    if (!cur) 
+    if (!cur)
         return;
-    
-    res[(*returnSize)++] = cur-val;
-    recur(cur-left, res, returnSize);
-    recur(cur-right, res, returnSize);
+
+    res[(*returnSize)++] = cur->val;
+    recur(cur->left, res, returnSize);
+    recur(cur->right, res, returnSize);
 }
 
 int *preorderTraversal(struct TreeNode *root, int *returnSize) {
@@ -692,19 +661,20 @@ int *preorderTraversal(struct TreeNode *root, int *returnSize) {
 ```cpp
 class Solution {
 public:
-    vector<intpreorderTraversal(TreeNode* root) {
-        vector<intres;
-        stack<TreeNode *stk;
+    vector<int> preorderTraversal(TreeNode *root) {
+        vector<int> res;
+        stack<TreeNode *> stk;
 
         while (root || !stk.empty()) {
             while (root) {
-                res.push_back(root-val);
+                res.push_back(root->val);
                 stk.push(root);
-                root = root-left;
+                root = root->left;
             }
-            
-            root = stk.top(); stk.pop();
-            root = root-right;
+
+            root = stk.top();
+            stk.pop();
+            root = root->right;
         }
 
         return res;
@@ -723,13 +693,13 @@ void inorder(struct TreeNode* root, int* res, int* resSize) {
     if (!root) {
         return;
     }
-    inorder(root-left, res, resSize);
-    res[(*resSize)++] = root-val;
-    inorder(root-right, res, resSize);
+    inorder(root->left, res, resSize);
+    res[(*resSize)++] = root->val;
+    inorder(root->right, res, resSize);
 }
 
 int* inorderTraversal(struct TreeNode* root, int* returnSize) {
-    int* res = malloc(sizeof(int) * 501);
+    int* res = (int *) malloc(sizeof(int) * 501);
     *returnSize = 0;
     inorder(root, res, returnSize);
     return res;
@@ -741,19 +711,20 @@ int* inorderTraversal(struct TreeNode* root, int* returnSize) {
 ```cpp
 class Solution {
 public:
-    vector<intinorderTraversal(TreeNode* root) {
-        vector<intres;
-        stack<TreeNode *stk;
+    vector<int> inorderTraversal(TreeNode *root) {
+        vector<int> res;
+        stack<TreeNode *> stk;
 
         while (root || !stk.empty()) {
             while (root) {
                 stk.push(root);
-                root = root-left;
+                root = root->left;
             }
-            
-            root = stk.top(); stk.pop();
-            res.push_back(root-val);
-            root = root-right;
+
+            root = stk.top();
+            stk.pop();
+            res.push_back(root->val);
+            root = root->right;
         }
 
         return res;
@@ -774,9 +745,9 @@ void postorder(struct TreeNode *root, int *res, int *resSize) {
     if (root == NULL) {
         return;
     }
-    postorder(root-left, res, resSize);
-    postorder(root-right, res, resSize);
-    res[(*resSize)++] = root-val;
+    postorder(root->left, res, resSize);
+    postorder(root->right, res, resSize);
+    res[(*resSize)++] = root->val;
 }
 
 int *postorderTraversal(struct TreeNode *root, int *returnSize) {
@@ -794,25 +765,25 @@ int *postorderTraversal(struct TreeNode *root, int *returnSize) {
 ```cpp
 class Solution {
 public:
-    vector<intpostorderTraversal(TreeNode* root) {
-        vector<intres;
-        stack<TreeNode *stk;
+    vector<int> postorderTraversal(TreeNode *root) {
+        vector<int> res;
+        stack<TreeNode *> stk;
         TreeNode *prev = nullptr;
 
         while (root || !stk.empty()) {
             while (root) {
                 stk.push(root);
-                root = root-left;
+                root = root->left;
             }
 
             root = stk.top();
-            if (root-right && root-right != prev) {
-                root = root-right;
+            if (root->right && root->right != prev) {
+                root = root->right;
                 continue;
             }
 
             stk.pop();
-            res.push_back(root-val);
+            res.push_back(root->val);
             prev = root;
             root = nullptr;
         }
@@ -830,26 +801,27 @@ public:
 ```cpp
 class Solution {
 public:
-    vector<vector<intlevelOrder(TreeNode* root) {
-        vector<vector<intres;
+    vector<vector<int>> levelOrder(TreeNode *root) {
+        vector<vector<int>> res;
         if (!root)
             return res;
 
-        queue<TreeNode *q({root});
+        queue<TreeNode *> q({root});
         TreeNode *cur_node;
         while (!q.empty()) {
             int cur_level_size = q.size();
-            res.push_back(vector<int());
+            res.push_back(vector<int>());
             for (int i = 0; i < cur_level_size; ++i) {
-                cur_node = q.front(); q.pop();
-                res.back().push_back(cur_node-val);
-                if (cur_node-left)
-                    q.push(cur_node-left);
-                if (cur_node-right)
-                    q.push(cur_node-right);
+                cur_node = q.front();
+                q.pop();
+                res.back().push_back(cur_node->val);
+                if (cur_node->left)
+                    q.push(cur_node->left);
+                if (cur_node->right)
+                    q.push(cur_node->right);
             }
         }
-        
+
         return res;
     }
 };
@@ -891,19 +863,20 @@ public:
 ```cpp
 class Solution {
 public:
-    vector<intlevelOrder(TreeNode* root) {
-        vector<intres;
+    vector<int> levelOrder(TreeNode *root) {
+        vector<int> res;
         if (!root)
             return res;
-        queue<TreeNode *q({root});
+        queue<TreeNode *> q({root});
         TreeNode *cur;
         while (!q.empty()) {
-            cur = q.front(); q.pop();
-            res.push_back(cur-val);
-            if (cur-left)
-                q.push(cur-left);
-            if (cur-right)
-                q.push(cur-right);
+            cur = q.front();
+            q.pop();
+            res.push_back(cur->val);
+            if (cur->left)
+                q.push(cur->left);
+            if (cur->right)
+                q.push(cur->right);
         }
 
         return res;
@@ -945,26 +918,27 @@ public:
 ```cpp
 class Solution {
 public:
-    vector<vector<intlevelOrder(TreeNode* root) {
-        vector<vector<intres;
+    vector<vector<int>> levelOrder(TreeNode *root) {
+        vector<vector<int>> res;
         if (!root)
             return res;
 
-        queue<TreeNode *q({root});
+        queue<TreeNode *> q({root});
         TreeNode *cur_node;
         while (!q.empty()) {
             int cur_level_size = q.size();
-            res.push_back(vector<int());
-            for (int i = 0; i < cur_level_size; ++i) {	// 遍历当前层的 size
-                cur_node = q.front(); q.pop();
-                res.back().push_back(cur_node-val);
-                if (cur_node-left)
-                    q.push(cur_node-left);
-                if (cur_node-right)
-                    q.push(cur_node-right);
+            res.push_back(vector<int>());
+            for (int i = 0; i < cur_level_size; ++i) {    // 遍历当前层的 size
+                cur_node = q.front();
+                q.pop();
+                res.back().push_back(cur_node->val);
+                if (cur_node->left)
+                    q.push(cur_node->left);
+                if (cur_node->right)
+                    q.push(cur_node->right);
             }
         }
-        
+
         return res;
     }
 };
@@ -1001,38 +975,37 @@ public:
 
 ```go
 func levelOrder(root *TreeNode) [][]int {
-    res := [][]int{}
-    if root == nil {
-        return res
-    }
-    queue := []*TreeNode{root}
-    var Level int = 0
-    for len(queue) != 0 {
-        //利用临时队列，暂存每个节点的左右子树
-        temp := []*TreeNode{}
-        //只需考虑在同一层上追加元素
-        res = append(res, []int{})
-        for _, v := range queue {
-            res[Level] = append(res[Level], v.Val)
-            if v.Left != nil {
-                temp = append(temp, v.Left)
-            }
-            if v.Right != nil {
-                temp = append(temp, v.Right)
-            }
-        }
-        if Level % 2 != 0 {
-            Reverse(res[Level])
-        }
-        //层级加1，队列重新复制为队列的左右子树集
-        Level++
-        queue = temp
-    }
-    return res
+	var res [][]int
+	if root == nil {
+		return res
+	}
+	queue := []*TreeNode{root}
+	var Level int = 0
+	for len(queue) != 0 {
+		//利用临时队列，暂存每个节点的左右子树
+		var temp []*TreeNode
+		//只需考虑在同一层上追加元素
+		res = append(res, []int{})
+		for _, v := range queue {
+			res[Level] = append(res[Level], v.Val)
+			if v.Left != nil {
+				temp = append(temp, v.Left)
+			}
+			if v.Right != nil {
+				temp = append(temp, v.Right)
+			}
+		}
+		if Level%2 != 0 {
+			Reverse(res[Level])
+		}
+		//层级加1，队列重新复制为队列的左右子树集
+		Level++
+		queue = temp
+	}
+	return res
 }
 
-
-//数组倒序函数
+// Reverse 数组倒序函数
 func Reverse(arr []int) {
 	length := len(arr)
 	for i := 0; i < length/2; i++ {
@@ -1084,26 +1057,24 @@ func Reverse(arr []int) {
 
 ```c
 bool same(struct TreeNode *a, struct TreeNode *b) {
-    if (b == NULL)		// b 为空可以
+    if (b == NULL)        // b 为空可以
         return true;
-    if (a == NULL)		// a 为空, b不为空不可以
+    if (a == NULL)        // a 为空, b不为空不可以
         return false;
 
-    if (a-val != b-val)
+    if (a->val != b->val)
         return false;
 
-    return same(a-left, b-left) && same(a-right, b-right);
+    return same(a->left, b->left) && same(a->right, b->right);
 }
 
-
-
-bool isSubStructure(struct TreeNode* A, struct TreeNode* B){
+bool isSubStructure(struct TreeNode *A, struct TreeNode *B) {
     if (A == NULL || B == NULL)
         return false;
     if (same(A, B))
         return true;
-    
-    return isSubStructure(A-left, B) || isSubStructure(A-right, B);
+
+    return isSubStructure(A->left, B) || isSubStructure(A->right, B);
 }
 ```
 
@@ -1140,14 +1111,14 @@ bool isSubStructure(struct TreeNode* A, struct TreeNode* B){
 **代码**:
 
 ```c
-struct TreeNode* mirrorTree(struct TreeNode* root){
+struct TreeNode *mirrorTree(struct TreeNode *root) {
     if (!root)
         return NULL;
-    
-    struct TreeNode *tmp = root-right;	// root-right 及其下面的子节点被存下来了
-    root-right = mirrorTree(root-left);	// root-right 改变了
-    root-left = mirrorTree(tmp);
-    
+
+    struct TreeNode *tmp = root->right;    // root-right 及其下面的子节点被存下来了
+    root->right = mirrorTree(root->left);    // root-right 改变了
+    root->left = mirrorTree(tmp);
+
     return root;
 }
 ```
@@ -1159,10 +1130,10 @@ struct TreeNode* invertTree(struct TreeNode* root) {
     if (root == NULL) {
         return NULL;
     }
-    struct TreeNode* left = invertTree(root-left);
-    struct TreeNode* right = invertTree(root-right);
-    root-left = right;
-    root-right = left;
+    struct TreeNode* left = invertTree(root->left);
+    struct TreeNode* right = invertTree(root->right);
+    root->left = right;
+    root->right = left;
     return root;
 }
 ```
@@ -1186,17 +1157,17 @@ bool *same(struct TreeNode *a, struct TreeNode *b) {
         return true;
     if (a == NULL || b == NULL)
         return false;
-    if (a-val != b-val)
+    if (a->val != b->val)
         return false;
-    
-    return same(a-left, b-right) && same(a-right, b-left);
+
+    return same(a->left, b->right) && same(a->right, b->left);
 }
 
-bool isSymmetric(struct TreeNode* root){
+bool isSymmetric(struct TreeNode *root) {
     if (!root)
         return true;
 
-    return same(root-left, root-right);
+    return same(root->left, root->right);
 }
 ```
 
@@ -1221,13 +1192,13 @@ bool isSymmetric(struct TreeNode* root){
 class Solution {
 public:
     Node *treeToDoublyList(Node *root) {
-        if (!root) 
+        if (!root)
             return nullptr;
-        
+
         dfs(root);
-        head-left = pre;
-        pre-right = head;
-        
+        head->left = pre;
+        pre->right = head;
+
         return head;
     }
 
@@ -1235,19 +1206,19 @@ private:
     Node *pre, *head;
 
     void dfs(Node *cur) {
-        if (!cur) 
+        if (!cur)
             return;
-        
-        dfs(cur-left);
-        if (pre) 
-            pre-right = cur;
-        else 
+
+        dfs(cur->left);
+        if (pre)
+            pre->right = cur;
+        else
             head = cur;
-        
-        cur-left = pre;
+
+        cur->left = pre;
         pre = cur;
-        
-        dfs(cur-right);
+
+        dfs(cur->right);
     }
 };
 ```
@@ -1258,26 +1229,27 @@ public:
     Node *treeToDoublyList(Node *root) {
         if (!root)
             return nullptr;
-        stack<Node *stk;
-        vector<Node *arr;
-        
+        stack<Node *> stk;
+        vector<Node *> arr;
+
         while (root || !stk.empty()) {
             while (root) {
                 stk.push(root);
-                root = root-left;
+                root = root->left;
             }
-            root = stk.top(); stk.pop();
+            root = stk.top();
+            stk.pop();
             arr.push_back(root);
-            root = root-right;
+            root = root->right;
         }
-        
+
         // 迭代是需要把结果存入数组, 不然遍历会出现问题
         int p, n;
         for (int i = 0; i < arr.size(); ++i) {
             n = (i + 1) % arr.size();
             p = (i + arr.size() - 1) % arr.size();
-            arr[i]-left = arr[p];
-            arr[i]-right = arr[n];
+            arr[i]->left = arr[p];
+            arr[i]->right = arr[n];
         }
         return arr[0];
     }
@@ -1285,6 +1257,9 @@ public:
 ```
 
 **follow up**:
+
+
+
 ### 剑指 Offer 54. 二叉搜索树的第k大节点
 
 > 给定一棵二叉搜索树，请找出其中第k大的节点。
@@ -1301,25 +1276,26 @@ public:
 ```cpp
 class Solution {
 public:
-    int kthLargest(TreeNode* root, int k) {
-        return helper(root, k)-val;
+    int kthLargest(TreeNode *root, int k) {
+        return helper(root, k)->val;
     }
+
     TreeNode *helper(TreeNode *root, int &k) {
         if (!root)
             return nullptr;
-        
+
         TreeNode *tmp;
-        tmp = helper(root-right, k);
+        tmp = helper(root->right, k);
         if (tmp)
             return tmp;
-        
+
         if (!--k)
             return root;
-        
-        tmp = helper(root-left, k);
+
+        tmp = helper(root->left, k);
         if (tmp)
             return tmp;
-        
+
         return nullptr;
     }
 };
@@ -1343,13 +1319,13 @@ public:
 **代码**:
 
 ```c
-int maxDepth(struct TreeNode* root){
+int maxDepth(struct TreeNode *root) {
     if (!root)
         return 0;
-    
-    int l = maxDepth(root-left);
-    int r = maxDepth(root-right);
-    return 1 + (l r ? l : r);
+
+    int l = maxDepth(root->left);
+    int r = maxDepth(root->right);
+    return 1 + (l > r ? l : r);
 }
 ```
 
@@ -1421,15 +1397,15 @@ bool isBalanced(struct TreeNode* root){
 ```c
 struct TreeNode *lowestCommonAncestor(struct TreeNode *root, struct TreeNode *p, struct TreeNode *q) {
     while (root) {
-        if (root->val > p->val && root->val > q->val){
+        if (root->val > p->val && root->val > q->val) {
             root = root->left;
             continue;
         }
-        if (root->val < p->val && root->val < q->val){
+        if (root->val < p->val && root->val < q->val) {
             root = root->right;
             continue;
         }
-        
+
         return root;
     }
     return root;
@@ -1503,7 +1479,7 @@ struct TreeNode *lowestCommonAncestor(struct TreeNode *root, struct TreeNode *p,
 
 **代码**:
 ```c
-int maxProfit(int* prices, int pricesSize){
+int maxProfit(int *prices, int pricesSize) {
     if (pricesSize == 0)
         return 0;
     int hold = prices[0];
@@ -1511,8 +1487,8 @@ int maxProfit(int* prices, int pricesSize){
     int cur_benefit;
 
     for (int i = 1; i < pricesSize; ++i) {
-        if ((cur_benefit = prices[i] - hold) 0)
-            cur_max_benefit = cur_benefit cur_max_benefit ? cur_benefit : cur_max_benefit;
+        if ((cur_benefit = prices[i] - hold) > 0)
+            cur_max_benefit = cur_benefit > cur_max_benefit ? cur_benefit : cur_max_benefit;
         else
             hold = prices[i];
     }
@@ -1525,7 +1501,7 @@ func maxProfit(prices []int) int {
 	hold := prices[0];
 	profit := 0
 	for _, price := range prices {
-		if price - hold 0 {
+		if price - hold > 0 {
 			profit = int(math.Max(float64(price-hold), float64(profit)))
 		} else {
 			hold = price
@@ -1570,12 +1546,12 @@ func maxProfit(prices []int) int {
 ```cpp
 class Solution {
 public:
-    int maxSubArray(vector<int&nums) {
+    int maxSubArray(vector<int> &nums) {
         int res = INT32_MIN;
         int cur_max = 0;
         for (auto &num: nums) {
-            cur_max = cur_max + num num ? cur_max + num : num;
-            res = res cur_max ? res : cur_max;
+            cur_max = cur_max + num > num ? cur_max + num : num;
+            res = res > cur_max ? res : cur_max;
         }
         return res;
     }
@@ -1583,20 +1559,20 @@ public:
 ```
 
 ```c
-int maxSubArray(int* nums, int numsSize){
+int maxSubArray(int *nums, int numsSize) {
     if (numsSize == 0)
         return 0;
-    
+
     int cur_max = nums[0];
     int pre_sum = nums[0];
     for (int i = 1; i < numsSize; ++i) {
         pre_sum += nums[i];
-        if (nums[i] pre_sum) {
+        if (nums[i] > pre_sum) {
             pre_sum = nums[i];
         }
-        cur_max = cur_max pre_sum ? cur_max : pre_sum;
+        cur_max = cur_max > pre_sum ? cur_max : pre_sum;
     }
-    
+
     return cur_max;
 }
 ```
@@ -1628,25 +1604,25 @@ int maxSubArray(int* nums, int numsSize){
 
 ```c
 int my_max(int a, int b) {
-    return a b ? a : b;
+    return a > b ? a : b;
 }
 
 int maxValue(int **grid, int gridSize, int *gridColSize) {
     if (gridSize == 0)
         return 0;
     for (int i = 1; i < gridSize; ++i)
-        grid[i][0] += grid[i-1][0];
- 
+        grid[i][0] += grid[i - 1][0];
+
     for (int i = 1; i < gridColSize[0]; ++i)
-        grid[0][i] += grid[0][i-1];
+        grid[0][i] += grid[0][i - 1];
 
     for (int i = 1; i < gridSize; ++i) {
         for (int j = 1; j < gridColSize[i]; ++j) {
             grid[i][j] = my_max(grid[i][j] + grid[i - 1][j], grid[i][j] + grid[i][j - 1]);
         }
     }
-    
-    return grid[gridSize-1][gridColSize[0]-1];
+
+    return grid[gridSize - 1][gridColSize[0] - 1];
 }
 ```
 
@@ -1734,12 +1710,12 @@ int lengthOfLongestSubstring(char *s) {
     char c;
     int map[128];
     memset(map, -1, sizeof(map));
-    for (;(c = s[ed]); ++ed) {
-        if (map[c] != -1 && map[c] st) {
+    for (; (c = s[ed]); ++ed) {
+        if (map[c] != -1 && map[c] > st) {
             st = map[c];
         }
         map[c] = ed;
-        res = ed - st res ? ed - st : res;
+        res = ed - st > res ? ed - st : res;
     }
     return res;
 }
@@ -1781,19 +1757,19 @@ cur 和 pre
 **代码**:
 
 ```c
-struct ListNode* deleteNode(struct ListNode* head, int val){
+struct ListNode *deleteNode(struct ListNode *head, int val) {
     struct ListNode node;
     struct ListNode *dummy = &node;
-    dummy-next = head;
+    dummy->next = head;
     struct ListNode *pre = dummy;
     while (head) {
-        if (head-val == val) {
-            pre-next = head-next;
+        if (head->val == val) {
+            pre->next = head->next;
         }
         pre = head;
-        head = head-next;
+        head = head->next;
     }
-    return dummy-next;
+    return dummy->next;
 }
 ```
 
@@ -1826,16 +1802,16 @@ struct ListNode* deleteNode(struct ListNode* head, int val){
 **代码**:
 
 ```c
-struct ListNode* getKthFromEnd(struct ListNode* head, int k){
+struct ListNode *getKthFromEnd(struct ListNode *head, int k) {
     struct ListNode *slow;
     struct ListNode *fast = head;
     for (int i = 0; i < k; ++i) {
-        fast = fast-next;
+        fast = fast->next;
     }
     slow = head;
     while (fast) {
-        slow = slow-next;
-        fast = fast-next;
+        slow = slow->next;
+        fast = fast->next;
     }
     return slow;
 }
@@ -1863,23 +1839,23 @@ struct ListNode* getKthFromEnd(struct ListNode* head, int k){
 
 **代码**:
 
-```
-struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2){
+```c
+struct ListNode *mergeTwoLists(struct ListNode *l1, struct ListNode *l2) {
     struct ListNode node;
     struct ListNode *dummy = &node;
     struct ListNode *cursor = dummy;
     while (l1 && l2) {
-        if (l1-val < l2-val) {
-            cursor-next = l1;
-            l1 = l1-next;
+        if (l1->val < l2->val) {
+            cursor->next = l1;
+            l1 = l1->next;
         } else {
-            cursor-next = l2;
-            l2 = l2-next;
+            cursor->next = l2;
+            l2 = l2->next;
         }
-        cursor = cursor-next;
+        cursor = cursor->next;
     }
-    cursor-next = l1 ? l1 : l2;
-    return dummy-next;
+    cursor->next = l1 ? l1 : l2;
+    return dummy->next;
 }
 ```
 
@@ -1908,9 +1884,9 @@ struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *he
     struct ListNode *fixB = headB;
     int flag = 0;
     while (headA != headB) {
-        headA = headA ? headA-next : ({flag++; fixB;});
-        headB = headB ? headB-next : ({flag++; fixA;});
-        if (flag 2)
+        headA = headA ? headA->next : ({flag++; fixB;});
+        headB = headB ? headB->next : ({flag++; fixA;});
+        if (flag > 2)
             return NULL;
     }
     return headA;
@@ -1950,7 +1926,7 @@ struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *he
 ```cpp
 class Solution {
 public:
-    bool check(vector<vector<char&board, vector<vector<int&visited, int i, int j, string &s, int k) {
+    bool check(vector<vector<char>> &board, vector<vector<int>> &visited, int i, int j, string &s, int k) {
         if (board[i][j] != s[k])
             return false;
 
@@ -1958,14 +1934,17 @@ public:
         if (k == s.length() - 1)
             return true;
         visited[i][j] = true;
-        vector<pair<int, intdirections{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        vector<pair<int, int>> directions{{0,  1},
+                                          {0,  -1},
+                                          {1,  0},
+                                          {-1, 0}};
         bool result = false;
         for (auto &dir: directions) {
             int newi = i + dir.first, newj = j + dir.second;
-            if (newi = 0 && newi < board.size() && newj = 0 && newj < board[0].size()) {
+            if (newi >= 0 && newi < board.size() && newj >= 0 && newj < board[0].size()) {
                 if (visited[newi][newj])
                     continue;
-                if ((result = check(board, visited, newi, newj, s, k+1)))
+                if ((result = check(board, visited, newi, newj, s, k + 1)))
                     break;
             }
         }
@@ -1973,9 +1952,9 @@ public:
         return result;
     }
 
-    bool exist(vector<vector<char&board, string word) {
+    bool exist(vector<vector<char>> &board, string word) {
         int h = board.size(), w = board[0].size();
-        vector<vector<intvisited(h, vector<int(w));
+        vector<vector<int>> visited(h, vector<int>(w));
         for (int i = 0; i < h; ++i) {
             for (int j = 0; j < w; ++j) {
                 if (check(board, visited, i, j, word, 0))
@@ -2022,36 +2001,39 @@ sum(array)
 ```c++
 class Solution {
 public:
-    vector<vector<intres;
-    vector<vector<intpathSum(TreeNode* root, int target) {
-        vector<inttmp;
+    vector<vector<int>> res;
+
+    vector<vector<int>> pathSum(TreeNode *root, int target) {
+        vector<int> tmp;
         if (!root)
             return res;
-        
+
         helper(root, tmp, target);
         return res;
     }
+
 private:
-    int sum_of_eles(vector<int&arr) {
+    int sum_of_eles(vector<int> &arr) {
         int res = 0;
         for (int x: arr) {
             res += x;
         }
         return res;
     }
-    void helper(TreeNode *root, vector<int&cur_arr, int target) {
-        cur_arr.push_back(root-val);
-        if (!root-left && !root-right) {
+
+    void helper(TreeNode *root, vector<int> &cur_arr, int target) {
+        cur_arr.push_back(root->val);
+        if (!root->left && !root->right) {
             if (sum_of_eles(cur_arr) == target) {
                 res.push_back(cur_arr);
             }
             cur_arr.pop_back();
             return;
         }
-        if (root-left)
-            helper(root-left, cur_arr, target);
-        if (root-right)
-            helper(root-right, cur_arr, target);
+        if (root->left)
+            helper(root->left, cur_arr, target);
+        if (root->right)
+            helper(root->right, cur_arr, target);
         cur_arr.pop_back();
     }
 };
@@ -2074,12 +2056,12 @@ private:
 
 **代码**:
 
-```
+```cpp
 class Solution {
 private:
-    vector<vector<intres;
+    vector<vector<int>> res;
 
-    void backtrace(vector<int&nums, int st) {
+    void backtrace(vector<int> &nums, int st) {
         if (st == nums.size() - 1)
             res.push_back(nums);
 
@@ -2089,8 +2071,9 @@ private:
             swap(nums[i], nums[st]);
         }
     }
+
 public:
-    vector<vector<intpermute(vector<int& nums) {
+    vector<vector<int>> permute(vector<int> &nums) {
         backtrace(nums, 0);
         return res;
     }
@@ -2127,7 +2110,7 @@ for循环为了交换从当前到n-1
 ```cpp
 class Solution {
 private:
-    vector<stringres;
+    vector<string> res;
 
     void backtrack(string &s, int x) {
         if (x == s.size() - 1) {
@@ -2147,7 +2130,7 @@ private:
     }
 
 public:
-    vector<stringpermutation(string s) {
+    vector<string> permutation(string s) {
         backtrack(s, 0);
         return res;
     }
@@ -2233,9 +2216,9 @@ public:
 
 ```swift
 class Solution {
-    func movingCount(_ m: Int, _ n: Int, _ k: Int) -Int {
+    func movingCount(_ m: Int, _ n: Int, _ k: Int) -> Int {
         var res = 1;
-        var seen: Set<[Int]= [[0,0]]
+        var seen: Set<[Int]> = [[0,0]]
         var bfs = [[0, 0]]
         while !(bfs.isEmpty) {
             let ele = bfs.remove(at: 0)
@@ -2243,7 +2226,7 @@ class Solution {
             let btm = ele[0] + 1
             let lft = ele[1] - 1
             let rgt = ele[1] + 1
-            if top = 0 && !seen.contains([top, ele[1]]) && (self.everyPlaceSum(top) + self.everyPlaceSum(ele[1])) <= k {
+            if top >= 0 && !seen.contains([top, ele[1]]) && (self.everyPlaceSum(top) + self.everyPlaceSum(ele[1])) <= k {
                 bfs.append([top, ele[1]])
                 seen.insert([top, ele[1]])
                 res += 1
@@ -2253,7 +2236,7 @@ class Solution {
                 seen.insert([btm, ele[1]])
                 res += 1
             }
-            if lft = 0 && !seen.contains([ele[0], lft])  && (self.everyPlaceSum(lft) + self.everyPlaceSum(ele[0])) <= k {
+            if lft >= 0 && !seen.contains([ele[0], lft])  && (self.everyPlaceSum(lft) + self.everyPlaceSum(ele[0])) <= k {
                 bfs.append([ele[0], lft])
                 seen.insert([ele[0], lft])
                 res += 1
@@ -2267,7 +2250,7 @@ class Solution {
         return res
     }
     
-    func everyPlaceSum(_ x: Int) -Int {
+    func everyPlaceSum(_ x: Int) -> Int {
         if x == 0 {
             return 0
         }
@@ -2284,24 +2267,13 @@ class Solution {
 
 ## dfs
 
-### 剑指 offer 41 数据流中的中位数
+### 题目
 
-> 如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
->
-> 例如，
->
-> [2,3,4] 的中位数是 3
->
-> [2,3] 的中位数是 (2 + 3) / 2 = 2.5
->
-> 设计一个支持以下两种操作的数据结构：
->
-> void addNum(int num) - 从数据流中添加一个整数到数据结构中。
-> double findMedian() - 返回目前所有元素的中位数。
+> 问题
 
 **思路**:
 
-建立一个大根堆, 一个小根堆
+
 
 **代码**:
 
@@ -2310,10 +2282,6 @@ class Solution {
 ```
 
 **follow up**
-
-
-
-
 
 
 
@@ -2342,33 +2310,33 @@ second + third == target - x *(两数之和)*
 ```cpp
 class Solution {
 public:
-    vector<vector<intthreeSum(vector<int& nums) {
+    vector<vector<int>> threeSum(vector<int> &nums) {
         int first, second, third, target;
         int n = nums.size();
-        
+
         sort(nums.begin(), nums.end());
-        vector<vector<intans;
+        vector<vector<int>> ans;
         for (first = 0; first < n; ++first) {
-            if (first 0 && nums[first] == nums[first - 1])
+            if (first > 0 && nums[first] == nums[first - 1])
                 continue;
-            
+
             third = n - 1;
             target = -nums[first];
             for (second = first + 1; second < n; ++second) {
-                if (second first + 1 && nums[second] == nums[second - 1])
+                if (second > first + 1 && nums[second] == nums[second - 1])
                     continue;
 
-                while (second < third && nums[second] + nums[third] target)
+                while (second < third && nums[second] + nums[third] > target)
                     --third;
-                
+
                 if (second == third)
                     break;
-                
+
                 if (nums[second] + nums[third] == target)
                     ans.push_back({nums[first], nums[second], nums[third]});
             }
         }
-        
+
         return ans;
     }
 };
@@ -2395,20 +2363,20 @@ public:
 
 **代码**:
 
-```
-bool isStraight(int* nums, int numsSize){
+```c
+bool isStraight(int *nums, int numsSize) {
     int set[14];
     int m_min = INT32_MAX, m_max = INT32_MIN;
     memset(set, 0, sizeof(set));
     for (int i = 0; i < numsSize; ++i) {
         if (nums[i] == 0)
             continue;
-        
+
         if (set[nums[i]]++)
             return false;
-        
+
         m_min = m_min < nums[i] ? m_min : nums[i];
-        m_max = m_max nums[i] ? m_max : nums[i];
+        m_max = m_max > nums[i] ? m_max : nums[i];
     }
     return m_max - m_min < 5;
 }
@@ -2440,7 +2408,7 @@ int *construct_state_machine(char *word, size_t word_len) {
     pi[0] = 0;
     int j = 0;
     for (int i = 1; i < word_len; ++i) {
-        while (j 0 && word[i] != word[j]) {
+        while (j > 0 && word[i] != word[j]) {
             j = pi[j - 1];
         }
         if (word[i] == word[j]) {
@@ -2459,7 +2427,7 @@ int strStr(char *word, char *pattern) {
     if (!pi)
         return 0;
     for (int i = 0, j = 0; i < n; ++i) {
-        while (j 0 && word[i] != pattern[j])
+        while (j > 0 && word[i] != pattern[j])
             j = pi[j - 1];
 
         if (word[i] == pattern[j])
@@ -2469,7 +2437,7 @@ int strStr(char *word, char *pattern) {
             return i - m + 1;
         }
     }
-    
+
     free(pi);
     return -1;
 }
@@ -2501,13 +2469,13 @@ reverse 此数之后的数组(由递增变为递减)
 ```cpp
 class Solution {
 public:
-    void nextPermutation(vector<int>& nums) {
+    void nextPermutation(vector<int> &nums) {
         int i, j;
 
-        for (i = nums.size()-2; i >= 0 && nums[i] >= nums[i + 1]; --i);
+        for (i = nums.size() - 2; i >= 0 && nums[i] >= nums[i + 1]; --i);
         if (i >= 0) {
             for (j = nums.size() - 1; j >= 0 && nums[i] >= nums[j]; --j);
-            
+
             swap(nums[i], nums[j]);
         }
 
