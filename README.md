@@ -134,8 +134,6 @@ void merge_sort(int *nums, size_t len) {
 
 
 
-
-
 ### 215 数组中的第K个最大元素
 
 >
@@ -560,6 +558,77 @@ int findMin(int* nums, int numsSize) {
 ```
 
 **follow up**
+
+### 4. 寻找两个正序数组的中位数
+
+> 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+>
+> 算法的时间复杂度应该为 O(log (m+n)) 。
+>
+
+**思路**:
+
+中位数可知是找两个数组中的第K个, k = (nums1_len + nums2_len + 1) / 2
+
+然后分别对两个数组进行二分
+
+如果二分的数组1的值数组2的值小, 那么可以排除数组1之前比关键值都小的数, 反之同理
+
+这样一下子排除了 k - mid 个数
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int getKthElement(const vector<int>& nums1, const vector<int>& nums2, int k) {
+        int m = nums1.size();
+        int n = nums2.size();
+        int index1 = 0, index2 = 0;
+
+        while (true) {
+            // 边界情况
+            if (index1 == m) {
+                return nums2[index2 + k - 1];
+            }
+            if (index2 == n) {
+                return nums1[index1 + k - 1];
+            }
+            if (k == 1) {
+                return min(nums1[index1], nums2[index2]);
+            }
+
+            // 正常情况
+            int newIndex1 = min(index1 + k / 2 - 1, m - 1);
+            int newIndex2 = min(index2 + k / 2 - 1, n - 1);
+            int pivot1 = nums1[newIndex1];
+            int pivot2 = nums2[newIndex2];
+            if (pivot1 <= pivot2) {
+                k -= newIndex1 - index1 + 1;
+                index1 = newIndex1 + 1;
+            }
+            else {
+                k -= newIndex2 - index2 + 1;
+                index2 = newIndex2 + 1;
+            }
+        }
+    }
+
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int totalLength = nums1.size() + nums2.size();
+        if (totalLength % 2 == 1) {
+            return getKthElement(nums1, nums2, (totalLength + 1) / 2);
+        }
+        else {
+            return (getKthElement(nums1, nums2, totalLength / 2) + getKthElement(nums1, nums2, totalLength / 2 + 1)) / 2.0;
+        }
+    }
+};
+```
+
+**follow up**
+
+
 
 
 
@@ -1679,6 +1748,8 @@ class Solution:
 
 ### 剑指 Offer 48. 最长不含重复字符的子字符串
 
+### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+
 > 请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
 >
 >  
@@ -1721,56 +1792,642 @@ int lengthOfLongestSubstring(char *s) {
 }
 ```
 
+```cpp
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> map;
+        int max_len = 0;
+        int st = -1;
+        
+        for (int i = 0; i < s.size(); ++i) {
+            char c = s[i];
+            if (map.count(c) && map[c] > st) {
+                st = map[c];
+            }
+
+            map[c] = i;
+            max_len = max(max_len, i - st);
+        }
+
+        return max_len;
+    }
+};
+```
+
+**follow up**
+
+### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
+
+> 数字 `n` 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 **有效的** 括号组合。
+
+**思路**:
+
+动态规划
+
+下一个括号放在哪里
+
+"(" + 【i=p时所有括号的排列组合】 + ")" + 【i=q时所有括号的排列组合】
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        if (n == 0)
+            return vector<string>();
+
+        vector<vector<string>> dp(n + 1);
+        dp[0] = {""};
+        dp[1] = {"()"};
+        for (int i = 2; i <= n; ++i) {
+            vector<string> cur;
+            for (int j = 0; j < i; ++j) {
+                for (string p : dp[j]) {
+                    for (string q: dp[i - j - 1]) {
+                        string s = "(" + p + ")" + q;
+                        dp[i].push_back(s);
+                    }
+                }
+            }
+        }
+        
+        return dp[n];
+    }
+};
+```
+
+```cpp
+// 递归做法
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        if (n == 0)
+            return {""};
+
+        vector<string> ans;
+        for (int i = 0; i < n; ++i)
+            for (string p : this->generateParenthesis(i))
+                for (string q : this->generateParenthesis(n - 1 - i))
+                    ans.push_back("(" + p + ")" + q);
+        
+        return ans;
+    }
+};
+```
+
+
+
+**follow up**
+
+## 链表
+
+### 206. 反转链表
+
+> 给你单链表的头节点 `head` ，请你反转链表，并返回反转后的链表。
+
+**思路**:
+
+方法1: 遍历并改变每个指针的指向
+
+方法2: 头插法, 把当前节点的后面一个节点放到当前节点的前面
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode *last = nullptr;
+        ListNode *cur = nullptr;
+        while (head) {
+            cur = head;
+            head = head->next;
+            cur->next = last;
+            last = cur;
+        }
+        
+        return cur;
+    }
+};
+```
+
+```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head)
+            return nullptr;
+        
+        ListNode *pre = new ListNode(0, head);
+        ListNode *cur = head;
+        ListNode *next;
+        while ((next = cur->next)) {
+            cur->next = next->next;
+            next->next = pre->next;
+            pre->next = next;
+        }
+
+        return pre->next;
+    }
+};
+```
+
+
+
+**follow up**
+
+### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+
+> 给你单链表的头指针 head 和两个整数 left 和 right ，其中 left <= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
+>
+
+**思路**:
+
+使用[反转链表](# 206. 反转链表)头插法
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        ListNode *dummy = new ListNode(0, head);
+        ListNode *pre = dummy;
+
+        for (int i = 0; i < left - 1; ++i)
+            pre = pre->next;
+
+        ListNode *cur = pre->next;
+        ListNode *next;
+        for (int i = 0; i < right - left; ++i) {
+            next = cur->next;
+            cur->next = next->next;
+            next->next = pre->next;
+            pre->next = next;
+        }
+
+        return dummy->next;
+    }
+};
+```
+
 **follow up**
 
 
 
-## 链表
+### [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/)
 
 ### 剑指 Offer 18. 删除链表的节点
 
-> 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
->
-> 返回删除后的链表的头节点。
->
-> 注意：此题对比原题有改动
->
-> 示例 1:
->
-> 输入: head = [4,5,1,9], val = 5
-> 输出: [4,1,9]
-> 解释: 给定你链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -1 -9.
-> 示例 2:
->
-> 输入: head = [4,5,1,9], val = 1
-> 输出: [4,5,9]
-> 解释: 给定你链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -5 -9.
+> 给你一个链表的头节点 `head` 和一个整数 `val` ，请你删除链表中所有满足 `Node.val == val` 的节点，并返回 **新的头节点** 。
 
 **思路**:
 
-两个游标
 
-cur 和 pre
-
-当 cur 的值是要删除的值时, 让pre的next指向cur的next即可
 
 **代码**:
 
-```c
-struct ListNode *deleteNode(struct ListNode *head, int val) {
-    struct ListNode node;
-    struct ListNode *dummy = &node;
-    dummy->next = head;
-    struct ListNode *pre = dummy;
-    while (head) {
-        if (head->val == val) {
-            pre->next = head->next;
+```cpp
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode *dummy = new ListNode(0, head);
+        ListNode *pre = dummy;
+        while (head) {
+            if (head->val != val) {
+                pre->next = head;
+                pre = head;
+            }
+            head = head->next;
         }
-        pre = head;
-        head = head->next;
+
+        pre->next = nullptr;
+        return dummy->next;
     }
-    return dummy->next;
-}
+};
+```
+
+**follow up**
+
+
+
+### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+
+> 存在一个按升序排列的链表，给你这个链表的头节点 `head` ，请你删除所有重复的元素，使每个元素 **只出现一次** 。
+>
+> 返回同样按升序排列的结果链表。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode *deleteDuplicates(ListNode *head) {
+        if (!head)
+            return head;
+
+        ListNode *cur = head;
+        while (cur->next) {
+            if (cur->val == cur->next->val)
+                cur->next = cur->next->next;
+            else
+                cur = cur->next;
+        }
+
+        return head;
+    }
+};
+```
+
+**follow up**
+
+
+
+
+
+### [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+
+> 存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
+>
+> 返回同样按升序排列的结果链表。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode *deleteDuplicates(ListNode *head) {
+        if (!head)
+            return head;
+
+        struct ListNode *node;
+        struct ListNode *cursor = head;
+        struct ListNode *dummy = new ListNode;
+        struct ListNode *vertex = dummy;
+
+        while ((node = cursor) != nullptr) {
+            cursor = cursor->next;
+            if (cursor && node->val == cursor->val) {
+                do {
+                    cursor = cursor->next;
+                } while (cursor && cursor->val == node->val);
+
+                continue;
+            }
+
+            dummy->next = node;
+            dummy = dummy->next;
+        }
+        dummy->next = nullptr;
+        return vertex->next;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
+
+> 给你一个链表的头节点 head ，判断链表中是否有环。
+>
+> 如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。
+>
+> 如果链表中存在环，则返回 true 。 否则，返回 false 。
+>
+
+**思路**:
+
+快慢指针
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (!head)
+            return false;
+        ListNode *slow = head, *fast = head->next;
+        while (fast && fast->next) {
+            if (slow == fast)
+                return true;
+
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return false;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+
+> 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+>
+> 如果链表中有某个节点，可以通过连续跟踪 next 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。如果 pos 是 -1，则在该链表中没有环。注意：pos 不作为参数进行传递，仅仅是为了标识链表的实际情况。
+>
+> 不允许修改 链表。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if (!head)
+            return head;
+        
+        struct ListNode *slow = head;
+        struct ListNode *fast = head;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast) {
+                fast = head;
+                while (slow != fast) {
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                return slow;
+            }
+
+        }
+
+        return nullptr;
+    }
+};
+```
+
+注意此题只能按照上述做, 而不能
+
+详情: [K神解析](https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/)
+
+```cpp
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if (!head)
+            return head;
+        ListNode *slow, *fast;
+        slow = head;
+        fast = head->next;
+        while (fast && fast->next) {
+            if (slow == fast) {
+                fast = head;
+                while (slow != fast) {
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                return slow;
+            }
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return nullptr;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [876. 链表的中间结点](https://leetcode-cn.com/problems/middle-of-the-linked-list/)
+
+> 给定一个头结点为 `head` 的非空单链表，返回链表的中间结点。
+>
+> 如果有两个中间结点，则返回第二个中间结点。
+
+**思路**:
+
+快慢指针, 注意边界条件
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode *slow = head, *fast = head;
+
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return slow;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
+
+难度中等1192
+
+> 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+
+**思路**:
+
+递归简介明了, 细细体会
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if (!(head && head->next))
+            return head;
+
+        ListNode *vertex = head->next;
+        head->next = swapPairs(vertex->next);
+        vertex->next = head;
+        
+        return vertex;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [328. 奇偶链表](https://leetcode-cn.com/problems/odd-even-linked-list/)
+
+> 给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (!head)
+            return nullptr;
+        ListNode *odd = head;
+        ListNode *even = head->next;
+        ListNode *anchor = even;
+        while (even && even->next) {
+            odd = odd->next = odd->next->next;
+            even = even->next = even->next->next;
+        }
+
+        odd->next = anchor;
+        return head;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+
+> 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+>
+> 请你将两个数相加，并以相同形式返回一个表示和的链表。
+>
+> 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+>
+
+**思路**:
+
+模拟就完事了
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+        ListNode *vertex = new ListNode;
+        ListNode *cur = vertex;
+        ListNode *temp;
+        int carry = 0;
+        int sum, val;
+
+        while (l1 || l2) {
+            if (l1 && l2) {
+                sum = l1->val + l2->val + carry;
+                l1 = l1->next;
+                l2 = l2->next;
+            } else if (l1) {
+                sum = l1->val + carry;
+                l1 = l1->next;
+            } else {
+                sum = l2->val + carry;
+                l2 = l2->next;
+            }
+
+            val = sum % 10;
+            carry = sum / 10;
+            temp = new ListNode(val);
+            cur->next = temp;
+            cur = cur->next;
+        }
+
+        if (carry)
+            cur->next = new ListNode(1);
+        
+        return vertex->next;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [445. 两数相加 II](https://leetcode-cn.com/problems/add-two-numbers-ii/)
+
+> 给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。
+>
+> 你可以假设除了数字 0 之外，这两个数字都不会以零开头。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+        stack<ListNode *> s1, s2;
+
+        while (l1) {
+            s1.push(l1);
+            l1 = l1->next;
+        }
+
+        while (l2) {
+            s2.push(l2);
+            l2 = l2->next;
+        }
+
+        int sum, val;
+        int carry = 0;
+        ListNode *next = nullptr;
+        ListNode *cur;
+        while (!(s1.empty() && s2.empty())) {
+            if (!s1.empty() && !s2.empty()) {
+                sum = s1.top()->val + s2.top()->val + carry;
+                s1.pop(), s2.pop();
+            } else if (!s1.empty()) {
+                sum = s1.top()->val + carry;
+                s1.pop();
+            } else {
+                sum = s2.top()->val + carry;
+                s2.pop();
+            }
+            
+            val = sum % 10;
+            carry = sum / 10;
+            cur = new ListNode(val, next);
+            next = cur;
+        }
+        
+        if (carry)
+            cur = new ListNode(1, next);
+        
+        return cur;
+    }
+};
 ```
 
 **follow up**
@@ -1835,6 +2492,8 @@ struct ListNode *getKthFromEnd(struct ListNode *head, int k) {
 
 **思路**:
 
+
+
 这不就是归并排序的子问题
 
 **代码**:
@@ -1857,6 +2516,116 @@ struct ListNode *mergeTwoLists(struct ListNode *l1, struct ListNode *l2) {
     cursor->next = l1 ? l1 : l2;
     return dummy->next;
 }
+```
+
+**follow up**
+
+
+
+### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
+
+> 给你一个链表数组，每个链表都已经按升序排列。
+>
+> 请你将所有链表合并到一个升序链表中，返回合并后的链表。
+
+**思路**:
+
+归并的思想两两合并
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    ListNode *merge_two(ListNode *headA, ListNode *headB) {
+        ListNode *dummy = new ListNode;
+        ListNode *cursor = dummy;
+        while (headA && headB) {
+            if (headA->val < headB->val) {
+                cursor->next = headA;
+                headA = headA->next;
+            } else {
+                cursor->next = headB;
+                headB = headB->next;
+            }
+
+            cursor = cursor->next;
+        }
+        cursor->next = headA ? headA : headB;
+        return dummy->next;
+    }
+
+    ListNode *merge_lists(vector<ListNode *> &lists, int l, int r) {
+        if (l == r)
+            return lists[l];
+        if (l > r)
+            return nullptr;
+        int m = l + (r - l) / 2;
+        return merge_two(merge_lists(lists, l, m), merge_lists(lists, m + 1, r));
+    }
+
+public:
+    ListNode *mergeKLists(vector<ListNode *> &lists) {
+        return merge_lists(lists, 0, lists.size() - 1);
+    }
+};
+```
+
+**follow up**
+
+
+
+### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
+
+> 给你链表的头结点 `head` ，请将其按 **升序** 排列并返回 **排序后的链表** 。
+
+**思路**:
+
+[归并排序](#归并排序)的思想
+
+和[23. 合并K个升序链表](#23. 合并K个升序链表) 代码相似部分很多
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    ListNode *merge_two(ListNode *l1, ListNode *l2) {
+        ListNode *dummy = new ListNode;
+        ListNode *cur = dummy;
+
+        while (l1 && l2) {
+            if (l1->val < l2->val) {
+                cur->next = l1;
+                l1 = l1->next;
+            } else {
+                cur->next = l2;
+                l2 = l2->next;
+            }
+            cur = cur->next;
+        }
+
+        cur->next = l1 ? l1 : l2;
+        return dummy->next;
+    }
+
+public:
+    ListNode *sortList(ListNode *head) {
+        if (!head || !head->next)
+            return head;
+
+        ListNode *slow = head;
+        ListNode *fast = head->next;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        fast = slow->next;
+        slow->next = nullptr;
+
+        return merge_two(sortList(head), sortList(fast));
+    }
+};
 ```
 
 **follow up**
@@ -1896,6 +2665,237 @@ struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *he
 **follow up**
 
 
+
+### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
+
+> 给你一个单链表的头节点 `head` ，请你判断该链表是否为回文链表。如果是，返回 `true` ；否则，返回 `false` 。
+
+**思路**:
+
+快慢指针取中间, 反转后半部分, 和前半部分比较
+
+注意: 当第一个元素
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    ListNode *reverse_listnode(ListNode *head) {
+        ListNode *temp;
+        ListNode *prev = nullptr;
+        while (head) {
+            temp = head->next;
+            head->next = prev;
+            prev = head;
+            head = temp;
+        }
+        
+        return prev;
+    }
+    
+    bool compare_listnode(ListNode *l1, ListNode *l2) {
+        while (l2) {
+            if (l1->val != l2->val)
+                return false;
+            l1 = l1->next;
+            l2 = l2->next;
+        }
+
+        return true;
+    }
+
+public:
+    bool isPalindrome(ListNode *head) {
+        if (!head)
+            return head;
+        ListNode *slow, *fast;
+        slow = fast = head;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        fast = reverse_listnode(slow);
+        return compare_listnode(head, fast);
+    }
+};
+```
+
+**follow up**
+
+
+
+### [143. 重排链表](https://leetcode-cn.com/problems/reorder-list/)
+
+> 给定一个单链表 L 的头节点 head ，单链表 L 表示为：
+>
+> L0 → L1 → … → Ln - 1 → Ln
+> 请将其重新排列后变为：
+>
+> L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+> 不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+**思路**:
+
+1. 找到中间节点
+2. 反转后面链表
+3. 合并
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    ListNode *reverse_listnode(ListNode *head) {
+        ListNode *temp;
+        ListNode *prev = nullptr;
+        while (head) {
+            temp = head->next;
+            head->next = prev;
+            prev = head;
+            head = temp;
+        }
+
+        return prev;
+    }
+
+    ListNode *find_median(ListNode *l1, ListNode *l2) {
+        struct ListNode *slow, *fast;
+        slow = fast = l1;
+        while (fast != l2 && fast->next != l2) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return slow;
+    }
+
+    void merge(ListNode *l1, ListNode *l2) {
+        ListNode *prev = new ListNode;
+        ListNode *temp;
+        while (l1 && l2) {
+            temp = l1->next;
+            prev->next = l1;
+            l1->next = l2;
+            prev = l2;
+            l2 = l2->next;
+            l1 = temp;
+        }
+      
+      	// 注意这一行代码, 我们找中间节点没有置下一个为nullptr
+      	// 所以如果是偶数节点, 最后会变成 head_list->mid_first<-mid_second
+      	//																				|
+      	//																				v
+      	// 																				nullptr											
+        if (prev == prev->next)
+            prev->next = nullptr;
+    }
+
+public:
+    void reorderList(ListNode *head) {
+        ListNode *mid = find_median(head, nullptr);
+        mid = reverse_listnode(mid);
+        merge(head, mid);
+    }
+};
+```
+
+**follow up**
+
+
+
+### [430. 扁平化多级双向链表](https://leetcode-cn.com/problems/flatten-a-multilevel-doubly-linked-list/)
+
+> 多级双向链表中，除了指向下一个节点和前一个节点指针之外，它还有一个子链表指针，可能指向单独的双向链表。这些子列表也可能会有一个或多个自己的子项，依此类推，生成多级数据结构，如下面的示例所示。
+>
+> 给你位于列表第一级的头节点，请你扁平化列表，使所有结点出现在单级双链表中。
+>
+
+**思路**:
+
+迭代求解, 比官方更简洁
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    Node *flatten(Node *head) {
+        Node *cur = head;
+        stack<Node *> stk;
+
+        while (cur) {
+            if (cur->child) {
+                if (cur->next) {
+                    stk.push(cur->next);
+                    cur->next->prev = nullptr;
+                }
+                cur->next = cur->child;
+                cur->child->prev = cur;
+                cur->child = nullptr;
+            }
+
+            if (!(cur->next || stk.empty())) {
+                cur->next = stk.top();
+                stk.top()->prev = cur;
+                stk.pop();
+            }
+            cur = cur->next;
+        }
+
+        return head;
+    }
+};
+```
+
+**follow up**
+
+### 题目
+
+> 给你二叉树的根结点 root ，请你将它展开为一个单链表：
+>
+> 展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+> 展开后的单链表应该与二叉树 先序遍历 顺序相同。
+
+**思路**:
+
+第一种方法自然是通过 **前序遍历** 展开组成链表
+
+第二种方法, 可以把 当前节点分为左节点和右节点, 
+
+1. 左边的节点要成为右节点(前序遍历左边优先)
+2. **左节点的最右的右节点**的下一个节点是右节点
+3. 当前节点重置为当前节点的右节点, 重复上述过程
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    void flatten(TreeNode *root) {
+        if (!root)
+            return;
+
+        struct TreeNode *cur = root;
+        struct TreeNode *restore_right;
+        struct TreeNode *anchor;
+        while (cur) {
+            restore_right = cur->right;
+            cur->right = cur->left;
+            cur->left = nullptr;
+          	anchor = cur;
+            while (cur->right) {
+                cur = cur->right;
+            }
+            cur->right = restore_right;
+            cur = anchor->right;
+        }
+    }
+};
+```
+
+**follow up**
 
 ## 回溯
 
@@ -2185,7 +3185,60 @@ public:
 
 **follow up**
 
+### 题目
 
+> 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+>
+> 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> combinations;
+        if (digits.empty())
+            return combinations;
+
+        unordered_map<char, string> phone_map {
+                {'2', "abc"},
+                {'3', "def"},
+                {'4', "ghi"},
+                {'5', "jkl"},
+                {'6', "mno"},
+                {'7', "pqrs"},
+                {'8', "tuv"},
+                {'9', "wxyz"},
+        };
+
+        string combination;
+        backtrack(combinations, phone_map, digits, 0, combination);
+        return combinations;
+    }
+
+    void backtrack(vector<string> &combinations, unordered_map<char, string> &phone_map, string &digits, int index, string &combination) {
+        if (index == digits.length()) {
+            combinations.push_back(combination);
+        } else {
+            char digit = digits[index];
+            string &letters = phone_map.at(digit);
+            for (char &letter : letters) {
+                combination.push_back(letter);
+                backtrack(combinations, phone_map, digits, index + 1, combination);
+                combination.pop_back();
+            }
+        }
+    }
+};
+```
+
+**follow up**
 
 ## bfs
 
@@ -2287,6 +3340,163 @@ class Solution {
 
 
 
+## 双指针
+
+### 11. 盛最多水的容器
+
+> 给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int r = height.size() - 1;
+        int l = 0;
+
+        int best = 0;
+        while (l < r) {
+            int cur = min(height[l], height[r]) * (r - l);
+            best = max(best, cur);
+
+            height[l] < height[r] ? l++ : r--;
+        }
+
+        return best;
+    }
+};
+```
+
+**follow up**
+
+
+
+## 位运算
+
+### 题目
+
+> 问题
+
+**思路**:
+
+
+
+**代码**:
+
+```
+
+```
+
+**follow up**
+
+
+
+## 滑动窗口
+
+### 3. 无重复字符的最长子串
+
+> 给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。
+
+**思路**:
+
+用一个map存放已经出现的字符, 防止重复key是char value是index
+
+当重复字符 *a* 出现时, 让第一个字符滑动至字符 *a* 上一次出现的位置, 记为*st*
+
+从字符本次的index到上次出现的位置的距离即为不重复的长度
+
+注意: 如果重复的字符上次出现的位置在 *st* 之前那么不能滑动(窗口只能向前滑动, 不能向后滑动)
+
+**代码**:
+
+```cpp
+int lengthOfLongestSubstring(char *s) {
+    int st = -1, ed = 0, res = 0;
+    char c;
+    int map[128];
+    memset(map, -1, sizeof(map));
+    for (;(c = s[ed]); ++ed) {
+        if (map[c] != -1 && map[c] > st) {
+            st = map[c];
+        }
+        map[c] = ed;
+        res = ed - st > res ? ed - st : res;
+    }
+    return res;
+}
+```
+
+**follow up**
+
+
+
+### 992. K 个不同整数的子数组
+
+> 给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定不同的子数组为好子数组。
+>
+> （例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）
+>
+> 返回 A 中好子数组的数目。
+>
+
+**思路**:
+
+题目是求, 子数组中恰好不同整数为K个: f(x, k)
+
+可以转化为
+
+子数组中不同整数最多有K个: g(x, k)
+
+则: f(x, k) = g(x, k) - g(x, k)
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    int atMostDistinct(vector<int> arr, int k) {
+        int len = arr.size();
+        vector<int> freq(len + 1);
+
+        int l = 0, r = 0;
+        int count = 0;
+        int res = 0;
+
+        while (r < len) {
+            if (freq[arr[r]] == 0)
+                count++;
+            freq[arr[r]]++;
+            r++;
+
+            while (count > k) {
+                freq[arr[l]]--;
+                if (freq[arr[l]] == 0)
+                    count--;
+                l++;
+            }
+
+            res += r - l;
+        }
+
+        return res;
+    }
+public:
+    int subarraysWithKDistinct(vector<int>& nums, int k) {
+        return atMostDistinct(nums, k) - atMostDistinct(nums, k - 1);
+    }
+};
+```
+
+**follow up**
+
+
+
 ## 其他
 
 ### 15. 三数之和
@@ -2294,7 +3504,6 @@ class Solution {
 > 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
 >
 > 注意：答案中不可以包含重复的三元组。
->
 
 
 **思路**:
@@ -2311,33 +3520,100 @@ second + third == target - x *(两数之和)*
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int> &nums) {
-        int first, second, third, target;
-        int n = nums.size();
-
         sort(nums.begin(), nums.end());
+        int first, second, third;
         vector<vector<int>> ans;
-        for (first = 0; first < n; ++first) {
+
+      	// 注意这里强转了 int, 如果不, num.size() 是一个 unsigned long 类型
+      	// 0 - 2 会是一个非常大的数字
+        for (first = 0; first < (int) nums.size() - 2; ++first) {
             if (first > 0 && nums[first] == nums[first - 1])
                 continue;
 
-            third = n - 1;
-            target = -nums[first];
-            for (second = first + 1; second < n; ++second) {
-                if (second > first + 1 && nums[second] == nums[second - 1])
+            second = first + 1;
+            third = nums.size() - 1;
+            while (second < third) {
+                if (second > first + 1 && nums[second] == nums[second - 1]) {
+                    second++;
                     continue;
+                }
 
-                while (second < third && nums[second] + nums[third] > target)
-                    --third;
-
-                if (second == third)
-                    break;
-
-                if (nums[second] + nums[third] == target)
-                    ans.push_back({nums[first], nums[second], nums[third]});
+                int target = -nums[first];
+                int two_sum = nums[second] + nums[third];
+                if (two_sum < target)
+                    second++;
+                else if (two_sum > target)
+                    third--;
+                else {
+                    ans.push_back(vector<int>{nums[first], nums[second], nums[third]});
+                    second++;
+                    third--;
+                }
             }
         }
 
         return ans;
+    }
+};
+```
+
+**follow up**
+
+[16. 最接近的三数之和](#16. 最接近的三数之和)
+
+
+
+### 16. 最接近的三数之和
+
+> 给你一个长度为 n 的整数数组 nums 和 一个目标值 target。请你从 nums 中选出三个整数，使它们的和与 target 最接近。
+>
+> 返回这三个数的和。
+>
+> 假定每组输入只存在恰好一个解。
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/3sum-closest
+> 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+**思路**:
+
+和[三数之和](#15. 三数之和)思路一样
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        int nums_len = nums.size();
+        int best = e7;
+
+        auto update = [&](int cur) {
+            if (abs(cur - target) < abs(best -target))
+                best = cur;
+        };
+
+        for (int i = 0; i < nums_len; ++i) {
+            if (i > 0 && nums[i] == nums[i - 1])
+                continue;
+
+            int j = i + 1, k = nums_len - 1;
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];
+                
+                if (sum == target)
+                    return target;
+
+                update(sum);
+                if (sum > target)
+                    k--;
+                else
+                    j++;
+            }
+        }
+        
+        return best;
     }
 };
 ```
@@ -2349,7 +3625,6 @@ public:
 ### 剑指 Offer 61. 扑克牌中的顺子
 
 > 从若干副扑克牌中随机抽 5 张牌，判断是不是一个顺子，即这5张牌是不是连续的。2～10为数字本身，A为1，J为11，Q为12，K为13，而大、小王为 0 ，可以看成任意数字。A 不能视为 14。
->
 
 **思路**:
 
@@ -2391,7 +3666,6 @@ bool isStraight(int *nums, int numsSize) {
 > 实现 strStr() 函数。
 >
 > 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回  -1 。
->
 
 
 **思路**:
@@ -2405,43 +3679,111 @@ int *construct_state_machine(char *word, size_t word_len) {
     if (word_len == 0)
         return NULL;
     int *pi = (int *) malloc(sizeof(int) * word_len);
-    pi[0] = 0;
+    if (!pi)
+        return NULL;
+
     int j = 0;
+    pi[0] = 0;
     for (int i = 1; i < word_len; ++i) {
-        while (j > 0 && word[i] != word[j]) {
+        while (word[i] != word[j] && j > 0)
             j = pi[j - 1];
-        }
-        if (word[i] == word[j]) {
-            j++;
-        }
-        pi[i] = j;
+
+        if (word[i] == word[j])
+            pi[i] = ++j;
+        else
+            pi[i] = j;
     }
 
     return pi;
 }
 
 int strStr(char *word, char *pattern) {
-    int n = strlen(word);
-    int m = strlen(pattern);
-    int *pi = construct_state_machine(pattern, m);
+    int m = strlen(word);
+    int n = strlen(pattern);
+
+    int *pi = construct_state_machine(pattern, n);
     if (!pi)
         return 0;
-    for (int i = 0, j = 0; i < n; ++i) {
+
+    for (int i = 0, j = 0; i < m; ++i) {d
         while (j > 0 && word[i] != pattern[j])
             j = pi[j - 1];
-
         if (word[i] == pattern[j])
             j++;
-        if (j == m) {
-            free(pi);
-            return i - m + 1;
-        }
+        if (j == n)
+            return i - n + 1;
     }
 
     free(pi);
     return -1;
 }
 ```
+
+**follow up**
+
+### 459. 重复的子字符串
+
+> 给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
+
+**思路**:
+
+方法1:
+
+组合每个可能的字符串, 并判断
+
+方法2:
+
+如果字符串中存在substr, 那么两个str组合, 一定可以找到一个str且str的开头在第一个字符串中且不是0
+
+**代码**:
+
+```c
+bool is_substr(char *ori_str, char *sub_str, size_t sub_len) {
+    ori_str += sub_len;
+
+    int count = 0;
+    while (*ori_str != '\0') {
+        if (*ori_str++ == sub_str[count++]) {
+            if (count == sub_len)
+                count = 0;
+        } else {
+            return false;
+        }
+    }
+
+    return count ? false : true;
+}
+
+bool repeatedSubstringPattern(char *s) {
+    size_t length = strlen(s);
+    char substr[length + 1];
+    memset(substr, 0, length + 1);
+    size_t substr_len = 0;
+
+    for (int i = 0; i < length; ++i) {
+        if (s[i] != substr[0])
+            substr[substr_len++] = s[i];
+        else {
+            if (length % substr_len != 0 || !is_substr(s, substr, substr_len))
+                substr[substr_len++] = s[i];
+            else return true;
+        }
+    }
+
+    return false;
+}
+```
+
+```cpp
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+        return (s + s).find(s, 1) < s.size();
+    }
+};
+```
+
+
 
 **follow up**
 
@@ -2452,7 +3794,6 @@ int strStr(char *word, char *pattern) {
 > 实现获取 下一个排列 的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列（即，组合出下一个更大的整数）。
 >
 > 如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
->
 
 **思路**:
 
@@ -2488,6 +3829,316 @@ public:
 
 [46. 全排列](#46. 全排列)
 
+### 1979. 找出数组的最大公约数
+
+> 给你一个整数数组 `nums` ，返回数组中最大数和最小数的 **最大公约数** 。
+>
+> 两个数的 **最大公约数** 是能够被两个数整除的最大正整数。
+
+**思路**:
+
+
+
+**代码**:
+
+```c
+int gcd(int a, int b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+char *gcdOfStrings(char *str1, char *str2) {
+    char one_add_two[2002];
+    char two_add_one[2002];
+    strcpy(one_add_two, str1);
+    strcat(one_add_two, str2);
+    strcpy(two_add_one, str2);
+    strcat(two_add_one, str1);
+    for (int i = 0; one_add_two[i] != '\0'; i++)
+        if (one_add_two[i] != two_add_one[i])
+            return "";
+
+    int s1_len = str_len(str1);
+    int s2_len = str_len(str2);
+    int numOfMaxDivisor = gcd(s1_len, s2_len);
+    str1[numOfMaxDivisor] = '\0';
+    return str1;
+}
+
+```
+
+**follow up**
+
+### 914. 卡牌分组
+
+> 给定一副牌，每张牌上都写着一个整数。
+>
+> 此时，你需要选定一个数字 X，使我们可以将整副牌按下述规则分成 1 组或更多组：
+>
+> 每组都有 X 张牌。
+> 组内所有的牌上都写着相同的整数。
+> 仅当你可选的 X >= 2 时返回 true。
+
+**思路**:
+
+计算每个数出现的个数, 然后求[最大公因数](# 1979. 找出数组的最大公约数)
+
+**代码**:
+
+```cpp
+class Solution {
+    int cnt[10000];
+
+public:
+    bool hasGroupsSizeX(vector<int> &deck) {
+        for (auto x: deck)
+            cnt[x]++;
+        int g = -1;
+        for (int &i: cnt) {
+            if (i) {
+                if (g != -1)
+                    g = gcd(g, i);
+                else
+                    g = i; 
+            }
+        }
+
+        return g >= 2;
+    }
+};
+```
+
+**follow up**
+
+### 915. 分割数组
+
+> 给定一个数组 A，将其划分为两个连续子数组 left 和 right， 使得：
+>
+> left 中的每个元素都小于或等于 right 中的每个元素。
+> left 和 right 都是非空的。
+> left 的长度要尽可能小。
+> 在完成这样的分组后返回 left 的长度。可以保证存在这样的划分方法。
+
+**思路**:
+
+分别计算
+
+从左到右的子数组中的最大值
+
+和
+
+从右到左到子数组中的最小值
+
+当左边子数组的最大值都小于等于右边子数组的最小值的时候, 即为所求
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int partitionDisjoint(vector<int> &nums) {
+        int n = nums.size();
+        vector<int> max_left(n);
+        vector<int> min_right(n);
+
+        int m = nums[0];
+        int i;
+        for (i = 0; i < n; ++i) {
+            m = max(m, nums[i]);
+            max_left[i] = m;
+        }
+
+        m = nums[n - 1];
+        for (i = n - 1; i >= 0; --i) {
+            m = min(m, nums[i]);
+            min_right[i] = m;
+        }
+
+        for (i = 1; i < n; ++i) {
+            if (max_left[i - 1] <= min_right[i])
+                break;
+        }
+
+        return i;
+    }
+};
+```
+
+**follow up**
+
+### [10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
+
+> 给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。
+>
+> '.' 匹配任意单个字符
+> '*' 匹配零个或多个前面的那一个元素
+> 所谓匹配，是要涵盖 整个 字符串 s的，而不是部分字符串。
+
+**思路**:
+
+分情况讨论
+
+1. s[i] == p[j] 或者
+
+    p[j] == '.'  && p[j + 1]. != '*'
+
+    这种情况最好解决, 继续匹配下一位就好了i++, j++
+
+2. 当 p[j + 1] == '*' 的时候又要分两种情况讨论
+
+    1. s[i] == p[j] 或者
+
+        p[j] == '.'
+
+        这时候s应该继续匹配下一位即 i++ **或者** ‘*’ 代表了 0, 即 j+2
+
+    2. s[i] != p[j]
+
+        这时候 ‘*’ 必须代表了0, 即 j + 2
+
+**代码**:
+
+```cpp
+bool handler_p(char *p) {
+    while (*p != '\0') {
+        if (*(p + 1) == '*')
+            p += 2;
+        else
+            return false;
+    }
+
+    return true;
+}
+
+
+bool isMatch(char *s, char *p) {
+    if (!(*s || *p))
+        return true;
+    if (!*p)
+        return false;
+    if (!*s)
+        return handler_p(p);
+
+    if (*(p + 1) == '*') {
+        if (*p == *s || *p == '.')
+            return isMatch(s + 1, p)         // '*' 代表了 n
+                   || isMatch(s, p + 2);        // '*' 代表了 0
+        // ignore '*'
+        return isMatch(s, p + 2);
+    }
+
+    if (*s == *p || *p == '.')
+        return isMatch(s + 1, p + 1);
+
+    return false;
+}
+```
+
+**follow up**
+
+
+
+
+## 栈
+
+### 题目
+
+> 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+>
+> 有效字符串需满足：
+>
+> 左括号必须用相同类型的右括号闭合。
+> 左括号必须以正确的顺序闭合。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> stk;
+        for (char c : s) {
+            switch (c) {
+                case '(':
+                case '{':
+                case '[':
+                    stk.push(c);
+                    break;
+                case ')':
+                    if (stk.empty() || stk.top() != '(')
+                        return false;
+                    stk.pop();
+                    break;
+                case '}':
+                    if (stk.empty() || stk.top() != '{')
+                        return false;
+                    stk.pop();
+                    break;
+                case ']':
+                    if (stk.empty() || stk.top() != '[')
+                        return false;
+                    stk.pop();
+                    break;
+                default:
+                    return false;
+            }
+        }
+        
+        if (stk.empty())
+            return true;
+        else
+            return false;
+    }
+}
+```
+
+**follow up**
+
+
+
+### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
+
+> 给定 `n` 个非负整数表示每个宽度为 `1` 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+**思路**:
+
+维护一个递减栈
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    int m_res = 0;
+public:
+    int trap(vector<int>& height) {
+        stack<int> stk;
+        int btm_h, l_idx, h;
+        for (int r_idx = 0; r_idx < height.size(); ++r_idx) {
+            while (!stk.empty() && height[stk.top()] < height[r_idx]) {
+                btm_h = height[stk.top()];
+                stk.pop();
+                if (stk.empty())
+                    break;
+                
+                l_idx = stk.top();
+                h = min(height[l_idx], height[r_idx]) - btm_h;
+                m_res += (r_idx - l_idx - 1) * h;           
+            }
+            
+            stk.push(r_idx);
+        }
+        
+        return m_res;
+    }
+};
+```
+
+**follow up**
+
 
 
 ## 分类
@@ -2502,13 +4153,9 @@ public:
 
 **代码**:
 
-```
+```cpp
 
 ```
 
 **follow up**
-
-
-
-
 

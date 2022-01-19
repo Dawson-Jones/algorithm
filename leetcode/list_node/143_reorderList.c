@@ -39,7 +39,7 @@ void reorderList(struct ListNode* head){
     mid = reverse(mid);
 
     struct ListNode *pre = malloc(sizeof(struct ListNode));
-    struct ListNode *h_n, *m_n;
+    struct ListNode *h_n;
     while (head && mid) {
         h_n = head->next;
         pre->next = head;
