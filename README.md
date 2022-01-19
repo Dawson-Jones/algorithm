@@ -1977,6 +1977,65 @@ public:
 
 
 
+### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+> 给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+>
+> k 是一个正整数，它的值小于或等于链表的长度。
+>
+> 如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+>
+> 进阶：
+>
+> 你可以设计一个只使用常数额外空间的算法来解决此问题吗？
+> 你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
+
+**思路**:
+
+反转链表之后头尾相接即可
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    ListNode *reverse(ListNode *head) {
+        ListNode *temp, *prev = nullptr;
+        while (head) {
+            temp = head->next;
+            head->next = prev;
+            prev = head;
+            head = temp;
+        }
+
+        return prev;
+    }
+
+public:
+    ListNode *reverseKGroup(ListNode *head, int k) {
+        if (!head)
+            return head;
+
+        ListNode *cur = head;
+        for (int i = 1; i != k && cur; ++i) {
+            cur = cur->next;
+        }
+        if (!cur)
+            return head;
+
+        ListNode *next = cur->next;
+        cur->next = nullptr;
+        ListNode *reversed_head = reverse(head);
+        head->next = reverseKGroup(next, k);
+        return reversed_head;
+    }
+};
+```
+
+**follow up**
+
+
+
 ### [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/)
 
 ### 剑指 Offer 18. 删除链表的节点
@@ -2181,7 +2240,7 @@ public:
 };
 ```
 
-注意此题只能按照上述做, 而不能
+注意此题只能按照上述做, 而不能下面是死循环
 
 详情: [K神解析](https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/)
 
@@ -2191,6 +2250,7 @@ public:
     ListNode *detectCycle(ListNode *head) {
         if (!head)
             return head;
+      
         ListNode *slow, *fast;
         slow = head;
         fast = head->next;
@@ -2208,6 +2268,44 @@ public:
         }
 
         return nullptr;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)
+
+> 给你一个链表的头节点 `head` ，旋转链表，将链表每个节点向右移动 `k` 个位置。
+
+**思路**:
+
+连接首尾, 找到旋转的位置后, 再拆开
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if (!head)
+            return head;
+        int total_len;
+        ListNode *cur = head;
+        for (total_len = 1; cur->next != nullptr; ++total_len, cur = cur->next);
+        cur->next = head;
+
+        k = total_len - k % total_len;
+        ListNode *prev;
+        for (int i = 0; i < k; ++i) {
+            prev = head;
+            head = head->next;
+        }
+        
+        prev->next = nullptr;
+        return head;
     }
 };
 ```
@@ -2851,7 +2949,9 @@ public:
 
 **follow up**
 
-### 题目
+
+
+### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)
 
 > 给你二叉树的根结点 root ，请你将它展开为一个单链表：
 >
@@ -2896,6 +2996,52 @@ public:
 ```
 
 **follow up**
+
+
+
+### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)
+
+> 给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
+>
+> 你应当 保留 两个分区中每个节点的初始相对位置。
+>
+
+**思路**:
+
+模拟
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        ListNode *sm_fix = new ListNode;
+        ListNode *lg_fix = new ListNode;
+        ListNode *sm_cur = sm_fix;
+        ListNode *lg_cur = lg_fix;
+
+        while (head) {
+            if (head->val < x) {
+                sm_cur->next = head;
+                sm_cur = sm_cur->next;
+            } else {
+                lg_cur->next = head;
+                lg_cur = lg_cur->next;
+            }            
+            head = head->next;
+        }
+        
+        sm_cur->next = lg_fix->next;
+        lg_cur->next = nullptr;
+        return sm_fix->next;
+    }
+};
+```
+
+**follow up**
+
+
 
 ## 回溯
 
