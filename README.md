@@ -559,6 +559,110 @@ int findMin(int* nums, int numsSize) {
 
 **follow up**
 
+
+
+### [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
+
+> 整数数组 nums 按升序排列，数组中的值 互不相同 。
+>
+> 在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
+>
+> 给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int search(vector<int> &nums, int target) {
+        int l = 0;
+        int r = nums.size() - 1;
+        int m;
+
+        if (r == -1)
+            return -1;
+        if (r == 0)
+            return nums[l] == target ? l : -1;
+
+        while (l <= r) {
+            m = l + (r - l) / 2;
+            if (target == nums[m])
+                return m;
+
+            if (nums[l] <= nums[m]) {
+                if (nums[l] <= target && target < nums[m]) {
+                    r = m - 1;
+                } else {
+                    l = m + 1;
+                }
+            } else {
+                if (nums[m] < target && target <= nums[r]) {
+                    l = m + 1;
+                } else {
+                    r = m - 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+> 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+>
+> 如果数组中不存在目标值 target，返回 [-1, -1]。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int binarySearch(vector<int> &nums, int target, bool lower) {
+        int left = 0, right = (int) nums.size() - 1, ans = (int) nums.size();
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (nums[mid] > target || (lower && nums[mid] >= target)) {
+                right = mid - 1;
+                ans = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return ans;
+    }
+
+    vector<int> searchRange(vector<int> &nums, int target) {
+        int leftIdx = binarySearch(nums, target, true);
+        int rightIdx = binarySearch(nums, target, false) - 1;
+        if (leftIdx <= rightIdx && rightIdx < nums.size() && nums[leftIdx] == target && nums[rightIdx] == target) {
+            return vector<int>{leftIdx, rightIdx};
+        }
+        return vector<int>{-1, -1};
+    }
+};
+```
+
+**follow up**
+
+
+
 ### 4. 寻找两个正序数组的中位数
 
 > 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
@@ -693,6 +797,49 @@ char firstUniqChar(char *s) {
             return s[i];
     return ' ';
 }
+```
+
+**follow up**
+
+
+
+### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)
+
+> 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
+>
+> 字母异位词 是由重新排列源单词的字母得到的一个新单词，所有源单词中的字母通常恰好只用一次。
+>
+>  
+>
+> 示例 1:
+>
+> 输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+> 输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string> &strs) {
+        unordered_map<string, vector<string>> map;
+        for (auto &str: strs) {
+            string key = str;
+            sort(key.begin(), key.end());
+            map[key].emplace_back(str);
+        }
+        
+        vector<vector<string>> ans;
+        for (auto item: map) {
+            ans.emplace_back(item.second);
+        }
+        return ans;
+    }
+};
 ```
 
 **follow up**
@@ -1519,6 +1666,39 @@ struct TreeNode *lowestCommonAncestor(struct TreeNode *root, struct TreeNode *p,
 
 ## 动态规划
 
+### [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
+
+> 给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+>
+> **子数组** 是数组中的一个连续部分。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int cur_max = nums[0];
+        int res = cur_max;
+
+        for (int i = 1; i < nums.size(); ++i) {
+            cur_max = max(cur_max + nums[i], nums[i]);
+            res = max(cur_max, res);
+        }
+
+        return res;
+    }
+};
+```
+
+**follow up**
+
+
+
 ### 剑指 Offer 63. 股票的最大利润
 
 ### 121. 买卖股票的最佳时机
@@ -1829,9 +2009,31 @@ public:
 
 "(" + 【i=p时所有括号的排列组合】 + ")" + 【i=q时所有括号的排列组合】
 
+其中 p + q 应等于 n - 1
+
 **代码**:
 
 ```cpp
+// 递归
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        if (n == 0)
+            return {""};
+
+        vector<string> ans;
+        for (int i = 0; i < n; ++i)
+            for (string p : this->generateParenthesis(i))
+                for (string q : this->generateParenthesis(n - 1 - i))
+                    ans.push_back("(" + p + ")" + q);
+        
+        return ans;
+    }
+};
+```
+
+```cpp
+// 迭代
 class Solution {
 public:
     vector<string> generateParenthesis(int n) {
@@ -1858,28 +2060,9 @@ public:
 };
 ```
 
-```cpp
-// 递归做法
-class Solution {
-public:
-    vector<string> generateParenthesis(int n) {
-        if (n == 0)
-            return {""};
-
-        vector<string> ans;
-        for (int i = 0; i < n; ++i)
-            for (string p : this->generateParenthesis(i))
-                for (string q : this->generateParenthesis(n - 1 - i))
-                    ans.push_back("(" + p + ")" + q);
-        
-        return ans;
-    }
-};
-```
-
-
-
 **follow up**
+
+
 
 ## 链表
 
@@ -3043,7 +3226,7 @@ public:
 
 
 
-## 回溯
+## 回溯、dfs
 
 ### 剑指 Offer 12. 矩阵中的路径
 
@@ -3241,7 +3424,7 @@ public:
 
 **思路**:
 
-dfs + 回溯
+回溯
 
 在 for 循环中递归
 
@@ -3264,7 +3447,7 @@ private:
             return;
         }
 
-        set<int> st;
+        set<char> st;
         for (int i = x; i < s.size(); ++i) {
             if (st.find(s[i]) != st.end())
                 continue;
@@ -3331,7 +3514,40 @@ public:
 
 **follow up**
 
-### 题目
+全组合
+
+剑指 offer 38题的后续讨论, 这里没有用题目中的做法, 而是使用了动态规划做的
+
+```cpp
+class Solution {
+public:
+    void Combination(vector<char> &nums) {
+        vector<vector<string>> dp(nums.size());
+        dp[0].push_back(string(1, nums[0]));
+
+        for (int i = 1; i < nums.size(); ++i) {
+            for (int j = i - 1; j >= 0; --j) {
+                for (const auto &temp: dp[j]) {
+                    dp[j + 1].push_back(temp + nums[i]);
+                }
+            }
+            dp[0].push_back(string(1, nums[i]));
+        }
+
+        for (const auto& vs: dp) {
+            for (const auto& str: vs) {
+                cout << str << endl;
+            }
+        }
+    }
+};
+```
+
+
+
+
+
+### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 
 > 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
 >
@@ -3346,45 +3562,172 @@ public:
 
 ```cpp
 class Solution {
+private:
+    unordered_map<char, string> map{
+            {'2', "abc"},
+            {'3', "def"},
+            {'4', "ghi"},
+            {'5', "jkl"},
+            {'6', "mno"},
+            {'7', "pqrs"},
+            {'8', "tuv"},
+            {'9', "wxyz"},
+    };
+    vector<string> res;
 public:
     vector<string> letterCombinations(string digits) {
-        vector<string> combinations;
         if (digits.empty())
-            return combinations;
+            return res;
 
-        unordered_map<char, string> phone_map {
-                {'2', "abc"},
-                {'3', "def"},
-                {'4', "ghi"},
-                {'5', "jkl"},
-                {'6', "mno"},
-                {'7', "pqrs"},
-                {'8', "tuv"},
-                {'9', "wxyz"},
-        };
-
-        string combination;
-        backtrack(combinations, phone_map, digits, 0, combination);
-        return combinations;
+        string cur;
+        backtrace(digits, 0, cur);
+        return res;
     }
 
-    void backtrack(vector<string> &combinations, unordered_map<char, string> &phone_map, string &digits, int index, string &combination) {
-        if (index == digits.length()) {
-            combinations.push_back(combination);
-        } else {
-            char digit = digits[index];
-            string &letters = phone_map.at(digit);
-            for (char &letter : letters) {
-                combination.push_back(letter);
-                backtrack(combinations, phone_map, digits, index + 1, combination);
-                combination.pop_back();
-            }
+    void backtrace(string &digits, int index, string &cur) {
+        if (index >= digits.size()) {
+            res.push_back(cur);
+            return;
+        }
+
+        for (char c: map[digits[index]]) {
+            cur.push_back(c);
+            backtrace(digits, index + 1, cur);
+            cur.pop_back();
         }
     }
 };
 ```
 
 **follow up**
+
+
+
+### [93. 复原 IP 地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
+
+> 有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
+>
+> 例如："0.1.2.201" 和 "192.168.1.1" 是 有效 IP 地址，但是 "0.011.255.245"、"192.168.1.312" 和 "192.168@1.1" 是 无效 IP 地址。
+> 给定一个只包含数字的字符串 s ，用以表示一个 IP 地址，返回所有可能的有效 IP 地址，这些地址可以通过在 s 中插入 '.' 来形成。你不能重新排序或删除 s 中的任何数字。你可以按 任何 顺序返回答案。
+>
+>  
+>
+> 示例 1：
+>
+> 输入：s = "25525511135"
+> 输出：["255.255.11.135","255.255.111.35"]
+
+**思路**:
+
+递归组合每一种可能性
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    static constexpr int SEG_COUNT = 4;
+    vector<string> ans;
+    vector<int> segments;
+
+public:
+    void dfs(const string &s, int seg_idx, int seg_st) {
+        if (seg_idx == SEG_COUNT) {
+            if (seg_st == s.size()) {
+                string ip_addr;
+                for (int i = 0; i < SEG_COUNT; ++i) {
+                    ip_addr += to_string(segments[i]);
+                    if (i != SEG_COUNT - 1) {
+                        ip_addr += ".";
+                    }
+                }
+                ans.push_back(move(ip_addr));
+            }
+            return;
+        }
+
+        if (seg_st == s.size())
+            return;
+
+        if (s[seg_st] == '0') {
+            segments[seg_idx] = 0;
+            dfs(s, seg_idx + 1, seg_st + 1);
+        }
+
+        int addr = 0;
+        for (int seg_ed = seg_st; seg_ed < s.size(); ++seg_ed) {
+            addr = addr * 10 + (s[seg_ed] - '0');
+            if (addr > 0 && addr <= 0xff) {
+                segments[seg_idx] = addr;
+                dfs(s, seg_idx + 1, seg_ed + 1);
+            } else {
+                break;
+            }
+        }
+    }
+    vector<string> restoreIpAddresses(string s) {
+        segments.resize(SEG_COUNT);
+        dfs(s, 0, 0);
+        return ans;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
+
+> 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+>
+> candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。 
+>
+> 对于给定的输入，保证和为 target 的不同组合数少于 150 个。
+>
+
+**思路**:
+
+简单回溯, 一下子就做出来了
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    vector<vector<int>> res;
+private:
+    void dfs(vector<int> &candidates, int target, vector<int> &cur, int st) {
+        if (target == 0) {
+            res.push_back(cur);
+            return;
+        }
+
+        for (int i = st; i < candidates.size(); ++i) {
+            int item = candidates[i];
+            
+            if (target - item < 0) {
+                return;
+            }
+
+            cur.push_back(item);
+            dfs(candidates, target - item, cur, i);
+            cur.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> cur;
+        sort(candidates.begin(), candidates.end());
+        dfs(candidates, target, cur, 0);
+        return res;
+    }
+};
+```
+
+**follow up**
+
+
 
 ## bfs
 
@@ -3462,36 +3805,11 @@ class Solution {
 
 
 
-
-
-## dfs
-
-### 题目
-
-> 问题
-
-**思路**:
-
-
-
-**代码**:
-
-```
-
-```
-
-**follow up**
-
-
-
-
-
 ## 双指针
 
 ### 11. 盛最多水的容器
 
 > 给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
->
 
 **思路**:
 
@@ -3520,6 +3838,8 @@ public:
 ```
 
 **follow up**
+
+
 
 
 
@@ -3593,7 +3913,7 @@ int lengthOfLongestSubstring(char *s) {
 
 **思路**:
 
-题目是求, 子数组中恰好不同整数为K个: f(x, k)
+子数组中恰好不同整数为K个: f(x, k)
 
 可以转化为
 
@@ -3635,6 +3955,149 @@ private:
 public:
     int subarraysWithKDistinct(vector<int>& nums, int k) {
         return atMostDistinct(nums, k) - atMostDistinct(nums, k - 1);
+    }
+};
+```
+
+**follow up**
+
+
+
+## 栈
+
+### [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
+
+> 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+>
+> 有效字符串需满足：
+>
+> 左括号必须用相同类型的右括号闭合。
+> 左括号必须以正确的顺序闭合。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> stk;
+        for (char c : s) {
+            switch (c) {
+                case '(':
+                case '{':
+                case '[':
+                    stk.push(c);
+                    break;
+                case ')':
+                    if (stk.empty() || stk.top() != '(')
+                        return false;
+                    stk.pop();
+                    break;
+                case '}':
+                    if (stk.empty() || stk.top() != '{')
+                        return false;
+                    stk.pop();
+                    break;
+                case ']':
+                    if (stk.empty() || stk.top() != '[')
+                        return false;
+                    stk.pop();
+                    break;
+                default:
+                    return false;
+            }
+        }
+        
+        if (stk.empty())
+            return true;
+        else
+            return false;
+    }
+}
+```
+
+**follow up**
+
+
+
+### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
+
+> 给定 `n` 个非负整数表示每个宽度为 `1` 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+**思路**:
+
+维护一个递减栈
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    int m_res = 0;
+public:
+    int trap(vector<int>& height) {
+        stack<int> stk;
+        int btm_h, l_idx, h;
+        for (int r_idx = 0; r_idx < height.size(); ++r_idx) {
+            while (!stk.empty() && height[stk.top()] < height[r_idx]) {
+                btm_h = height[stk.top()];
+                stk.pop();
+                if (stk.empty())
+                    break;
+                
+                l_idx = stk.top();
+                h = min(height[l_idx], height[r_idx]) - btm_h;
+                m_res += (r_idx - l_idx - 1) * h;           
+            }
+            
+            stk.push(r_idx);
+        }
+        
+        return m_res;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [32. 最长有效括号](https://leetcode-cn.com/problems/longest-valid-parentheses/)
+
+> 给你一个只包含 `'('` 和 `')'` 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    int res = 0;
+public:
+    int longestValidParentheses(string s) {
+        stack<int> stk({-1});
+        
+        for (int i = 0; i < s.length(); ++i) {
+            if (s[i] == '(')
+                stk.push(i);
+            else {  // c == ')'
+                stk.pop();
+                if (stk.empty()) {
+                    stk.push(i);
+                } else {
+                    res = max(res, i - stk.top());
+                }
+            }
+        }
+        
+        return res;
     }
 };
 ```
@@ -3851,11 +4314,11 @@ int strStr(char *word, char *pattern) {
     if (!pi)
         return 0;
 
-    for (int i = 0, j = 0; i < m; ++i) {d
+    for (int i = 0, j = 0; i < m; ++i) {
         while (j > 0 && word[i] != pattern[j])
             j = pi[j - 1];
         if (word[i] == pattern[j])
-            j++;
+            j++;x
         if (j == n)
             return i - n + 1;
     }
@@ -4183,61 +4646,76 @@ bool isMatch(char *s, char *p) {
 
 
 
+### [44. 通配符匹配](https://leetcode-cn.com/problems/wildcard-matching/)
 
-## 栈
-
-### 题目
-
-> 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+> 给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
 >
-> 有效字符串需满足：
+> '?' 可以匹配任何单个字符。
+> '*' 可以匹配任意字符串（包括空字符串）。
+> 两个字符串完全匹配才算匹配成功。
 >
-> 左括号必须用相同类型的右括号闭合。
-> 左括号必须以正确的顺序闭合。
+> 说明:
+>
+> s 可能为空，且只包含从 a-z 的小写字母。
+> p 可能为空，且只包含从 a-z 的小写字母，以及字符 ? 和 *。
+> 示例 1:
+>
+> 输入:
+> s = "aa"
+> p = "a"
+> 输出: false
+> 解释: "a" 无法匹配 "aa" 整个字符串。
 
 **思路**:
 
+分情况讨论
 
+1. 如果此时的 s 和 p 一样, 或者 p 为 ?, 那么直接匹配下一位就可以
+2. 如果 p 是 *,  看下一位
+    1. 还是 *, 多个 * 合并为一个
+    2. 如果是 ?, 匹配 s 剩下的 所有, 因为 * 可以代表任何字符串
+    3. 如果是字符 c, 找到 s 中也是字符 c 的, 下面的继续匹配, 因为 s 前面的都可以被 * 给代替
 
 **代码**:
 
+这个代码应该是正确的, 但是在 leetcode 中有极端情况会超时
+
 ```cpp
-class Solution {
-public:
-    bool isValid(string s) {
-        stack<char> stk;
-        for (char c : s) {
-            switch (c) {
-                case '(':
-                case '{':
-                case '[':
-                    stk.push(c);
-                    break;
-                case ')':
-                    if (stk.empty() || stk.top() != '(')
-                        return false;
-                    stk.pop();
-                    break;
-                case '}':
-                    if (stk.empty() || stk.top() != '{')
-                        return false;
-                    stk.pop();
-                    break;
-                case ']':
-                    if (stk.empty() || stk.top() != '[')
-                        return false;
-                    stk.pop();
-                    break;
-                default:
-                    return false;
-            }
+bool isMatch(char *s, char *p) {
+    if (!*s && !*p)
+        return true;
+    if (!*p)
+        return false;
+    if (!*s)
+        return *p == '*' && isMatch(s, p + 1);
+
+    if (*s == *p || *p == '?')
+        return isMatch(s + 1, p + 1);
+
+    if (*p != '*')
+        return false;
+
+    // *p == '*'
+    if (*(p + 1) == '\0')
+        return true;
+    //   *(p + 1) has char
+    char c = *(p + 1);
+    if (c == '*')
+        return isMatch(s, p + 1);
+
+    if (c == '?') {
+        for (int i = 0; s[i] != '\0'; ++i) {
+            if (isMatch(s + i, p + 1))
+                return true;
         }
-        
-        if (stk.empty())
-            return true;
-        else
-            return false;
+    } else {
+        for (int i = 0; s[i] != '\0'; ++i) {
+            if (s[i] == c && isMatch(s + i + 1, p + 2))
+                return true;
+        }
     }
+
+    return false;
 }
 ```
 
@@ -4245,40 +4723,109 @@ public:
 
 
 
-### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
 
-> 给定 `n` 个非负整数表示每个宽度为 `1` 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+### [38. 外观数列](https://leetcode-cn.com/problems/count-and-say/)
+
+> 给定一个正整数 n ，输出外观数列的第 n 项。
+>
+> 「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。
+>
+> 你可以将其视作是由递归公式定义的数字字符串序列：
+>
+> countAndSay(1) = "1"
+> countAndSay(n) 是对 countAndSay(n-1) 的描述，然后转换成另一个数字字符串。
+> 前五项如下：
+>
+> 1.     1
+> 2.     11
+> 3.     21
+> 4.     1211
+> 5.     111221
+> 第一项是数字 1 
+> 描述前一项，这个数是 1 即 “ 一 个 1 ”，记作 "11"
+> 描述前一项，这个数是 11 即 “ 二 个 1 ” ，记作 "21"
+> 描述前一项，这个数是 21 即 “ 一 个 2 + 一 个 1 ” ，记作 "1211"
+> 描述前一项，这个数是 1211 即 “ 一 个 1 + 一 个 2 + 二 个 1 ” ，记作 "111221"
+> 要 描述 一个数字字符串，首先要将字符串分割为 最小 数量的组，每个组都由连续的最多 相同字符 组成。然后对于每个组，先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。
+>
 
 **思路**:
 
-维护一个递减栈
+简单递归
 
 **代码**:
 
 ```cpp
 class Solution {
-private:
-    int m_res = 0;
 public:
-    int trap(vector<int>& height) {
-        stack<int> stk;
-        int btm_h, l_idx, h;
-        for (int r_idx = 0; r_idx < height.size(); ++r_idx) {
-            while (!stk.empty() && height[stk.top()] < height[r_idx]) {
-                btm_h = height[stk.top()];
-                stk.pop();
-                if (stk.empty())
-                    break;
-                
-                l_idx = stk.top();
-                h = min(height[l_idx], height[r_idx]) - btm_h;
-                m_res += (r_idx - l_idx - 1) * h;           
+    string countAndSay(int n) {
+        if (n == 1)
+            return "1";
+
+        string cur;
+        char temp;
+        int count = 1;
+        string last = countAndSay(n - 1);
+        int i;
+        for (i = 0; i < last.length() - 1; ++i) {
+            temp = last[i];
+            if (last[i + 1] == temp) {
+                count++;
+                continue;
             }
-            
-            stk.push(r_idx);
+
+            cur += to_string(count) + temp;
+            count = 1;
+        }
+
+        if (last[i] == temp) {
+            cur += to_string(count) + temp;
+        } else {
+            cur += to_string(1) + last[i];
+        }
+
+        return cur;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [48. 旋转图像](https://leetcode-cn.com/problems/rotate-image/)
+
+> 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+>
+> 你必须在 原地 旋转图像，这意味着你需要直接修改输入的二维矩阵。请不要 使用另一个矩阵来旋转图像。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int raw = matrix.size();
+        int col = matrix[0].size();
+        
+        // 对角线翻转
+        for (int i = 0; i < raw; ++i) {
+            for (int j = 0; j < i; ++j) {
+                swap(matrix[i][j], matrix[j][i]);
+            }
         }
         
-        return m_res;
+        // 水平翻转
+        for (int i = 0; i < raw; ++i) {
+            for (int j = 0; j < col / 2; ++j) {
+                swap(matrix[i][j], matrix[i][col - j - 1]);
+            }
+        }
     }
 };
 ```
