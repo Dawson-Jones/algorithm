@@ -15,34 +15,22 @@
 比第一位小的, pass
 
 ```c
-void my_swap(int *x, int *y) {
-    int temp = *x;
-    *x = *y;
-    *y = temp;
-}
-
-void my_qsort(int *nums, int l, int r) {
+void my_qsort(vector<int> &nums, int l, int r) {
     if (l >= r)
         return;
 
-    int i = l + 1;
     int j = r;
-    for (; i <= j; ++i) {
-        if (nums[i] > nums[l])
+    int i;
+    for (i = l + 1; i <= j; ++i) {
+        if (nums[i] > nums[l]) {
             // 这里之所以需要i--, 是不知道交换的 j 是不是比 l 大
             // 所以让 i 停在原地
-            my_swap(&nums[i--], &nums[j--]);
+            swap(nums[i--], nums[j--]);
+        }
     }
-    my_swap(&nums[l], &nums[i - 1]);
-
-    my_qsort(nums, l, i - 2);
-    my_qsort(nums, i, r);
-}
-
-
-int *sortArray(int *nums, int numsSize) {
-    my_qsort(nums, 0, numsSize - 1);
-    return nums;
+    swap(nums[j], nums[l]);
+    my_qsort(nums, l, j - 1);
+    my_qsort(nums, j + 1, r);
 }
 ```
 
@@ -56,31 +44,26 @@ int *sortArray(int *nums, int numsSize) {
 
 固定第一个
 
-t+1 ~ i 之间都是比固定位大的
+l+1 ~ t 之间都是比固定位小的
 
-l +1 ~ t 之间都是比固定位小的
+t+1 ~ i 之间都是比固定位大的
 
 i 用来遍历所有
 
 注意: 在 t 和 i 没有分开之前, t 和 i 一直在做自身的交换, 不影响
 
 ```c
-void my_swap(int *x, int *y) {
-    int temp = *x;
-    *x = *y;
-    *y = temp;
-}
-
-void my_qsort(int nums[], int l, int r) {
+void my_qsort(vector<int> &nums, int l, int r) {
     if (l >= r)
         return;
-    int i = l + 1;
+  
     int t = l;
-    for (; i <= r; ++i) {
+    int i;
+    for (i = l + 1; i <= r; ++i) {
         if (nums[i] < nums[l])
-            my_swap(&nums[++t], &nums[i]);
+            swap(nums[i], nums[++t]);
     }
-    my_swap(&nums[l], &nums[t]);
+    swap(nums[l], nums[t]);
     my_qsort(nums, l, t - 1);
     my_qsort(nums, t + 1, r);
 }
@@ -201,6 +184,36 @@ int findKthLargest(int* nums, int numsSize, int k){
     }
     return 0;
 }
+```
+
+递归
+
+```cpp
+class Solution {
+    int my_qsort(vector<int> &nums, int l, int r, int k) {
+        int t = l;
+        int i = l + 1;
+        for (; i <= r; ++i) {
+            if (nums[i] < nums[l]) {
+                swap(nums[++t], nums[i]);
+            }
+        }
+        swap(nums[l], nums[t]);
+
+        if (t < nums.size() - k) {
+            return my_qsort(nums, t + 1, r, k);
+        } else if (t > nums.size() - k) {
+            return my_qsort(nums, l, t - 1, k);
+        } else {
+            return nums[t];
+        }
+    }
+
+public:
+    int findKthLargest(vector<int> &nums, int k){
+        return my_qsort(nums, 0, nums.size() - 1, k);
+    }
+};
 ```
 
 **follow up**
@@ -389,6 +402,40 @@ public:
 
     int reversePairs(vector<int> &nums) {
         return merge(nums, 0, nums.size() - 1);
+    }
+};
+```
+
+**follow up**
+
+
+
+### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
+
+> 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
+        vector<vector<int>> res({intervals[0]});
+
+        for (auto interval: intervals) {
+            if (interval[0] > res.back()[1])
+                res.push_back(interval);
+            else
+                res.back()[1] = max(res.back()[1], interval[1]);
+        }
+        
+        return res;
     }
 };
 ```
@@ -1358,7 +1405,11 @@ struct TreeNode* invertTree(struct TreeNode* root) {
 
 
 
+
+
 ### 剑指 Offer 28. 对称的二叉树
+
+### [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
 
 > 实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
 >
@@ -1368,23 +1419,23 @@ struct TreeNode* invertTree(struct TreeNode* root) {
 **代码**:
 
 ```c
-bool *same(struct TreeNode *a, struct TreeNode *b) {
-    if (a == NULL && b == NULL)
-        return true;
-    if (a == NULL || b == NULL)
-        return false;
-    if (a->val != b->val)
-        return false;
+class Solution {
+private:
+    bool helper(TreeNode *bt1, TreeNode *bt2) {
+        if (!(bt1 || bt2))
+            return true;
+        if (!(bt1 && bt2))
+            return false;
+        if (bt1->val != bt2->val)
+            return false;
 
-    return same(a->left, b->right) && same(a->right, b->left);
-}
-
-bool isSymmetric(struct TreeNode *root) {
-    if (!root)
-        return true;
-
-    return same(root->left, root->right);
-}
+        return helper(bt1->left, bt2->right) && helper(bt1->right, bt2->left);
+    }
+public:
+    bool isSymmetric(TreeNode* root) {
+        return helper(root->left, root->right);
+    }
+};
 ```
 
 **follow up**
@@ -1664,7 +1715,166 @@ struct TreeNode *lowestCommonAncestor(struct TreeNode *root, struct TreeNode *p,
 
 
 
+### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/)
+
+> 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
+>
+> 有效 二叉搜索树定义如下：
+>
+> 节点的左子树只包含 小于 当前节点的数。
+> 节点的右子树只包含 大于 当前节点的数。
+> 所有左子树和右子树自身必须也是二叉搜索树。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    bool helper(TreeNode *root, long long lower, long long upper) {
+        if (root == nullptr)
+            return true;
+
+        if (root->val <= lower || root->val >= upper)
+            return false;
+
+        return helper(root->left, lower, root->val) && helper(root->right, root->val, upper);
+    }
+public:
+    bool isValidBST(TreeNode* root) {
+        return helper(root, LONG_MIN, LONG_MAX);
+    }
+};
+```
+
+**follow up**
+
+
+
+
+
+
+
 ## 动态规划
+
+### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+
+> 假设你正在爬楼梯。需要 `n` 阶你才能到达楼顶。
+>
+> 每次你可以爬 `1` 或 `2` 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int climbStairs(int n) {
+        int pprev = 1;
+        int prev = 2;
+        if (n <= 2) 
+            return n;
+        
+        int cur;
+        for (int i = 2; i < n; ++i) {
+            cur = pprev + prev;
+            pprev = prev;
+            prev = cur;
+        }
+
+        return prev;
+    }
+};
+```
+
+**follow up**
+
+
+
+
+
+### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
+
+难度中等1268
+
+> 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+>
+> 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+>
+> 问总共有多少条不同的路径？
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(m, vector<int>(n, 1));
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+};
+```
+
+**follow up**
+
+
+
+### [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+
+> 给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+>
+> **说明：**每次只能向下或者向右移动一步。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int minPathSum(vector<vector<int>> &grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        vector<vector<int>> dp(row, vector<int>(col));
+
+        dp[0][0] = grid[0][0];
+        for (int i = 1; i < row; ++i)
+            dp[i][0] = dp[i - 1][0] + grid[i][0];
+
+        for (int i = 1; i < col; ++i)
+            dp[0][i] = dp[0][i - 1] + grid[0][i];
+
+        for (int i = 1; i < row; ++i)
+            for (int j = 1; j < col; ++j)
+                dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+
+        return dp[row - 1][col - 1];
+    }
+};
+```
+
+**follow up**
+
+
 
 ### [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
@@ -2055,6 +2265,82 @@ public:
             }
         }
         
+        return dp[n];
+    }
+};
+```
+
+**follow up**
+
+
+
+### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
+
+> 给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数  。
+>
+> 你可以对一个单词进行如下三种操作：
+>
+> 插入一个字符
+> 删除一个字符
+> 替换一个字符
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        vector<vector<int>> dp(word1.size() + 1, vector<int>(word2.size() + 1));
+        for (int i = 1; i <= word1.size(); ++i)
+            dp[i][0] = i;
+        for (int i = 1; i <= word2.size(); ++i)
+            dp[0][i] = i;
+
+        for (int i = 0; i < word1.size(); ++i) {
+            for (int j = 0; j < word2.size(); ++j) {
+                if (word1[i] == word2[j])
+                    dp[i+1][j+1] = dp[i][j];
+                else
+                    dp[i+1][j+1] = min({dp[i+1][j], dp[i][j+1], dp[i][j]}) + 1;
+            }
+        }
+        
+        return dp[word1.size()][word2.size()];
+    }
+};
+```
+
+**follow up**
+
+
+
+### [96. 不同的二叉搜索树](https://leetcode-cn.com/problems/unique-binary-search-trees/)
+
+> 给你一个整数 `n` ，求恰由 `n` 个节点组成且节点值从 `1` 到 `n` 互不相同的 **二叉搜索树** 有多少种？返回满足题意的二叉搜索树的种数。
+
+**思路**:
+
+循环中的 i 是改搜索树的头节点, j 是左边的节点个数, dp[j] 是左边二叉搜索树的个数
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int numTrees(int n) {
+        vector<int> dp(n + 1);
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i < n + 1; ++i) {
+            for (int j = 0; j < i; ++j) {
+                dp[i] += dp[j] * dp[i - j - 1];
+            }
+        }
+
         return dp[n];
     }
 };
@@ -3514,9 +3800,23 @@ public:
 
 **follow up**
 
-全组合
+
+
+### [78. 子集](https://leetcode-cn.com/problems/subsets/)
+
+> 给你一个整数数组 `nums` ，数组中的元素 **互不相同** 。返回该数组所有可能的子集（幂集）。
+>
+> 解集 **不能** 包含重复的子集。你可以按 **任意顺序** 返回解集。
+
+**思路**:
+
+*全组合*
 
 剑指 offer 38题的后续讨论, 这里没有用题目中的做法, 而是使用了动态规划做的
+
+**代码**:
+
+方法1: 动态规划, 这个是优先想到的, 但是明显回溯更优雅
 
 ```cpp
 class Solution {
@@ -3542,6 +3842,63 @@ public:
     }
 };
 ```
+
+有空字符串的版本
+
+```cpp
+class Solution {
+public:
+    void Combination(vector<char> &nums) {
+        vector<vector<string>> dp(nums.size() + 1);
+        dp[0].push_back("");
+
+        for (int i = 0; i < nums.size(); ++i) {
+            for (int j = i; j >= 0; --j) {
+                for (const auto &temp: dp[j]) {
+                    dp[j + 1].push_back(temp + nums[i]);
+                }
+            }
+        }
+
+        for (const auto& vs: dp) {
+            for (const auto& str: vs) {
+                cout << str << endl;
+            }
+        }
+    }
+};
+```
+
+
+
+方法2: 回溯
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> res;
+    void dfs(vector<int> &nums, int st, vector<int> &temp) {
+        if (st == nums.size()) {
+            res.push_back(temp);
+            return;
+        }
+
+        temp.push_back(nums[st]);
+        dfs(nums, st + 1, temp);
+        temp.pop_back();
+
+        dfs(nums, st + 1, temp);
+    }
+
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<int> temp;
+        dfs(nums, 0, temp);
+        return res;
+    }
+};
+```
+
+**follow up**
 
 
 
@@ -3955,6 +4312,76 @@ private:
 public:
     int subarraysWithKDistinct(vector<int>& nums, int k) {
         return atMostDistinct(nums, k) - atMostDistinct(nums, k - 1);
+    }
+};
+```
+
+**follow up**
+
+
+
+### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)
+
+> 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
+>
+>  
+>
+> 注意：
+>
+> 对于 t 中重复字符，我们寻找的子字符串中该字符数量必须不少于 t 中该字符数量。
+> 如果 s 中存在这样的子串，我们保证它是唯一的答案。
+
+**思路**:
+
+先计算 t 的每个字符的个数
+
+用 l, r 表示 s 的一个区间, 当这个区间中包涵的 t 中字符的个数, 大于等于 t 的时候, 就可以计算长度了
+
+计算长度, 要刚好使 l 指向一个 t 中的字符, 代码非常精妙
+
+**代码**:
+
+```cpp
+
+class Solution {
+public:
+    unordered_map <char, int> ori, cnt;
+
+    bool check() {
+        for (const auto &p: ori) {
+            if (cnt[p.first] < p.second) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    string minWindow(string s, string t) {
+        for (const auto &c: t)
+            ori[c]++;
+
+        int len = INT_MAX, ansL = -1, ansR = -1;
+
+        for (int l = 0, r = 0; r < s.size(); ++r) {
+            if (ori.count(s[r])) {
+                cnt[s[r]]++;
+            }
+
+            while (check() && l <= r) {
+                if ((r - l + 1) < len) {
+                    ansL = l;
+                    len = r - l + 1;
+                }
+
+                if (ori.count(s[l])) {
+                    cnt[s[l]]--;
+                }
+
+                l++;
+            }
+        }
+
+        return ansL == -1 ? string() : s.substr(ansL, len);
     }
 };
 ```
