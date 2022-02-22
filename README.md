@@ -444,6 +444,51 @@ public:
 
 
 
+### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/)
+
+> 给定一个未排序的整数数组 `nums` ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+
+**思路**:
+
+哈希排列
+
+**代码**:
+
+```cpp
+class Solution {
+    unordered_set<int> set;
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.size() == 0)
+            return 0;
+
+        for (auto num : nums) {
+            set.insert(num);
+        }
+
+        int ans = 1;
+        for (auto num : nums) {
+            if (set.count(num - 1))
+                continue;
+            
+            int cur = 1;
+            while (set.count(++num))
+               ans = max(++cur, ans);
+        }
+
+        return ans;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)
+
+
+
+**follow up*
+
 ## 优先队列
 
 ### 剑指 offer 41. 数据流中的中位数
@@ -682,7 +727,10 @@ public:
 class Solution {
 public:
     int binarySearch(vector<int> &nums, int target, bool lower) {
-        int left = 0, right = (int) nums.size() - 1, ans = (int) nums.size();
+        int left = 0;
+        int right = nums.size() - 1
+        int ans = nums.size();
+      
         while (left <= right) {
             int mid = (left + right) / 2;
             if (nums[mid] > target || (lower && nums[mid] >= target)) {
@@ -1585,15 +1633,16 @@ public:
 
 **代码**:
 
-```c
-int maxDepth(struct TreeNode *root) {
-    if (!root)
-        return 0;
-
-    int l = maxDepth(root->left);
-    int r = maxDepth(root->right);
-    return 1 + (l > r ? l : r);
-}
+```cpp
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (!root)
+            return 0;
+        
+        return 1 + max(maxDepth(root->left), maxDepth(root->right));
+    }
+};
 ```
 
 **follow up**
@@ -1753,6 +1802,98 @@ public:
 **follow up**
 
 
+
+### [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+> 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    unordered_map<int, int> inorder_map;
+public:
+    TreeNode *buildTree(vector<int> preorder, vector<int> inorder, int pre_st, int pre_ed, int in_st, int in_ed) {
+        if (pre_st > pre_ed)
+            return nullptr;
+
+        TreeNode *root = new TreeNode(preorder[pre_st]);
+        int mid_index = inorder_map[preorder[pre_st]];
+        int left_size = mid_index - in_st;
+        root->left = buildTree(preorder, inorder, pre_st + 1, pre_st + left_size, in_st, mid_index - 1);
+        root->right = buildTree(preorder, inorder, pre_st + left_size + 1, pre_ed, mid_index + 1, in_ed);
+
+        return root;
+    }
+
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        for (int i = 0; i < inorder.size(); ++i) {
+            inorder_map[inorder[i]] = i;
+        }
+
+        return buildTree(preorder, inorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)
+
+**follow up**
+
+
+
+### [106. 从中序与后序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+
+> 给定两个整数数组 inorder 和 postorder ，其中 inorder 是二叉树的中序遍历， postorder 是同一棵树的后序遍历，请你构造并返回这颗 二叉树 。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    unordered_map<int, int> inorder_map;
+public:
+    TreeNode *buildTree(vector<int> postorder, vector<int> inorder, int post_left, int post_right, int in_left, int in_right) {
+        if (post_left > post_right)
+            return nullptr;
+
+        TreeNode *root = new TreeNode(postorder[post_right]);
+        int mid_index = inorder_map[postorder[post_right]];
+        int left_size = mid_index - in_left;
+        root->left = buildTree(postorder, inorder, post_left , post_left + left_size - 1, in_left, mid_index - 1);
+        root->right = buildTree(postorder, inorder, post_left + left_size, post_right - 1, mid_index + 1, in_right);
+
+        return root;
+    }
+
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        for (int i = 0; i < inorder.size(); ++i) {
+            inorder_map[inorder[i]] = i;
+        }
+
+        return buildTree(postorder, inorder, 0, postorder.size() - 1, 0, inorder.size() - 1);
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)
+
+**follow up**
 
 
 
@@ -1937,38 +2078,29 @@ public:
 遍历更新最大收益
 
 **代码**:
-```c
-int maxProfit(int *prices, int pricesSize) {
-    if (pricesSize == 0)
-        return 0;
-    int hold = prices[0];
-    int cur_max_benefit = 0;
-    int cur_benefit;
+```cpp
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int ans;
+        int hold = prices[1];
 
-    for (int i = 1; i < pricesSize; ++i) {
-        if ((cur_benefit = prices[i] - hold) > 0)
-            cur_max_benefit = cur_benefit > cur_max_benefit ? cur_benefit : cur_max_benefit;
-        else
-            hold = prices[i];
+        for (int i = 1; i < prices.size(); ++i) {
+            int benefit = prices[i] - hold;
+            if (benefit < 0)
+                hold = prices[i];
+            else
+                ans = max(ans, benefit);
+        }
+
+        return ans;
     }
-    return cur_max_benefit;
-}
+};
 ```
 
-```go
-func maxProfit(prices []int) int {
-	hold := prices[0];
-	profit := 0
-	for _, price := range prices {
-		if price - hold > 0 {
-			profit = int(math.Max(float64(price-hold), float64(profit)))
-		} else {
-			hold = price
-		}
-	}
-	return profit
-}
-```
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(1)
 
 **follow up**
 
@@ -2345,6 +2477,50 @@ public:
     }
 };
 ```
+
+**follow up**
+
+
+
+### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/)
+
+> 给你一个字符串 `s` 和一个字符串列表 `wordDict` 作为字典。请你判断是否可以利用字典中出现的单词拼接出 `s` 。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> set;
+        for (int i = 0; i < wordDict.size(); ++i) {
+            set.insert(wordDict[i]);
+        }
+
+        vector<bool> dp(s.size() + 1);
+        dp[0] = true;
+
+        for (int i = 1; i <= s.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (dp[j] && set.count(s.substr(j, i - j))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        
+        return dp[s.size()];
+    }
+};
+```
+
+**时间复杂度**: O(n<sup>2</sup>)
+
+**空间复杂度**: O(n)
 
 **follow up**
 
@@ -4202,9 +4378,9 @@ public:
 
 ## 位运算
 
-### 题目
+### [136. 只出现一次的数字](https://leetcode-cn.com/problems/single-number/)
 
-> 问题
+> 给定一个**非空**整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
 
 **思路**:
 
@@ -4212,9 +4388,122 @@ public:
 
 **代码**:
 
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans = 0;
+        for (auto num: nums) {
+            ans ^= num;
+        }
+        
+        return ans;
+    }
+};
 ```
 
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)
+
+**follow up**
+
+
+
+### [137. 只出现一次的数字 II](https://leetcode-cn.com/problems/single-number-ii/)
+
+> 给你一个整数数组 `nums` ，除某个元素仅出现 **一次** 外，其余每个元素都恰出现 **三次 。**请你找出并返回那个只出现了一次的元素。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans = 0;
+        for (int i = 0; i < 32; ++i) {
+            int total = 0;
+            for (auto num : nums)
+                total += (num >> i) & 1;
+            
+            if (total % 3)
+                ans |= (1 << i);
+        }
+        
+        return ans;
+    }
+};
+
 ```
+
+**时间复杂度**: O(32*n)
+
+**空间复杂度**: O(1)
+
+还有一个简单方法看不懂
+
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int a = 0, b = 0;
+        for (int num: nums) {
+            b = ~a & (b ^ num);
+            a = ~b & (a ^ num);
+        }
+        return b;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(1)
+
+**follow up**
+
+
+
+### [260. 只出现一次的数字 III](https://leetcode-cn.com/problems/single-number-iii/)
+
+> 给定一个整数数组 `nums`，其中恰好有两个元素只出现一次，其余所有元素均出现两次。 找出只出现一次的那两个元素。你可以按 **任意顺序** 返回答案。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        vector<int> res(2, 0);
+        long temp = 0;
+        for (auto num: nums)
+            temp ^= num;
+        
+        temp &= ~(temp - 1);
+
+        for (auto num: nums) {
+            if (num & temp)
+                res[0] ^= num;
+            else
+                res[1] ^= num;
+        }
+            
+        return res;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(1)
 
 **follow up**
 
@@ -5261,6 +5550,60 @@ public:
 
 
 
+### [54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
+
+> 给你一个 `m` 行 `n` 列的矩阵 `matrix` ，请按照 **顺时针螺旋顺序** ，返回矩阵中的所有元素。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        if (matrix.size() == 0 || matrix[0].size() == 0) {
+            return {};
+        }
+
+        int rows = matrix.size(), columns = matrix[0].size();
+        vector<int> order;
+        int left = 0, right = columns - 1, top = 0, bottom = rows - 1;
+        while (left <= right && top <= bottom) {
+            for (int column = left; column <= right; column++) {
+                order.push_back(matrix[top][column]);
+            }
+            for (int row = top + 1; row <= bottom; row++) {
+                order.push_back(matrix[row][right]);
+            }
+            if (left < right && top < bottom) {
+                for (int column = right - 1; column > left; column--) {
+                    order.push_back(matrix[bottom][column]);
+                }
+                for (int row = bottom; row > top; row--) {
+                    order.push_back(matrix[row][left]);
+                }
+            }
+            left++;
+            right--;
+            top++;
+            bottom--;
+        }
+        return order;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(1)
+
+**follow up**
+
+
+
 ## 分类
 
 ### 题目
@@ -5277,6 +5620,12 @@ public:
 
 ```
 
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)
+
+
+
 **follow up**
 
 
@@ -5287,7 +5636,7 @@ public:
 
 > 绝对地址: 进程之间数据不隔离, 若不注意, 内存会互相覆盖
 >
-> 虚拟北村: 进入保护模式, 用来隔离进程, 对进程来说透明, 更加安全
+> 虚拟地址: 进入保护模式, 用来隔离进程, 对进程来说透明, 更加安全
 
 操作系统会提供一种机制, 将不通进程的**虚拟地址**和不同内存的**物理地址**映射起来(通过MMU memory manage unit)
 
@@ -5295,11 +5644,11 @@ public:
 
 通过**段选择子**和**段内偏移量**找到真实内存
 
-优点: 
+**优点**: 
 
 1. 解决了虚拟内存映射问题
 
-缺点: 
+**缺点**: 
 
 1. 内存碎片
 2. 内存交互效率低
@@ -5318,7 +5667,7 @@ public:
 2. 虚拟地址与物理地址之间通过**页表**(MMU)来映射
 3. **采用了分页，那么释放的内存都是以页为单位释放的，也就不会产生无法给进程使用的小内存。**
 
-优点: 
+**优点**: 
 
 1. 释放的内存都是以页为单位释放的，也就不会产生无法给进程使用的小内存。
 2. 内存可以不连续
@@ -5512,3 +5861,46 @@ epoll实际上是**事件驱动（每个事件关联上fd）**（复杂度降低
 5. 更新内存管理的数据结构。
 6. 恢复处理机上下文。
 
+
+
+## 事务的特性
+
+- **原子性**（Atomicity）：一个事务（transaction）中的所有操作，或者全部完成，或者全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被[回滚](https://zh.wikipedia.org/wiki/回滚_(数据管理))（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。即，事务不可分割、不可约简。
+
+- **一致性**（Consistency）：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设[约束](https://zh.wikipedia.org/wiki/数据完整性)、[触发器](https://zh.wikipedia.org/wiki/触发器_(数据库))、[级联回滚](https://zh.wikipedia.org/wiki/级联回滚)等。
+
+- **事务隔离**(Isolation）：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别
+
+    - 未提交读（Read uncommitted）
+
+        **同时读取和修改**
+
+        数据被其他**事务修改过，但还没有提交**，就存在着回滚的可能性，这时候读取这些“未提交”数据的情况就是“**脏读**”。
+
+    - 提交读（read committed）
+
+        **同时读取和修改**
+
+        一个事务能**读取**到其他事务**提交过**(Committed)的数据。
+
+        一个事务在处理过程中如果重复读取某一个数据，而且这个数据恰好被其他事务修改并提交了，那么当前重复读取数据的事务就会出现同一个数据前后不同的情况。
+
+        在这个隔离级别会发生“不可重复读”的场景。
+
+    - 可重复读（repeatable read）
+
+        **同时读取**
+
+        一个事务一旦开始，事务过程中所读取的所有数据不允许被其他事务修改。
+
+        因为它只“保护”了它读取的数据不被修改，但是其他数据会被修改。如果其他数据被修改后恰好满足了当前事务的过滤条件（where语句），那么就会发生“幻影读”的情况。
+
+    - 串行化（Serializable）。
+
+        系统中所有的事务以串行地方式逐个执行，所以能避免所有数据不一致情况。
+
+        但是这种以排他方式来控制并发事务，串行化执行方式会导致事务排队，系统的并发量大幅下降，使用的时候要绝对慎重。
+
+    [事务的隔离级别](https://developer.aliyun.com/article/743691)
+
+- **持久性**（Durability）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。
