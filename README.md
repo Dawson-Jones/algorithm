@@ -5719,7 +5719,7 @@ ARP 请求
 
 **路由器**
 
-路由器只能根据具体的IP地址来转发数据
+路由器根据具体的IP地址来转发数据
 
 **网关**
 
@@ -5904,3 +5904,50 @@ epoll实际上是**事件驱动（每个事件关联上fd）**（复杂度降低
     [事务的隔离级别](https://developer.aliyun.com/article/743691)
 
 - **持久性**（Durability）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。
+
+
+
+## 红黑树
+
+### 性质
+
+1. 根结点是黑色
+2. 叶子节点是黑色
+3. 每个红色节点的两个子节点是黑色
+4. 任意一结点到每个叶子结点的路径都包含数量相同的黑结点。
+
+
+
+## 7层透明代理
+
+**代理使用 fakeIP 和 源进行握手**
+
+为了实现这个功能, 需要大量的修改
+
+cli <---> proxy <----> srv
+
+一句话就是: 必须让 srv 回来的数据包到 proxy, 因为是和 proxy 握手的
+
+1. socket: setsocketopt, socket的`IP_TRANSPARENT`选项, 需要超级用户权限, 使socket可以接收目的地址没有配置的数据包，也可以发送源地址不是本地地址的数据包实现。使用这种方式，上游服务不需要任何修改就可以得到客户端的ip。
+2. srv 必须和 proxy 在一个局域网, 如果出了公网, 返回路径就不能控制了
+3. 如果 srv 和 proxy 在一台机器, 设置一下
+
+    1. `iptables -t mangle -A OUTPUT -p tcp --src 172.19.228.32 --sport 15010:15011 -j MARK --set-xmark 0x1/0xffffffff`
+    2. `ip route add local 0.0.0.0/0 dev lo table 100`
+    3. `ip rule add fwmark 1 lookup 100`
+4. 如果不在一台机器, 还需要设置路由
+
+
+
+
+
+## UNIX Domain Socket 与 TCP/IP Socket 对比
+1. UNIX Domain Socket用于IPC更有效率：不需要经过网络协议栈，不需要打包拆包、计算校验和、维护序号和应答等，只是将应用层数据从一个进程拷贝到另一个进程。
+2. UNIX域套接字, 在同一台主机的传输速度是TCP套接字的两倍。这是因为，IPC机制本质上是可靠的通讯，而网络协议是为不可靠的通讯设计的。
+3. UNIX Domain Socket也提供面向流和面向数据包两种API接口，类似于TCP和UDP，但是面向消息的UNIX Domain Socket也是可靠的，消息既不会丢失也不会顺序错乱。
+
+## IPC
+
+### 管道
+
+单向, 亲缘, 
