@@ -1395,7 +1395,7 @@ bool isSubStructure(struct TreeNode *A, struct TreeNode *B) {
 
 ### 剑指 Offer 27. 二叉树的镜像
 
-### 226. 翻转二叉树
+### [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
 
 > 请完成一个函数，输入一个二叉树，该函数输出它的镜像。
 >
@@ -2521,6 +2521,50 @@ public:
 **时间复杂度**: O(n<sup>2</sup>)
 
 **空间复杂度**: O(n)
+
+**follow up**
+
+
+
+### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
+
+> 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+>
+> 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int pre = 0, cur = 0;
+        int temp;
+        for (auto num : nums) {
+            if (num + pre > cur) {
+                temp = pre;
+                pre = cur;
+                cur = num + temp;
+            } else {
+                pre = cur;
+            }
+        }
+
+        return cur;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(1)
+
+
 
 **follow up**
 
@@ -4262,6 +4306,92 @@ public:
 
 
 
+### [210. 课程表 II](https://leetcode-cn.com/problems/course-schedule-ii/)
+
+> 现在你总共有 numCourses 门课需要选，记为 0 到 numCourses - 1。给你一个数组 prerequisites ，其中 prerequisites[i] = [ai, bi] ，表示在选修课程 ai 前 必须 先选修 bi 。
+>
+> 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示：[0,1] 。
+> 返回你为了学完所有课程所安排的学习顺序。可能会有多个正确的顺序，你只要返回 任意一种 就可以了。如果不可能完成所有课程，返回 一个空数组 。
+
+**思路**:
+
+该题和[207. 课程表](https://leetcode-cn.com/problems/course-schedule/)几乎是一模一样的
+
+把每门课程的依赖放入一个数组中
+
+遍历每一门课程, 并把进行 dfs 搜索, 
+
+如果该课程没有依赖的话, 那么就可以把该课程置为为已完成, 把完成的课程放入学习列表中
+
+如果在dfs中重新遍历到了该课程, 那么说明有环
+
+**代码**:
+
+```cpp
+class Solution {
+private:
+    vector<vector<int>> edges;
+    /* 
+     * 0: not searched
+     * 1: searching
+     * 2: finished
+     */
+    vector<int> visited;
+    vector<int> result;
+    // determine the ring
+    bool valid = true;
+    
+public:
+    void dfs(int u) {
+        visited[u] = 1;    
+        for (int v : edges[u]) {
+            if (visited[v] == 0) {
+                dfs(v);
+                if (!valid)
+                    return;
+            } else if (visited[v] == 1) { // reback to the searching, it's a ring
+                valid = false;
+                return;
+            }
+        }
+        
+        visited[u] = 2;
+        result.push_back(u);
+    }
+    
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        edges.resize(numCourses);
+        visited.resize(numCourses);
+        
+        for (auto info: prerequisites) {
+            edges[info[1]].push_back(info[0]);
+        }
+        
+        for (int i = 0; i < numCourses && valid; ++i) {
+            if (!visited[i]) {
+                dfs(i);
+            }
+        }
+        
+        if (!valid)
+            return {};
+
+        reverse(result.begin(), result.end());
+        return result;
+    }
+};
+```
+
+**时间复杂度**: O(*n*+*m*)  *n* 为课程数，*m* 为先修课程的要求数
+
+**空间复杂度**: O(*n*+*m*)
+
+
+
+**follow up**
+
+
+
 ## bfs
 
 ### 剑指 Offer 13. 机器人的运动范围
@@ -4822,6 +4952,67 @@ public:
 
 
 
+### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)
+
+> 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+>
+> 实现 MinStack 类:
+>
+> MinStack() 初始化堆栈对象。
+> void push(int val) 将元素val推入堆栈。
+> void pop() 删除堆栈顶部的元素。
+> int top() 获取堆栈顶部的元素。
+> int getMin() 获取堆栈中的最小元素。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class MinStack {
+private:
+    stack<int> stk;
+    stack<int> min_stk;
+
+public:
+    MinStack() {
+        stk.push(INT_MAX);
+        min_stk.push(INT_MAX);
+    }
+
+    void push(int val) {
+        int cur_min = min(min_stk.top(), val);
+        stk.push(val);
+        min_stk.push(cur_min);
+    }
+
+    void pop() {
+        stk.pop();
+        min_stk.pop();
+    }
+
+    int top() {
+        return stk.top();
+    }
+
+    int getMin() {
+        return min_stk.top();
+    }
+};
+```
+
+**时间复杂度**: 
+
+**空间复杂度**: 
+
+
+
+**follow up**
+
+
+
 ## 其他
 
 ### 15. 三数之和
@@ -5034,7 +5225,7 @@ int strStr(char *word, char *pattern) {
         while (j > 0 && word[i] != pattern[j])
             j = pi[j - 1];
         if (word[i] == pattern[j])
-            j++;x
+            j++;
         if (j == n)
             return i - n + 1;
     }
@@ -5599,6 +5790,121 @@ public:
 **时间复杂度**: O(n)
 
 **空间复杂度**: O(1)
+
+**follow up**
+
+
+
+### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
+
+> 给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
+>
+> 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int res;
+        int count = 0;
+        for (auto num : nums) {
+            if (!count) {
+                res = num;
+                count++;
+            } else {
+                if (num == res) {
+                    count++;
+                } else {
+                    count--;
+                }
+            }
+        }
+        
+        return res;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(1)
+
+**follow up**
+
+
+
+### [208. 实现 Trie (前缀树)](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
+
+> Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+>
+> 请你实现 Trie 类：
+>
+> Trie() 初始化前缀树对象。
+> void insert(String word) 向前缀树中插入字符串 word 。
+> boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false 。
+> boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true ；否则，返回 false 。
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Trie {
+private:
+    vector<Trie *> children;
+    bool is_end;
+
+    Trie *searchPreix(string prefix) {
+        Trie *node = this;
+        for (char ch: prefix) {
+            ch -= 'a';
+            if (node->children[ch] == nullptr) return nullptr;
+            node = node->children[ch];
+        }
+        return node;
+    }
+
+public:
+    /** Initialize your data structure here. */
+    Trie() : children(26), is_end(false) {}
+
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        Trie *node = this;
+        for (char ch : word) {
+            ch -= 'a';
+            if (node->children[ch] == nullptr)
+                node->children[ch] = new Trie();
+              
+            node = node->children[ch];
+        }
+        node->is_end = true;
+    }
+
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        Trie *node = this->searchPreix(word);
+        return node != nullptr && node->is_end;
+    }
+
+    bool startsWith(string prefix) {
+        return this->searchPreix(prefix) != nullptr;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)
 
 **follow up**
 
