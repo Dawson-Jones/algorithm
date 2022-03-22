@@ -302,6 +302,41 @@ int* exchange(int* nums, int numsSize, int* returnSize){
 
 
 
+### [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
+
+> 给定一个数组 `nums`，编写一个函数将所有 `0` 移动到数组的末尾，同时保持非零元素的相对顺序。
+>
+> **请注意** ，必须在不复制数组的情况下原地对数组进行操作。
+
+**思路**:
+
+有点类似于快排的思想
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int zero_st = 0;
+        for (int i = zero_st; i < nums.size(); ++i) {
+            if (nums[i] != 0)
+                swap(nums[zero_st++], nums[i]);
+        }
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(1)
+
+
+
+**follow up**
+
+
+
 ### 剑指 Offer 45. 把数组排成最小的数
 
 > 输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
@@ -2564,7 +2599,97 @@ public:
 
 **空间复杂度**: O(1)
 
+**follow up**
 
+
+
+### [300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
+
+> 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
+>
+> 子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int res = 0;
+        int n = nums.size();
+        vector<int> dp(n, 1);
+        
+        for (int i = 0; i < nums.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+            
+            res = max(dp[i], res);
+        }
+
+        return res;
+    }
+};
+```
+
+**时间复杂度**: O(n<sup>2</sup>)
+
+**空间复杂度**: O(n)
+
+
+
+**follow up**
+
+
+
+### [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
+
+> 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
+>
+> 计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
+>
+> 你可以认为每种硬币的数量是无限的。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount + 1, -1);
+        dp[0] = 0;
+        
+        for (int i = 1; i <= amount; ++i) {
+            int cur = INT_MAX;
+            for (auto coin : coins) {
+                int idx = i - coin;
+                if (idx >= 0 && dp[idx] != -1) {
+                    cur = min(dp[idx] + 1, cur);
+                }
+            }
+            dp[i] = cur != INT_MAX ? cur : dp[i];
+        }
+
+        return dp.back();
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)2
 
 **follow up**
 
@@ -4809,6 +4934,68 @@ public:
 
 
 
+### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
+
+> 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
+>
+> 返回 滑动窗口中的最大值 。
+>
+
+**思路**:
+
+思路很容易想到, 但是代码不是很好写
+
+双端队列的单调递减队列用来表示滑动窗口的最大值
+
+每次把最前面的值放入结果中
+
+同时
+
+如果最前面的值已经不在有效窗口中要及时去除
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int> &nums, int k) {
+        deque<int> q;
+        for (int i = 0; i < k; ++i) {
+            while (!q.empty() && nums[q.back()] < nums[i])
+                q.pop_back();
+            q.push_back(i);
+        }
+
+        vector<int> res({nums[q.front()]});
+        for (int i = k; i < nums.size(); ++i) {
+            while (!q.empty() && nums[q.back()] < nums[i])
+                q.pop_back();
+            q.push_back(i);
+
+            if (q.front() < i - k + 1)
+                q.pop_front();
+            res.push_back(nums[q.front()]);
+        }
+
+        return res;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(k)
+
+
+
+**follow up**
+
+
+
+
+
 ## 栈
 
 ### [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
@@ -5910,6 +6097,51 @@ public:
 
 
 
+### [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/)
+
+> 给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积 。
+>
+> 题目数据 保证 数组 nums之中任意元素的全部前缀元素和后缀的乘积都在  32 位 整数范围内。
+>
+> 请不要使用除法，且在 O(n) 时间复杂度内完成此题。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int len = nums.size();
+        vector<int> res(len, 1);
+
+        for (int i = 1; i < len; ++i) {
+            res[i] = res[i - 1] * nums[i - 1];
+        }
+
+        int pre = nums[len - 1];
+        for (int i = len - 2; i >= 0; --i) {
+            res[i] *= pre;
+            pre *= nums[i];
+        }
+        
+        return res;
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(1)
+
+**follow up**
+
+
+
 ## 分类
 
 ### 题目
@@ -6301,3 +6533,34 @@ cli <---> proxy <----> srv
 
 1. 与overload类似，但是范围不同，是子类改写父类；
 2. 与override类似，但是父类中的方法不是虚函数。
+
+
+
+
+
+## eBPF
+
+指令**下放到内核中可以带来如下好处**
+
+- **无需在内核/用户空间切换**就可以实现内核的可编程。例如，Cilium 这种和网络相关 的 BPF 程序能直接在内核中实现灵活的容器策略、负载均衡等功能，而无需将包送先 到用户空间，处理之后再送回内核。需要在 **BPF 程序之间或内核/用户空间之间共享状 态**时，可以使用 BPF map。
+- **可编程 datapath** 具有很大的灵活性，因此程序能**在编译时将不需要的特性禁用掉， 从而极大地优化程序的性能**。例如，如果容器不需要 IPv4，那编写 BPF 程序时就可以 只处理 IPv6 的情况，从而节省了快速路径（fast path）中的资源。
+- 对于网络场景（例如 tc 和 XDP），BPF 程序可以在**无需重启内核、系统服务或容器的 情况下实现原子更新，并且不会导致网络中断**。另外，**更新 BPF map 不会导致程序 状态（program state）的丢失**。
+- BPF 给用户空间**提供了一个稳定的 ABI**，而且**不依赖任何第三方内核模块**。BPF 是 Linux 内核的一个核心组成部分，而 Linux 已经得到了广泛的部署，因此可以保证现 有的 BPF 程序能在新的内核版本上继续运行。这种保证与**系统调用**（内核提供给用 户态应用的接口）是同一级别的。另外，BPF 程序**在不同平台上是可移植的**。
+- BPF 程序**与内核协同工作**，**复用已有的内核基础设施**（例如驱动、netdevice、 隧道、协议栈和 socket）和工具（例如 iproute2），以及内核提供的安全保证。**和内 核模块不同，BPF 程序会被一个位于内核中的校验器（in-kernel verifier）进行校验， 以确保它们不会造成内核崩溃、程序永远会终止等等**。例如，XDP 程序会复用已有的内 核驱动，能够直接操作存放在 DMA 缓冲区中的数据帧，而不用像某些模型（例如 DPDK） 那样将这些数据帧甚至整个驱动暴露给用户空间。而且，XDP 程序**复用**内核协议栈而 不是绕过它。**BPF 程序可以看做是内核设施之间的通用“胶水代码”**， 基于 BPF 可以设计巧妙的程序，解决特定的问题。
+
+### map
+
+**BPF map 和程序作为内核资源只能通过文件描述符访问，其背后是内核中的匿名 inode**
+
+**文件描述符受限于进程的生命周期，使得 map 共享之类的操作非常笨重**。
+
+**为了解决这个问题，内核实现了一个最小内核空间 BPF 文件系统，BPF map 和 BPF 程序 都可以钉到（pin）这个文件系统内**
+
+### 典型的工作流
+
+1. 用 C 编写 BPF 程序
+2. 用 LLVM 将 C 程序编译成对象文件（ELF）
+3. 用户空间 BPF ELF 加载器（例如 iproute2）解析对象文件
+4. **加载器**通过 `bpf()` 系统调用**将解析后的对象文件注入内核**
+5. 内核验证 BPF 指令，然后对其执行即时编译（JIT），**返回程序的一个新文件描述符**
+6. 利用文件描述符 **attach 到内核子系统**（例如网络子系统）
