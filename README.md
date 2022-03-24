@@ -1160,7 +1160,7 @@ public:
 
 ### 102. 二叉树的层序遍历
 
-### 剑指 Offer 32 - II. 从上到下打印二叉树 II
+剑指 Offer 32 - II. 从上到下打印二叉树 II
 
 > 打印出每层的结构
 >
@@ -1350,9 +1350,9 @@ bool isSubStructure(struct TreeNode *A, struct TreeNode *B) {
 
 
 
-### 剑指 Offer 27. 二叉树的镜像
-
 ### [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+
+剑指 Offer 27. 二叉树的镜像
 
 > 请完成一个函数，输入一个二叉树，该函数输出它的镜像。
 >
@@ -1410,9 +1410,9 @@ struct TreeNode* invertTree(struct TreeNode* root) {
 
 
 
-### 剑指 Offer 28. 对称的二叉树
-
 ### [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
+
+剑指 Offer 28. 对称的二叉树
 
 > 实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
 >
@@ -1575,9 +1575,11 @@ public:
 
 
 
-### 剑指 Offer 55 - I. 二叉树的深度
-
 ### 104. 二叉树的最大深度
+
+剑指 Offer 55 - I. 二叉树的深度
+
+
 
 > 输入一棵二叉树的根节点，求该树的深度。从根节点到叶节点依次经过的节点（含根、叶节点）形成树的一条路径，最长路径的长度为树的深度。
 >
@@ -1608,7 +1610,7 @@ public:
 
 ### 110. 平衡二叉树
 
-### 剑指 Offer 55 - II. 平衡二叉树
+剑指 Offer 55 - II. 平衡二叉树
 
 > 输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
 >
@@ -1641,9 +1643,9 @@ bool isBalanced(struct TreeNode* root){
 
 
 
-### 剑指 Offer 68 - I. 二叉搜索树的最近公共祖先
-
 ### 235. 二叉搜索树的最近公共祖先
+
+剑指 Offer 68 - I. 二叉搜索树的最近公共祖先
 
 > 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
 
@@ -1689,7 +1691,7 @@ struct TreeNode *lowestCommonAncestor(struct TreeNode *root, struct TreeNode *p,
 
 ### 236. 二叉树的最近公共祖先
 
-### 剑指 Offer 68 - II. 二叉树的最近公共祖先
+剑指 Offer 68 - II. 二叉树的最近公共祖先
 
 > 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
 
@@ -2013,9 +2015,9 @@ public:
 
 
 
-### 剑指 Offer 63. 股票的最大利润
-
 ### 121. 买卖股票的最佳时机
+
+剑指 Offer 63. 股票的最大利润
 
 > 假设把某股票的价格按照时间先后顺序存储在数组中，请问买卖该股票一次可能获得的最大利润是多少？
 >
