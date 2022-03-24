@@ -522,10 +522,6 @@ public:
 
 
 
-**follow up*
-
-## 优先队列
-
 ### 剑指 offer 41. 数据流中的中位数
 
 > 如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
@@ -868,25 +864,6 @@ public:
 
 ## 哈希表
 
-### 01. 两数之和
-
-> 两数之和
->
-
-**思路**:
-
-**代码**:
-
-```
-
-```
-
-**follow up**
-
-[15. 三数之和](#15. 三数之和)
-
-
-
 ### 剑指 Offer 50. 第一个只出现一次的字符
 
 > 在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母。
@@ -1181,61 +1158,6 @@ public:
 
 
 
-### 剑指 Offer 32 - I. 从上到下打印二叉树
-
-> 从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
->
-> 
->
-> 例如:
-> 给定二叉树: [3,9,20,null,null,15,7]
->
->  3
->  / \
-> 9  20
->     /  \
->  15   7
->
-> 返回：
->
-> [3,9,20,15,7]
-
-**思路**:
-
-层序遍历
-
-**代码**:
-
-```cpp
-class Solution {
-public:
-    vector<int> levelOrder(TreeNode *root) {
-        vector<int> res;
-        if (!root)
-            return res;
-        queue<TreeNode *> q({root});
-        TreeNode *cur;
-        while (!q.empty()) {
-            cur = q.front();
-            q.pop();
-            res.push_back(cur->val);
-            if (cur->left)
-                q.push(cur->left);
-            if (cur->right)
-                q.push(cur->right);
-        }
-
-        return res;
-    }
-};
-```
-
-**follow up**
-
-[剑指 Offer 32 - II. 从上到下打印二叉树 II](#剑指 Offer 32 - II. 从上到下打印二叉树 II)
-
-
-
 ### 102. 二叉树的层序遍历
 
 ### 剑指 Offer 32 - II. 从上到下打印二叉树 II
@@ -1488,8 +1410,6 @@ struct TreeNode* invertTree(struct TreeNode* root) {
 
 
 
-
-
 ### 剑指 Offer 28. 对称的二叉树
 
 ### [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
@@ -1681,8 +1601,6 @@ public:
 ```
 
 **follow up**
-
-[剑指 Offer 55 - II. 平衡二叉树](#剑指 Offer 55 - II. 平衡二叉树)
 
 [110. 平衡二叉树](#110. 平衡二叉树)
 
@@ -1936,45 +1854,6 @@ public:
 
 ## 动态规划
 
-### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
-
-> 假设你正在爬楼梯。需要 `n` 阶你才能到达楼顶。
->
-> 每次你可以爬 `1` 或 `2` 个台阶。你有多少种不同的方法可以爬到楼顶呢？
-
-**思路**:
-
-
-
-**代码**:
-
-```cpp
-class Solution {
-public:
-    int climbStairs(int n) {
-        int pprev = 1;
-        int prev = 2;
-        if (n <= 2) 
-            return n;
-        
-        int cur;
-        for (int i = 2; i < n; ++i) {
-            cur = pprev + prev;
-            pprev = prev;
-            prev = cur;
-        }
-
-        return prev;
-    }
-};
-```
-
-**follow up**
-
-
-
-
-
 ### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
 
 难度中等1268
@@ -2046,6 +1925,55 @@ public:
         return dp[row - 1][col - 1];
     }
 };
+```
+
+**follow up**
+
+
+
+### 剑指 Offer 47. 礼物的最大价值
+
+> 在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+>
+> 
+>
+> 输入: 
+> [
+> [1,3,1],
+> [1,5,1],
+> [4,2,1]
+> ]
+> 输出: 12
+> 解释: 路径 1→3→5→2→1 可以拿到最多价值的礼物
+
+**思路**:
+
+简单dp
+
+**代码**:
+
+```c
+int my_max(int a, int b) {
+    return a > b ? a : b;
+}
+
+int maxValue(int **grid, int gridSize, int *gridColSize) {
+    if (gridSize == 0)
+        return 0;
+    for (int i = 1; i < gridSize; ++i)
+        grid[i][0] += grid[i - 1][0];
+
+    for (int i = 1; i < gridColSize[0]; ++i)
+        grid[0][i] += grid[0][i - 1];
+
+    for (int i = 1; i < gridSize; ++i) {
+        for (int j = 1; j < gridColSize[i]; ++j) {
+            grid[i][j] = my_max(grid[i][j] + grid[i - 1][j], grid[i][j] + grid[i][j - 1]);
+        }
+    }
+
+    return grid[gridSize - 1][gridColSize[0] - 1];
+}
 ```
 
 **follow up**
@@ -2143,7 +2071,7 @@ public:
 
 ### 53. 最大子序和
 
-### 剑指 Offer 42. 连续子数组的最大和
+剑指 Offer 42. 连续子数组的最大和
 
 > 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 >
@@ -2207,55 +2135,6 @@ int maxSubArray(int *nums, int numsSize) {
 
 
 
-### 剑指 Offer 47. 礼物的最大价值
-
-> 在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
->
-> 
->
-> 输入: 
-> [
->   [1,3,1],
->  [1,5,1],
->   [4,2,1]
-> ]
-> 输出: 12
-> 解释: 路径 1→3→5→2→1 可以拿到最多价值的礼物
-
-**思路**:
-
-简单dp
-
-**代码**:
-
-```c
-int my_max(int a, int b) {
-    return a > b ? a : b;
-}
-
-int maxValue(int **grid, int gridSize, int *gridColSize) {
-    if (gridSize == 0)
-        return 0;
-    for (int i = 1; i < gridSize; ++i)
-        grid[i][0] += grid[i - 1][0];
-
-    for (int i = 1; i < gridColSize[0]; ++i)
-        grid[0][i] += grid[0][i - 1];
-
-    for (int i = 1; i < gridSize; ++i) {
-        for (int j = 1; j < gridColSize[i]; ++j) {
-            grid[i][j] = my_max(grid[i][j] + grid[i - 1][j], grid[i][j] + grid[i][j - 1]);
-        }
-    }
-
-    return grid[gridSize - 1][gridColSize[0] - 1];
-}
-```
-
-**follow up**
-
-
-
 ### 剑指 Offer 46. 把数字翻译成字符串
 
 > 给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
@@ -2302,77 +2181,6 @@ class Solution:
 **follow up**
 
 
-
-### 剑指 Offer 48. 最长不含重复字符的子字符串
-
-### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
-
-> 请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
->
->  
->
-> 示例 1:
->
-> 输入: "abcabcbb"
-> 输出: 3 
-> 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
-> 示例 2:
->
-> 输入: "bbbbb"
-> 输出: 1
-> 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
-
-**思路**:
-
-记录所有字符串的index
-
-和出现重复的字符串的时候
-
-重复的index下一位即为开始的index
-
-**代码**:
-
-```c
-int lengthOfLongestSubstring(char *s) {
-    int st = -1, ed = 0, res = 0;
-    char c;
-    int map[128];
-    memset(map, -1, sizeof(map));
-    for (; (c = s[ed]); ++ed) {
-        if (map[c] != -1 && map[c] > st) {
-            st = map[c];
-        }
-        map[c] = ed;
-        res = ed - st > res ? ed - st : res;
-    }
-    return res;
-}
-```
-
-```cpp
-class Solution {
-public:
-    int lengthOfLongestSubstring(string s) {
-        unordered_map<char, int> map;
-        int max_len = 0;
-        int st = -1;
-        
-        for (int i = 0; i < s.size(); ++i) {
-            char c = s[i];
-            if (map.count(c) && map[c] > st) {
-                st = map[c];
-            }
-
-            map[c] = i;
-            max_len = max(max_len, i - st);
-        }
-
-        return max_len;
-    }
-};
-```
-
-**follow up**
 
 ### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
 
@@ -2491,7 +2299,11 @@ public:
 
 **思路**:
 
-循环中的 i 是改搜索树的头节点, j 是左边的节点个数, dp[j] 是左边二叉搜索树的个数
+循环中的 i 是改搜索树的头节点
+
+j 是左边的节点个数
+
+dp[j] 是左边二叉搜索树的个数
 
 **代码**:
 
@@ -2689,7 +2501,63 @@ public:
 
 **时间复杂度**: O(n)
 
-**空间复杂度**: O(n)2
+**空间复杂度**: O(n)
+
+**follow up**
+
+
+
+### [416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)
+
+> 给你一个 **只包含正整数** 的 **非空** 数组 `nums` 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+
+**思路**:
+
+0 1 背包问题
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int n = nums.size();
+        if (n < 2)
+            return false;
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        int maxNum = *max_element(nums.begin(), nums.end());
+        if (sum & 1) // odd
+            return false;
+
+        int target = sum / 2;
+        if (maxNum > target)
+            return false;
+
+        vector<vector<bool>> dp(n, vector<bool>(target + 1));
+        for (int i = 0; i < n; ++i) {
+            dp[i][0] = true;
+        }
+
+        dp[0][nums[0]] = true;
+        for (int i = 1; i < n; ++i) {
+            int num = nums[i];
+            for (int j = 1; j <= target; ++j) {
+                if (j >= num) {
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - num];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+
+        return dp[n - 1][target];
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)
 
 **follow up**
 
@@ -2852,7 +2720,7 @@ public:
 
 ### [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/)
 
-### 剑指 Offer 18. 删除链表的节点
+剑指 Offer 18. 删除链表的节点
 
 > 给你一个链表的头节点 `head` 和一个整数 `val` ，请你删除链表中所有满足 `Node.val == val` 的节点，并返回 **新的头节点** 。
 
@@ -2894,7 +2762,7 @@ public:
 
 **思路**:
 
-
+和[203. 移除链表元素](#203. 移除链表元素)一样的思路
 
 **代码**:
 
@@ -2919,8 +2787,6 @@ public:
 ```
 
 **follow up**
-
-
 
 
 
@@ -3160,9 +3026,7 @@ public:
 
 
 
-### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
-
-难度中等1192
+### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)⭐️
 
 > 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
 
@@ -3392,7 +3256,7 @@ struct ListNode *getKthFromEnd(struct ListNode *head, int k) {
 
 ### 21. 合并两个有序链表
 
-### 剑指 Offer 25. 合并两个排序的链表
+剑指 Offer 25. 合并两个排序的链表
 
 > 输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
 >
@@ -3434,7 +3298,7 @@ struct ListNode *mergeTwoLists(struct ListNode *l1, struct ListNode *l2) {
 
 
 
-### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
+### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)⭐️
 
 > 给你一个链表数组，每个链表都已经按升序排列。
 >
@@ -3487,7 +3351,7 @@ public:
 
 
 
-### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
+### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)⭐️
 
 > 给你链表的头结点 `head` ，请将其按 **升序** 排列并返回 **排序后的链表** 。
 
@@ -3585,8 +3449,6 @@ struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *he
 **思路**:
 
 快慢指针取中间, 反转后半部分, 和前半部分比较
-
-注意: 当第一个元素
 
 **代码**:
 
@@ -3859,9 +3721,9 @@ public:
 
 ## 回溯、dfs
 
-### 剑指 Offer 12. 矩阵中的路径
-
 ### 79. 单词搜索
+
+剑指 Offer 12. 矩阵中的路径
 
 > 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
 >
@@ -3930,9 +3792,9 @@ public:
 
 
 
-### 剑指 Offer 34. 二叉树中和为某一值的路径
-
 ### 113. 路径总和 II
+
+剑指 Offer 34. 二叉树中和为某一值的路径
 
 > 给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有从根节点到叶子节点路径总和等于给定目标和的路径。
 >
@@ -4002,6 +3864,82 @@ private:
 **follow up**
 
 
+
+### [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+
+> 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
+>
+> 路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+>
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/path-sum-iii
+> 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+**思路**:
+
+1. 和[113. 路径总和 II](#113. 路径总和 II)一样, 暴力求解
+2. 利用前缀和
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int dfs(TreeNode *root, int target) {
+        if (!root)
+            return 0;
+
+        int res = 0;
+        if (root->val == target)
+            res++;
+        res += dfs(root->left, target - root->val);
+        res += dfs(root->right, target - root->val);
+        
+        return res;
+    }
+
+    int pathSum(TreeNode *root, int targetSum) {
+        if (!root)
+            return 0;
+        return dfs(root, targetSum) + pathSum(root->left, targetSum) + pathSum(root->right, targetSum);
+    }
+};
+```
+
+**时间复杂度**: O(n<sup>2</sup>>)
+
+**空间复杂度**: O(n)
+
+```cpp
+class Solution {
+public:
+    unordered_map<int, int> map;
+    int dfs(TreeNode *root, int cur_sum, int target) {
+        if (!root)
+            return 0;
+
+        cur_sum += root->val;
+        int count = map.count(cur_sum - target) ? map[cur_sum - target] : 0;
+        
+        map[cur_sum]++;
+        count += dfs(root->left, cur_sum, target) + dfs(root->right, cur_sum, target);
+        map[cur_sum]--;
+        
+        return count;
+    }
+
+    int pathSum(TreeNode* root, int targetSum) {
+        map[0] = 1;
+        return dfs(root, 0, targetSum);
+    }
+};
+```
+
+**时间复杂度**: O(n)
+
+**空间复杂度**: O(n)
+
+**follow up**
 
 
 
@@ -4157,7 +4095,7 @@ public:
 
 *全组合*
 
-剑指 offer 38题的后续讨论, 这里没有用题目中的做法, 而是使用了动态规划做的
+[剑指 Offer 38. 字符串的排列](#剑指 Offer 38. 字符串的排列)的后续讨论, 这里没有用题目中的做法, 而是使用了动态规划做的
 
 **代码**:
 
@@ -4214,8 +4152,6 @@ public:
 };
 ```
 
-
-
 方法2: 回溯
 
 ```cpp
@@ -4244,8 +4180,6 @@ public:
 ```
 
 **follow up**
-
-
 
 
 
@@ -4595,7 +4529,7 @@ class Solution {
 
 ## 双指针
 
-### 11. 盛最多水的容器
+### [11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
 
 > 给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
 
@@ -4626,8 +4560,6 @@ public:
 ```
 
 **follow up**
-
-
 
 
 
@@ -4766,9 +4698,24 @@ public:
 
 ## 滑动窗口
 
-### 3. 无重复字符的最长子串
+### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
 
-> 给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。
+剑指 Offer 48. 最长不含重复字符的子字符串
+
+> 请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+>
+> 
+>
+> 示例 1:
+>
+> 输入: "abcabcbb"
+> 输出: 3 
+> 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+> 示例 2:
+>
+> 输入: "bbbbb"
+> 输出: 1
+> 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
 
 **思路**:
 
@@ -4782,13 +4729,13 @@ public:
 
 **代码**:
 
-```cpp
+```c
 int lengthOfLongestSubstring(char *s) {
     int st = -1, ed = 0, res = 0;
     char c;
     int map[128];
     memset(map, -1, sizeof(map));
-    for (;(c = s[ed]); ++ed) {
+    for (; (c = s[ed]); ++ed) {
         if (map[c] != -1 && map[c] > st) {
             st = map[c];
         }
@@ -4799,18 +4746,54 @@ int lengthOfLongestSubstring(char *s) {
 }
 ```
 
+```cpp
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> map;
+        int max_len = 0;
+        int st = -1;
+        
+        for (int i = 0; i < s.size(); ++i) {
+            char c = s[i];
+            if (map.count(c) && map[c] > st) {
+                st = map[c];
+            }
+
+            map[c] = i;
+            max_len = max(max_len, i - st);
+        }
+
+        return max_len;
+    }
+};
+```
+
 **follow up**
 
 
 
-### 992. K 个不同整数的子数组
+### [992. K 个不同整数的子数组](https://leetcode-cn.com/problems/subarrays-with-k-different-integers/)
 
-> 给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定不同的子数组为好子数组。
+> 给定一个正整数数组 nums和一个整数 k ，返回 num 中 「好子数组」 的数目。
 >
-> （例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）
+> 如果 nums 的某个子数组中不同整数的个数恰好为 k，则称 nums 的这个连续、不一定不同的子数组为 「好子数组 」。
 >
-> 返回 A 中好子数组的数目。
+> 例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。
+> 子数组 是数组的 连续 部分。
 >
+>  
+>
+> 示例 1：
+>
+> 输入：nums = [1,2,1,2,3], k = 2
+> 输出：7
+> 解释：恰好由 2 个不同整数组成的子数组：[1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2].
+> 示例 2：
+>
+> 输入：nums = [1,2,1,3,4], k = 3
+> 输出：3
+> 解释：恰好由 3 个不同整数组成的子数组：[1,2,1,3], [2,1,3], [1,3,4].
 
 **思路**:
 
@@ -4820,7 +4803,7 @@ int lengthOfLongestSubstring(char *s) {
 
 子数组中不同整数最多有K个: g(x, k)
 
-则: f(x, k) = g(x, k) - g(x, k)
+则: f(x, k) = g(x, k) - g(x, k - 1)
 
 **代码**:
 
@@ -4988,11 +4971,7 @@ public:
 
 **空间复杂度**: O(k)
 
-
-
 **follow up**
-
-
 
 
 
@@ -5194,8 +5173,6 @@ public:
 
 **空间复杂度**: 
 
-
-
 **follow up**
 
 
@@ -5274,9 +5251,6 @@ public:
 >
 > 假定每组输入只存在恰好一个解。
 >
-> 来源：力扣（LeetCode）
-> 链接：https://leetcode-cn.com/problems/3sum-closest
-> 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 **思路**:
 
@@ -5424,6 +5398,8 @@ int strStr(char *word, char *pattern) {
 
 **follow up**
 
+
+
 ### 459. 重复的子字符串
 
 > 给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
@@ -5486,8 +5462,6 @@ public:
 };
 ```
 
-
-
 **follow up**
 
 
@@ -5519,7 +5493,6 @@ public:
         for (i = nums.size() - 2; i >= 0 && nums[i] >= nums[i + 1]; --i);
         if (i >= 0) {
             for (j = nums.size() - 1; j >= 0 && nums[i] >= nums[j]; --j);
-
             swap(nums[i], nums[j]);
         }
 
@@ -5531,6 +5504,8 @@ public:
 **follow up**
 
 [46. 全排列](#46. 全排列)
+
+
 
 ### 1979. 找出数组的最大公约数
 
@@ -5566,10 +5541,11 @@ char *gcdOfStrings(char *str1, char *str2) {
     str1[numOfMaxDivisor] = '\0';
     return str1;
 }
-
 ```
 
 **follow up**
+
+
 
 ### 914. 卡牌分组
 
@@ -5611,6 +5587,8 @@ public:
 ```
 
 **follow up**
+
+
 
 ### 915. 分割数组
 
@@ -5667,6 +5645,8 @@ public:
 ```
 
 **follow up**
+
+
 
 ### [10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
 
@@ -5814,8 +5794,6 @@ bool isMatch(char *s, char *p) {
 ```
 
 **follow up**
-
-
 
 
 
@@ -5991,7 +5969,15 @@ public:
 
 **思路**:
 
+因为多数元素一定是超过一半的
 
+所以设一个数为多数元素
+
+遍历所有
+
+如果是这个数, 那么 count + 1
+
+不是的话		, 那么 count - 1
 
 **代码**:
 
@@ -6142,35 +6128,11 @@ public:
 
 
 
-## 分类
-
-### 题目
-
-> 问题
-
-**思路**:
-
-
-
-**代码**:
-
-```cpp
-
-```
-
-**时间复杂度**: O(n)
-
-**空间复杂度**: O(n)
-
-
-
-**follow up**
-
-
-
 # 八股文
 
-## 虚拟内存
+## 进程
+
+### 虚拟内存
 
 > 绝对地址: 进程之间数据不隔离, 若不注意, 内存会互相覆盖
 >
@@ -6217,24 +6179,43 @@ public:
 
 
 
-## 僵尸进程
+### 僵尸进程
 
 **僵尸进程**是指完成执行（通过`exit`[系统调用](https://zh.wikipedia.org/wiki/系统调用)，或运行时发生[致命错误](https://zh.wikipedia.org/wiki/致命错误)或收到终止[信号](https://zh.wikipedia.org/wiki/信号_(计算机科学))所致），但在操作系统的**进程表**中仍然存在其[进程控制块](https://zh.wikipedia.org/wiki/进程控制块)，处于"[终止状态](https://zh.wikipedia.org/w/index.php?title=终止状态&action=edit&redlink=1)"的进程。
 
 [子进程](https://zh.wikipedia.org/wiki/子进程)需要保留表项以允许其[父进程](https://zh.wikipedia.org/wiki/父进程)读取子进程的[退出状态](https://zh.wikipedia.org/wiki/退出状态)：一旦退出态通过`wait`[系统调用](https://zh.wikipedia.org/wiki/系统调用)读取，僵尸进程条目就从进程表中删除，称之为"回收"（reaped）。
 
-### 避免产生僵尸进程
+#### 避免产生僵尸进程
 
 1. 将父进程中对 SIGCHLD 信号的处理函数设为 SIG_IGN（忽略信号）；
 2. fork两次并杀死一级子进程，令二级子进程成为孤儿进程而被init所“收养”、清理
 
-## [孤儿进程](https://zh.wikipedia.org/wiki/孤儿进程)
+### [孤儿进程](https://zh.wikipedia.org/wiki/孤儿进程)
 
 不同于僵尸进程，其父进程已经死掉，但孤儿进程仍能正常执行，但并不会变为僵尸进程，因为被`init`（进程ID号为1）收养并`wait`其退出。
 
 
 
-## IO多路复用
+### 进程切换发生了什么
+
+1. 保存处理机上下文，包括程序计数器和其他寄存器。
+2. 更新PCB信息。
+3. 把进程的PCB移入相应的队列，如就绪、在某事件阻塞等队列。
+4. 选择另一个进程执行，并更新其PCB。
+5. 更新内存管理的数据结构。
+6. 恢复处理机上下文。
+
+
+
+### IPC
+
+
+
+
+
+## 网络
+
+### IO多路复用
 
 - IO 多路复用是一种同步IO模型，实现一个线程可以监视多个文件句柄；
 - 一旦某个文件句柄就绪，就能够通知应用程序进行相应的读写操作；
@@ -6244,24 +6225,24 @@ public:
 
 没有IO多路复用机制时，有BIO、NIO两种实现方式
 
-### 同步阻塞（BIO）
+#### 同步阻塞（BIO）
 
 - 服务端采用单线程，当 `accept` 一个请求后，在 `recv` 或 `send` 调用阻塞时，将无法 `accept` 其他请求（必须等上一个请求处理 `recv` 或 `send` 完 ）（无法处理并发）
 
-### 同步非阻塞（NIO）
+#### 同步非阻塞（NIO）
 
 - 服务器端当 `accept` 一个请求后，加入 `fds` 集合，每次轮询一遍 `fds` 集合 `recv` (非阻塞)数据，没有数据则立即返回错误，每次轮询所有 fd （包括没有发生读写实际的 fd）会很浪费 CPU。
 
-### select缺点
+#### select缺点
 
 - 单个进程所打开的FD是有限制的，通过 `FD_SETSIZE` 设置，默认1024 ;
 - 对 socket 扫描时是线性扫描，采用轮询的方法，效率较低（高并发）
 
-### poll
+#### poll
 
 - **没有最大连接数的限制**，原因是它是基于链表来存储的.
 
-### epoll
+#### epoll
 
 epoll实际上是**事件驱动（每个事件关联上fd）**（复杂度降低到了O(1)）
 
@@ -6272,10 +6253,9 @@ epoll实际上是**事件驱动（每个事件关联上fd）**（复杂度降低
 1. epoll_create()系统调用。此调用返回一个句柄，之后所有的使用都依靠这个句柄来标识。
 2. epoll_ctl()系统调用。通过此调用向epoll对象中添加、删除、修改感兴趣的事件，返回0标识成功，返回-1表示失败。
 3. epoll_wait()系统调用。通过此调用收集收集在epoll监控中已经发生的事件。
+3. 
 
-
-
-## 数据包流转
+### 数据包流转
 
 **封装**: 用户数据->tcp首部->IP首部->以太网首部
 
@@ -6305,7 +6285,7 @@ ARP 请求
 
 
 
-## tcp 传输可靠性
+### tcp 传输可靠性
 
 1. **确认和重传**：接收方收到报文就会确认，发送方发送一段时间后没有收到确认就重传。
 2. **数据校验**
@@ -6317,11 +6297,7 @@ ARP 请求
     1. BBR 通过**应答包（ACK）中的 RTT 信息**和已发送字节数来计算 **真实传输速率**（delivery rate）
     2. BBR 之前，主流的 TCP 拥塞控制算法都是基于**丢包**（loss-based）设计的
 
-
-
-
-
-## TCP 协议如何解决粘包、半包问题
+### TCP 协议如何解决粘包、半包问题
 
 1. **固定包长的数据包**
     1. 格式简单但灵活性差。如果包内容不足指定的字节数，剩余的空间需要填充特殊的信息，如 \0
@@ -6329,15 +6305,69 @@ ARP 请求
     1. 不足之处就是如果协议数据包内容部分需要使用包结束标志字符，就需要对这些字符做转码或者转义操作，以免被接收方错误地当成包结束标志而误解析。
 3. **包头 + 包体格式**
 
+### 7层透明代理
+
+**代理使用 fakeIP 和 源进行握手**
+
+为了实现这个功能, 需要大量的修改
+
+cli <---> proxy <----> srv
+
+一句话就是: 必须让 srv 回来的数据包到 proxy, 因为是和 proxy 握手的
+
+1. socket: setsocketopt, socket的`IP_TRANSPARENT`选项, 需要超级用户权限, 使socket可以接收目的地址没有配置的数据包，也可以发送源地址不是本地地址的数据包实现。使用这种方式，上游服务不需要任何修改就可以得到客户端的ip。
+2. srv 必须和 proxy 在一个局域网, 如果出了公网, 返回路径就不能控制了
+3. 如果 srv 和 proxy 在一台机器, 设置一下
+
+    1. `iptables -t mangle -A OUTPUT -p tcp --src 172.19.228.32 --sport 15010:15011 -j MARK --set-xmark 0x1/0xffffffff`
+    2. `ip route add local 0.0.0.0/0 dev lo table 100`
+    3. `ip rule add fwmark 1 lookup 100`
+4. 如果不在一台机器, 还需要设置路由
+
+### UNIX Domain Socket 与 TCP/IP Socket 对比
+
+1. UNIX Domain Socket用于IPC更有效率：不需要经过网络协议栈，不需要打包拆包、计算校验和、维护序号和应答等，只是将应用层数据从一个进程拷贝到另一个进程。
+2. UNIX域套接字, 在同一台主机的传输速度是TCP套接字的两倍。这是因为，IPC机制本质上是可靠的通讯，而网络协议是为不可靠的通讯设计的。
+3. UNIX Domain Socket也提供面向流和面向数据包两种API接口，类似于TCP和UDP，但是面向消息的UNIX Domain Socket也是可靠的，消息既不会丢失也不会顺序错乱。
+
+### 数据包收发过程
+
+1. 数据帧到达网卡
+2. 网卡把桢 DMA 到内存 ring buffer
+3. 硬中断通知 cpu
+4. cpu 响应硬中断, 简单处理后发出软中断
+5. ksoftirqd 进程处理软中断, 调用**网卡驱动注册的函数**收包
+6. 从 ring buffer 拿下帧保存为一个 sk_buffer
+7. 协议层处理网络帧, 把处理后的数据放入 socket 接收队列
+
+## eBPF
+
+指令**下放到内核中可以带来如下好处**
+
+- **无需在内核/用户空间切换**就可以实现内核的可编程。例如，Cilium 这种和网络相关 的 BPF 程序能直接在内核中实现灵活的容器策略、负载均衡等功能，而无需将包送先 到用户空间，处理之后再送回内核。需要在 **BPF 程序之间或内核/用户空间之间共享状 态**时，可以使用 BPF map。
+- **可编程 datapath** 具有很大的灵活性，因此程序能**在编译时将不需要的特性禁用掉， 从而极大地优化程序的性能**。例如，如果容器不需要 IPv4，那编写 BPF 程序时就可以 只处理 IPv6 的情况，从而节省了快速路径（fast path）中的资源。
+- 对于网络场景（例如 tc 和 XDP），BPF 程序可以在**无需重启内核、系统服务或容器的 情况下实现原子更新，并且不会导致网络中断**。另外，**更新 BPF map 不会导致程序 状态（program state）的丢失**。
+- BPF 给用户空间**提供了一个稳定的 ABI**，而且**不依赖任何第三方内核模块**。BPF 是 Linux 内核的一个核心组成部分，而 Linux 已经得到了广泛的部署，因此可以保证现 有的 BPF 程序能在新的内核版本上继续运行。这种保证与**系统调用**（内核提供给用 户态应用的接口）是同一级别的。另外，BPF 程序**在不同平台上是可移植的**。
+- BPF 程序**与内核协同工作**，**复用已有的内核基础设施**（例如驱动、netdevice、 隧道、协议栈和 socket）和工具（例如 iproute2），以及内核提供的安全保证。**和内 核模块不同，BPF 程序会被一个位于内核中的校验器（in-kernel verifier）进行校验， 以确保它们不会造成内核崩溃、程序永远会终止等等**。例如，XDP 程序会复用已有的内 核驱动，能够直接操作存放在 DMA 缓冲区中的数据帧，而不用像某些模型（例如 DPDK） 那样将这些数据帧甚至整个驱动暴露给用户空间。而且，XDP 程序**复用**内核协议栈而 不是绕过它。**BPF 程序可以看做是内核设施之间的通用“胶水代码”**， 基于 BPF 可以设计巧妙的程序，解决特定的问题。
+
+### map
+
+**BPF map 和程序作为内核资源只能通过文件描述符访问，其背后是内核中的匿名 inode**
+
+**文件描述符受限于进程的生命周期，使得 map 共享之类的操作非常笨重**。
+
+**为了解决这个问题，内核实现了一个最小内核空间 BPF 文件系统，BPF map 和 BPF 程序 都可以钉到（pin）这个文件系统内**
 
 
-## cpu指令执行步骤
 
-1. 取指令
-2. 指令译码
-3. 执行指令
-4. 访存取数
-5. 结果写回
+### 典型的工作流
+
+1. 用 C 编写 BPF 程序
+2. 用 LLVM 将 C 程序编译成对象文件（ELF）
+3. 用户空间 BPF ELF 加载器（例如 iproute2）解析对象文件
+4. **加载器**通过 `bpf()` 系统调用**将解析后的对象文件注入内核**
+5. 内核验证 BPF 指令，然后对其执行即时编译（JIT），**返回程序的一个新文件描述符**
+6. 利用文件描述符 **attach 到内核子系统**（例如网络子系统）
 
 
 
@@ -6349,7 +6379,19 @@ ARP 请求
 
 
 
-## 堆区、栈区
+## 语言
+
+### cpu指令执行步骤
+
+1. 取指令
+2. 指令译码
+3. 执行指令
+4. 访存取数
+5. 结果写回
+
+
+
+### 堆区、栈区
 
 1. 栈区：存放函数的参数值、局部变量等，由编译器自动分配和释放，通常在函数执行完后就释放
     1. 栈内存分配运算内置于CPU的指令集(SS:SP)，效率很高，但是分配的内存量有限
@@ -6363,7 +6405,8 @@ ARP 请求
 
 
 
-## 编译到执行的过程
+
+### 编译到执行的过程
 
 1. 编译预处理
 
@@ -6387,14 +6430,24 @@ ARP 请求
 
 
 
-## 进程切换发生了什么
 
-1. 保存处理机上下文，包括程序计数器和其他寄存器。
-2. 更新PCB信息。
-3. 把进程的PCB移入相应的队列，如就绪、在某事件阻塞等队列。
-4. 选择另一个进程执行，并更新其PCB。
-5. 更新内存管理的数据结构。
-6. 恢复处理机上下文。
+### overload （重载）
+
+1. 在同一个类中；
+2. 函数名字相同；
+3. 函数参数不同（类型不同、数量不同，两者满足其一即可）
+4. 不以返回值类型不同作为函数重载的条件。
+
+### override （覆盖，子类改写父类的虚函数），用于实现cpp中多态：
+
+1. 分别位于父类和子类中；
+2. 子类改写父类中的**virtual**方法；
+3. 与父类中的函数原型相同。
+
+### overwrite （重写或叫隐藏，子类改写父类的非虚函数，从而屏蔽父类函数）
+
+1. 与overload类似，但是范围不同，是子类改写父类；
+2. 与override类似，但是父类中的方法不是虚函数。
 
 
 
@@ -6442,8 +6495,6 @@ ARP 请求
 
 - **持久性**（Durability）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失。
 
-
-
 ### 优化MySQL
 
 1. SQL语句及索引的优化
@@ -6455,112 +6506,7 @@ ARP 请求
 
 ## 红黑树
 
-### 性质
-
 1. 根结点是黑色
 2. 叶子节点是黑色
 3. 每个红色节点的两个子节点是黑色
 4. 任意一结点到每个叶子结点的路径都包含数量相同的黑结点。
-
-
-
-## 7层透明代理
-
-**代理使用 fakeIP 和 源进行握手**
-
-为了实现这个功能, 需要大量的修改
-
-cli <---> proxy <----> srv
-
-一句话就是: 必须让 srv 回来的数据包到 proxy, 因为是和 proxy 握手的
-
-1. socket: setsocketopt, socket的`IP_TRANSPARENT`选项, 需要超级用户权限, 使socket可以接收目的地址没有配置的数据包，也可以发送源地址不是本地地址的数据包实现。使用这种方式，上游服务不需要任何修改就可以得到客户端的ip。
-2. srv 必须和 proxy 在一个局域网, 如果出了公网, 返回路径就不能控制了
-3. 如果 srv 和 proxy 在一台机器, 设置一下
-
-    1. `iptables -t mangle -A OUTPUT -p tcp --src 172.19.228.32 --sport 15010:15011 -j MARK --set-xmark 0x1/0xffffffff`
-    2. `ip route add local 0.0.0.0/0 dev lo table 100`
-    3. `ip rule add fwmark 1 lookup 100`
-4. 如果不在一台机器, 还需要设置路由
-
-
-
-
-
-## UNIX Domain Socket 与 TCP/IP Socket 对比
-1. UNIX Domain Socket用于IPC更有效率：不需要经过网络协议栈，不需要打包拆包、计算校验和、维护序号和应答等，只是将应用层数据从一个进程拷贝到另一个进程。
-2. UNIX域套接字, 在同一台主机的传输速度是TCP套接字的两倍。这是因为，IPC机制本质上是可靠的通讯，而网络协议是为不可靠的通讯设计的。
-3. UNIX Domain Socket也提供面向流和面向数据包两种API接口，类似于TCP和UDP，但是面向消息的UNIX Domain Socket也是可靠的，消息既不会丢失也不会顺序错乱。
-
-## IPC
-
-### 管道
-
-单向, 亲缘, 
-
-
-
-
-
-## 数据包收发过程
-
-1. 数据帧到达网卡
-2. 网卡把桢 DMA 到内存 ring buffer
-3. 硬中断通知 cpu
-4. cpu 响应硬中断, 简单处理后发出软中断
-5. ksoftirqd 进程处理软中断, 调用**网卡驱动注册的函数**收包
-6. 从 ring buffer 拿下帧保存为一个 sk_buffer
-7. 协议层处理网络帧, 把处理后的数据放入 socket 接收队列
-
-
-
-## CPP
-
-### overload （重载）
-
-1. 在同一个类中；
-2. 函数名字相同；
-3. 函数参数不同（类型不同、数量不同，两者满足其一即可）
-4. 不以返回值类型不同作为函数重载的条件。
-
-### override （覆盖，子类改写父类的虚函数），用于实现cpp中多态：
-
-1. 分别位于父类和子类中；
-2. 子类改写父类中的**virtual**方法；
-3. 与父类中的函数原型相同。
-
-### overwrite （重写或叫隐藏，子类改写父类的非虚函数，从而屏蔽父类函数）
-
-1. 与overload类似，但是范围不同，是子类改写父类；
-2. 与override类似，但是父类中的方法不是虚函数。
-
-
-
-
-
-## eBPF
-
-指令**下放到内核中可以带来如下好处**
-
-- **无需在内核/用户空间切换**就可以实现内核的可编程。例如，Cilium 这种和网络相关 的 BPF 程序能直接在内核中实现灵活的容器策略、负载均衡等功能，而无需将包送先 到用户空间，处理之后再送回内核。需要在 **BPF 程序之间或内核/用户空间之间共享状 态**时，可以使用 BPF map。
-- **可编程 datapath** 具有很大的灵活性，因此程序能**在编译时将不需要的特性禁用掉， 从而极大地优化程序的性能**。例如，如果容器不需要 IPv4，那编写 BPF 程序时就可以 只处理 IPv6 的情况，从而节省了快速路径（fast path）中的资源。
-- 对于网络场景（例如 tc 和 XDP），BPF 程序可以在**无需重启内核、系统服务或容器的 情况下实现原子更新，并且不会导致网络中断**。另外，**更新 BPF map 不会导致程序 状态（program state）的丢失**。
-- BPF 给用户空间**提供了一个稳定的 ABI**，而且**不依赖任何第三方内核模块**。BPF 是 Linux 内核的一个核心组成部分，而 Linux 已经得到了广泛的部署，因此可以保证现 有的 BPF 程序能在新的内核版本上继续运行。这种保证与**系统调用**（内核提供给用 户态应用的接口）是同一级别的。另外，BPF 程序**在不同平台上是可移植的**。
-- BPF 程序**与内核协同工作**，**复用已有的内核基础设施**（例如驱动、netdevice、 隧道、协议栈和 socket）和工具（例如 iproute2），以及内核提供的安全保证。**和内 核模块不同，BPF 程序会被一个位于内核中的校验器（in-kernel verifier）进行校验， 以确保它们不会造成内核崩溃、程序永远会终止等等**。例如，XDP 程序会复用已有的内 核驱动，能够直接操作存放在 DMA 缓冲区中的数据帧，而不用像某些模型（例如 DPDK） 那样将这些数据帧甚至整个驱动暴露给用户空间。而且，XDP 程序**复用**内核协议栈而 不是绕过它。**BPF 程序可以看做是内核设施之间的通用“胶水代码”**， 基于 BPF 可以设计巧妙的程序，解决特定的问题。
-
-### map
-
-**BPF map 和程序作为内核资源只能通过文件描述符访问，其背后是内核中的匿名 inode**
-
-**文件描述符受限于进程的生命周期，使得 map 共享之类的操作非常笨重**。
-
-**为了解决这个问题，内核实现了一个最小内核空间 BPF 文件系统，BPF map 和 BPF 程序 都可以钉到（pin）这个文件系统内**
-
-### 典型的工作流
-
-1. 用 C 编写 BPF 程序
-2. 用 LLVM 将 C 程序编译成对象文件（ELF）
-3. 用户空间 BPF ELF 加载器（例如 iproute2）解析对象文件
-4. **加载器**通过 `bpf()` 系统调用**将解析后的对象文件注入内核**
-5. 内核验证 BPF 指令，然后对其执行即时编译（JIT），**返回程序的一个新文件描述符**
-6. 利用文件描述符 **attach 到内核子系统**（例如网络子系统）
