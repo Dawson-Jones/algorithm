@@ -860,6 +860,83 @@ public:
 
 
 
+### [69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
+
+>给你一个非负整数 x ，计算并返回 x 的 算术平方根 。
+>
+>由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
+>
+>注意：不允许使用任何内置指数函数和算符，例如 pow(x, 0.5) 或者 x ** 0.5 。
+
+**思路**:
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    int mySqrt(int x) {
+        int l = 0, r = x; 
+        int ret = 0;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if ((long) m * m <= x) {
+                ret = m;
+                l = m + 1;
+            } else {
+                r = m - 1;
+            }
+        }
+        
+        return ret;
+    }
+};
+```
+
+**follow up**
+
+
+
+### [74. 搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
+
+> 编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+>
+> 每行中的整数从左到右按升序排列。
+> 每行的第一个整数大于前一行的最后一个整数。
+
+**思路**:
+
+- 两次二分
+- 一次二分, 代码是一次二分的方式
+
+**代码**:
+
+```cpp
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int row = matrix.size();
+        int col = matrix[0].size();
+        int l = 0, r = row * col - 1;
+        int m, t;
+        while (l <= r) {
+            m = l + (r - l) / 2;
+            t = matrix[m/col][m%col];
+            if (t == target)
+                return true;
+            else if (t > target)
+                r = m - 1;
+            else
+                l = m + 1;
+        }
+        
+        return false;
+    }
+};
+```
+
+**follow up**
+
 
 
 ## 哈希表
