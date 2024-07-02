@@ -302,7 +302,7 @@ int* exchange(int* nums, int numsSize, int* returnSize){
 
 
 
-### [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
+### [283. 移动零](https://leetcode.com/problems/move-zeroes/)
 
 > 给定一个数组 `nums`，编写一个函数将所有 `0` 移动到数组的末尾，同时保持非零元素的相对顺序。
 >
@@ -445,7 +445,7 @@ public:
 
 
 
-### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
+### [56. 合并区间](https://leetcode.com/problems/merge-intervals/)
 
 > 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
 >
@@ -479,7 +479,7 @@ public:
 
 
 
-### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/)
+### [128. 最长连续序列](https://leetcode.com/problems/longest-consecutive-sequence/)
 
 > 给定一个未排序的整数数组 `nums` ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
 
@@ -684,7 +684,7 @@ int findMin(int* nums, int numsSize) {
 
 
 
-### [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
+### [33. 搜索旋转排序数组](https://leetcode.com/problems/search-in-rotated-sorted-array/)
 
 > 整数数组 nums 按升序排列，数组中的值 互不相同 。
 >
@@ -741,7 +741,7 @@ public:
 
 
 
-### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
 > 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
 >
@@ -987,7 +987,7 @@ char firstUniqChar(char *s) {
 
 
 
-### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)
+### [49. 字母异位词分组](https://leetcode.com/problems/group-anagrams/)
 
 > 给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
 >
@@ -1427,7 +1427,7 @@ bool isSubStructure(struct TreeNode *A, struct TreeNode *B) {
 
 
 
-### [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+### [226. 翻转二叉树](https://leetcode.com/problems/invert-binary-tree/)
 
 剑指 Offer 27. 二叉树的镜像
 
@@ -1487,7 +1487,7 @@ struct TreeNode* invertTree(struct TreeNode* root) {
 
 
 
-### [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
+### [101. 对称二叉树](https://leetcode.com/problems/symmetric-tree/)
 
 剑指 Offer 28. 对称的二叉树
 
@@ -1796,7 +1796,7 @@ struct TreeNode *lowestCommonAncestor(struct TreeNode *root, struct TreeNode *p,
 
 
 
-### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/)
+### [98. 验证二叉搜索树](https://leetcode.com/problems/validate-binary-search-tree/)
 
 > 给你一个二叉树的根节点 root ，判断其是否是一个有效的二叉搜索树。
 >
@@ -1835,7 +1835,7 @@ public:
 
 
 
-### [105. 从前序与中序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+### [105. 从前序与中序遍历序列构造二叉树](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
 
 > 给定两个整数数组 preorder 和 inorder ，其中 preorder 是二叉树的先序遍历， inorder 是同一棵树的中序遍历，请构造二叉树并返回其根节点。
 >
@@ -1882,7 +1882,7 @@ public:
 
 
 
-### [106. 从中序与后序遍历序列构造二叉树](https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+### [106. 从中序与后序遍历序列构造二叉树](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
 
 > 给定两个整数数组 inorder 和 postorder ，其中 inorder 是二叉树的中序遍历， postorder 是同一棵树的后序遍历，请你构造并返回这颗 二叉树 。
 >
@@ -2025,7 +2025,7 @@ public:
 
 ## 动态规划
 
-### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
+### [62. 不同路径](https://leetcode.com/problems/unique-paths/)
 
 难度中等1268
 
@@ -2062,7 +2062,7 @@ public:
 
 
 
-### [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+### [64. 最小路径和](https://leetcode.com/problems/minimum-path-sum/)
 
 > 给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
 >
@@ -2151,7 +2151,7 @@ int maxValue(int **grid, int gridSize, int *gridColSize) {
 
 
 
-### [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
+### [53. 最大子数组和](https://leetcode.com/problems/maximum-subarray/)
 
 > 给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 >
@@ -2353,7 +2353,7 @@ class Solution:
 
 
 
-### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
+### [22. 括号生成](https://leetcode.com/problems/generate-parentheses/)
 
 > 数字 `n` 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 **有效的** 括号组合。
 
@@ -2420,7 +2420,7 @@ public:
 
 
 
-### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
+### [72. 编辑距离](https://leetcode.com/problems/edit-distance/)
 
 > 给你两个单词 word1 和 word2， 请返回将 word1 转换成 word2 所使用的最少操作数  。
 >
@@ -2464,7 +2464,7 @@ public:
 
 
 
-### [96. 不同的二叉搜索树](https://leetcode-cn.com/problems/unique-binary-search-trees/)
+### [96. 不同的二叉搜索树](https://leetcode.com/problems/unique-binary-search-trees/)
 
 > 给你一个整数 `n` ，求恰由 `n` 个节点组成且节点值从 `1` 到 `n` 互不相同的 **二叉搜索树** 有多少种？返回满足题意的二叉搜索树的种数。
 
@@ -2500,7 +2500,7 @@ public:
 
 
 
-### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/)
+### [139. 单词拆分](https://leetcode.com/problems/word-break/)
 
 > 给你一个字符串 `s` 和一个字符串列表 `wordDict` 作为字典。请你判断是否可以利用字典中出现的单词拼接出 `s` 。
 
@@ -2544,7 +2544,7 @@ public:
 
 
 
-### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
+### [198. 打家劫舍](https://leetcode.com/problems/house-robber/)
 
 > 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
 >
@@ -2586,7 +2586,7 @@ public:
 
 
 
-### [300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
+### [300. 最长递增子序列](https://leetcode.com/problems/longest-increasing-subsequence/)
 
 > 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
 >
@@ -2632,7 +2632,7 @@ public:
 
 
 
-### [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
+### [322. 零钱兑换](https://leetcode.com/problems/coin-change/)
 
 > 给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
 >
@@ -2678,7 +2678,7 @@ public:
 
 
 
-### [416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)
+### [416. 分割等和子集](https://leetcode.com/problems/partition-equal-subset-sum/)
 
 > 给你一个 **只包含正整数** 的 **非空** 数组 `nums` 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
 
@@ -2868,7 +2868,7 @@ public:
 
 **follow up**
 
-### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+### [92. 反转链表 II](https://leetcode.com/problems/reverse-linked-list-ii/)
 
 > 给你单链表的头指针 head 和两个整数 left 和 right ，其中 left <= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
 >
@@ -2907,7 +2907,7 @@ public:
 
 
 
-### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+### [25. K 个一组翻转链表](https://leetcode.com/problems/reverse-nodes-in-k-group/)
 
 > 给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
 >
@@ -2966,7 +2966,7 @@ public:
 
 
 
-### [203. 移除链表元素](https://leetcode-cn.com/problems/remove-linked-list-elements/)
+### [203. 移除链表元素](https://leetcode.com/problems/remove-linked-list-elements/)
 
 剑指 Offer 18. 删除链表的节点
 
@@ -3002,7 +3002,7 @@ public:
 
 
 
-### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+### [83. 删除排序链表中的重复元素](https://leetcode.com/problems/remove-duplicates-from-sorted-list/)
 
 > 存在一个按升序排列的链表，给你这个链表的头节点 `head` ，请你删除所有重复的元素，使每个元素 **只出现一次** 。
 >
@@ -3038,7 +3038,7 @@ public:
 
 
 
-### [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+### [82. 删除排序链表中的重复元素 II](https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/)
 
 > 存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
 >
@@ -3086,7 +3086,7 @@ public:
 
 
 
-### [141. 环形链表](https://leetcode-cn.com/problems/linked-list-cycle/)
+### [141. 环形链表](https://leetcode.com/problems/linked-list-cycle/)
 
 > 给你一个链表的头节点 head ，判断链表中是否有环。
 >
@@ -3125,7 +3125,7 @@ public:
 
 
 
-### [142. 环形链表 II](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+### [142. 环形链表 II](https://leetcode.com/problems/linked-list-cycle-ii/)
 
 > 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
 >
@@ -3170,7 +3170,7 @@ public:
 
 注意此题只能按照上述做, 而不能下面是死循环
 
-详情: [K神解析](https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/)
+详情: [K神解析](https://leetcode.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/)
 
 ```cpp
 class Solution {
@@ -3204,7 +3204,7 @@ public:
 
 
 
-### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)
+### [61. 旋转链表](https://leetcode.com/problems/rotate-list/)
 
 > 给你一个链表的头节点 `head` ，旋转链表，将链表每个节点向右移动 `k` 个位置。
 
@@ -3242,7 +3242,7 @@ public:
 
 
 
-### [876. 链表的中间结点](https://leetcode-cn.com/problems/middle-of-the-linked-list/)
+### [876. 链表的中间结点](https://leetcode.com/problems/middle-of-the-linked-list/)
 
 > 给定一个头结点为 `head` 的非空单链表，返回链表的中间结点。
 >
@@ -3274,7 +3274,7 @@ public:
 
 
 
-### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)⭐️
+### [24. 两两交换链表中的节点](https://leetcode.com/problems/swap-nodes-in-pairs/)⭐️
 
 > 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
 
@@ -3304,7 +3304,7 @@ public:
 
 
 
-### [328. 奇偶链表](https://leetcode-cn.com/problems/odd-even-linked-list/)
+### [328. 奇偶链表](https://leetcode.com/problems/odd-even-linked-list/)
 
 > 给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
 
@@ -3338,7 +3338,7 @@ public:
 
 
 
-### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+### [2. 两数相加](https://leetcode.com/problems/add-two-numbers/)
 
 > 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
 >
@@ -3395,7 +3395,7 @@ public:
 
 
 
-### [445. 两数相加 II](https://leetcode-cn.com/problems/add-two-numbers-ii/)
+### [445. 两数相加 II](https://leetcode.com/problems/add-two-numbers-ii/)
 
 > 给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。
 >
@@ -3546,7 +3546,7 @@ struct ListNode *mergeTwoLists(struct ListNode *l1, struct ListNode *l2) {
 
 
 
-### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/)⭐️
+### [23. 合并K个升序链表](https://leetcode.com/problems/merge-k-sorted-lists/)⭐️
 
 > 给你一个链表数组，每个链表都已经按升序排列。
 >
@@ -3599,7 +3599,7 @@ public:
 
 
 
-### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)⭐️
+### [148. 排序链表](https://leetcode.com/problems/sort-list/)⭐️
 
 > 给你链表的头结点 `head` ，请将其按 **升序** 排列并返回 **排序后的链表** 。
 
@@ -3690,7 +3690,7 @@ struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *he
 
 
 
-### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
+### [234. 回文链表](https://leetcode.com/problems/palindrome-linked-list/)
 
 > 给你一个单链表的头节点 `head` ，请你判断该链表是否为回文链表。如果是，返回 `true` ；否则，返回 `false` 。
 
@@ -3748,7 +3748,7 @@ public:
 
 
 
-### [143. 重排链表](https://leetcode-cn.com/problems/reorder-list/)
+### [143. 重排链表](https://leetcode.com/problems/reorder-list/)
 
 > 给定一个单链表 L 的头节点 head ，单链表 L 表示为：
 >
@@ -3827,7 +3827,7 @@ public:
 
 
 
-### [430. 扁平化多级双向链表](https://leetcode-cn.com/problems/flatten-a-multilevel-doubly-linked-list/)
+### [430. 扁平化多级双向链表](https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/)
 
 > 多级双向链表中，除了指向下一个节点和前一个节点指针之外，它还有一个子链表指针，可能指向单独的双向链表。这些子列表也可能会有一个或多个自己的子项，依此类推，生成多级数据结构，如下面的示例所示。
 >
@@ -3875,7 +3875,7 @@ public:
 
 
 
-### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)
+### [114. 二叉树展开为链表](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
 
 > 给你二叉树的根结点 root ，请你将它展开为一个单链表：
 >
@@ -3923,7 +3923,7 @@ public:
 
 
 
-### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)
+### [86. 分隔链表](https://leetcode.com/problems/partition-list/)
 
 > 给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
 >
@@ -4113,14 +4113,14 @@ private:
 
 
 
-### [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+### [437. 路径总和 III](https://leetcode.com/problems/path-sum-iii/)
 
 > 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
 >
 > 路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
 >
 > 来源：力扣（LeetCode）
-> 链接：https://leetcode-cn.com/problems/path-sum-iii
+> 链接：https://leetcode.com/problems/path-sum-iii
 > 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 **思路**:
@@ -4333,7 +4333,7 @@ public:
 
 
 
-### [78. 子集](https://leetcode-cn.com/problems/subsets/)
+### [78. 子集](https://leetcode.com/problems/subsets/)
 
 > 给你一个整数数组 `nums` ，数组中的元素 **互不相同** 。返回该数组所有可能的子集（幂集）。
 >
@@ -4431,7 +4431,7 @@ public:
 
 
 
-### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
+### [17. 电话号码的字母组合](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
 
 > 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
 >
@@ -4487,7 +4487,7 @@ public:
 
 
 
-### [93. 复原 IP 地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
+### [93. 复原 IP 地址](https://leetcode.com/problems/restore-ip-addresses/)
 
 > 有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
 >
@@ -4561,7 +4561,7 @@ public:
 
 
 
-### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
+### [39. 组合总和](https://leetcode.com/problems/combination-sum/)
 
 > 给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
 >
@@ -4613,7 +4613,7 @@ public:
 
 
 
-### [210. 课程表 II](https://leetcode-cn.com/problems/course-schedule-ii/)
+### [210. 课程表 II](https://leetcode.com/problems/course-schedule-ii/)
 
 > 现在你总共有 numCourses 门课需要选，记为 0 到 numCourses - 1。给你一个数组 prerequisites ，其中 prerequisites[i] = [ai, bi] ，表示在选修课程 ai 前 必须 先选修 bi 。
 >
@@ -4622,7 +4622,7 @@ public:
 
 **思路**:
 
-该题和[207. 课程表](https://leetcode-cn.com/problems/course-schedule/)几乎是一模一样的
+该题和[207. 课程表](https://leetcode.com/problems/course-schedule/)几乎是一模一样的
 
 把每门课程的依赖放入一个数组中
 
@@ -4777,7 +4777,7 @@ class Solution {
 
 ## 双指针
 
-### [11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
+### [11. 盛最多水的容器](https://leetcode.com/problems/container-with-most-water/)
 
 > 给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
 
@@ -4813,7 +4813,7 @@ public:
 
 ## 位运算
 
-### [136. 只出现一次的数字](https://leetcode-cn.com/problems/single-number/)
+### [136. 只出现一次的数字](https://leetcode.com/problems/single-number/)
 
 > 给定一个**非空**整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
 
@@ -4845,7 +4845,7 @@ public:
 
 
 
-### [137. 只出现一次的数字 II](https://leetcode-cn.com/problems/single-number-ii/)
+### [137. 只出现一次的数字 II](https://leetcode.com/problems/single-number-ii/)
 
 > 给你一个整数数组 `nums` ，除某个元素仅出现 **一次** 外，其余每个元素都恰出现 **三次 。**请你找出并返回那个只出现了一次的元素。
 
@@ -4903,7 +4903,7 @@ public:
 
 
 
-### [260. 只出现一次的数字 III](https://leetcode-cn.com/problems/single-number-iii/)
+### [260. 只出现一次的数字 III](https://leetcode.com/problems/single-number-iii/)
 
 > 给定一个整数数组 `nums`，其中恰好有两个元素只出现一次，其余所有元素均出现两次。 找出只出现一次的那两个元素。你可以按 **任意顺序** 返回答案。
 
@@ -4946,7 +4946,7 @@ public:
 
 ## 滑动窗口
 
-### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+### [3. 无重复字符的最长子串](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
 
 剑指 Offer 48. 最长不含重复字符的子字符串
 
@@ -5021,7 +5021,7 @@ public:
 
 
 
-### [992. K 个不同整数的子数组](https://leetcode-cn.com/problems/subarrays-with-k-different-integers/)
+### [992. K 个不同整数的子数组](https://leetcode.com/problems/subarrays-with-k-different-integers/)
 
 > 给定一个正整数数组 nums和一个整数 k ，返回 num 中 「好子数组」 的数目。
 >
@@ -5095,7 +5095,7 @@ public:
 
 
 
-### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)
+### [76. 最小覆盖子串](https://leetcode.com/problems/minimum-window-substring/)
 
 > 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 "" 。
 >
@@ -5165,7 +5165,7 @@ public:
 
 
 
-### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
+### [239. 滑动窗口最大值](https://leetcode.com/problems/sliding-window-maximum/)
 
 > 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
 >
@@ -5225,7 +5225,7 @@ public:
 
 ## 栈
 
-### [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
+### [20. 有效的括号](https://leetcode.com/problems/valid-parentheses/)
 
 > 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
 >
@@ -5284,7 +5284,7 @@ public:
 
 
 
-### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
+### [42. 接雨水](https://leetcode.com/problems/trapping-rain-water/)
 
 > 给定 `n` 个非负整数表示每个宽度为 `1` 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 
@@ -5326,7 +5326,7 @@ public:
 
 
 
-### [32. 最长有效括号](https://leetcode-cn.com/problems/longest-valid-parentheses/)
+### [32. 最长有效括号](https://leetcode.com/problems/longest-valid-parentheses/)
 
 > 给你一个只包含 `'('` 和 `')'` 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
 
@@ -5366,7 +5366,7 @@ public:
 
 
 
-### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)
+### [155. 最小栈](https://leetcode.com/problems/min-stack/)
 
 > 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
 >
@@ -5896,7 +5896,7 @@ public:
 
 
 
-### [10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
+### [10. 正则表达式匹配](https://leetcode.com/problems/regular-expression-matching/)
 
 > 给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。
 >
@@ -5968,7 +5968,7 @@ bool isMatch(char *s, char *p) {
 
 
 
-### [44. 通配符匹配](https://leetcode-cn.com/problems/wildcard-matching/)
+### [44. 通配符匹配](https://leetcode.com/problems/wildcard-matching/)
 
 > 给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
 >
@@ -6045,7 +6045,7 @@ bool isMatch(char *s, char *p) {
 
 
 
-### [38. 外观数列](https://leetcode-cn.com/problems/count-and-say/)
+### [38. 外观数列](https://leetcode.com/problems/count-and-say/)
 
 > 给定一个正整数 n ，输出外观数列的第 n 项。
 >
@@ -6114,7 +6114,7 @@ public:
 
 
 
-### [48. 旋转图像](https://leetcode-cn.com/problems/rotate-image/)
+### [48. 旋转图像](https://leetcode.com/problems/rotate-image/)
 
 > 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
 >
@@ -6154,7 +6154,7 @@ public:
 
 
 
-### [54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
+### [54. 螺旋矩阵](https://leetcode.com/problems/spiral-matrix/)
 
 > 给你一个 `m` 行 `n` 列的矩阵 `matrix` ，请按照 **顺时针螺旋顺序** ，返回矩阵中的所有元素。
 
@@ -6208,7 +6208,7 @@ public:
 
 
 
-### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
+### [169. 多数元素](https://leetcode.com/problems/majority-element/)
 
 > 给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
 >
@@ -6261,7 +6261,7 @@ public:
 
 
 
-### [208. 实现 Trie (前缀树)](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
+### [208. 实现 Trie (前缀树)](https://leetcode.com/problems/implement-trie-prefix-tree/)
 
 > Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
 >
@@ -6331,7 +6331,7 @@ public:
 
 
 
-### [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/)
+### [238. 除自身以外数组的乘积](https://leetcode.com/problems/product-of-array-except-self/)
 
 > 给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积 。
 >
