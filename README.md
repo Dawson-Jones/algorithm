@@ -1916,7 +1916,7 @@ public:
             inorder_map[inorder[i]] = i;
         }
 
-        return buildTree(postorder, inorder, 0, postorder.size() - 1, 0, inorder.size() - 1);
+        return (postorder, inorder, 0, postorder.size() - 1, 0, inorder.size() - 1);
     }
 };
 ```
@@ -1924,6 +1924,98 @@ public:
 **时间复杂度**: O(n)
 
 **空间复杂度**: O(n)
+
+**follow up**
+
+
+
+### [109. 有序链表转换二叉搜索树](https://leetcode.cn/problems/convert-sorted-list-to-binary-search-tree/)
+
+> 给定一个单链表的头节点  head ，其中的元素 按升序排序 ，将其转换为高度平衡的二叉搜索树。
+>
+> 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差不超过 1。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```rust
+impl Solution {
+    pub fn sorted_list_to_bst(head: Option<Box<ListNode>>) -> Option<Rc<RefCell<TreeNode>>> {
+        let mut v = Vec::new();
+        let mut node = &head;
+        while let Some(n) = node {
+            v.push(n.val);
+            node = &n.next
+        }
+
+        Self::build_binary_tree(&v)
+    }
+
+    fn build_binary_tree(v: &[i32]) -> Option<Rc<RefCell<TreeNode>>> {
+        if v.len() == 0 {
+            return None;
+        }
+
+        let mid = v.len() / 2;
+        let mut root = TreeNode::new(v[mid] as i32);
+        root.left = Self::build_binary_tree(&v[..mid]);
+        root.right = Self::build_binary_tree(&v[mid+1..]);
+
+        Some(Rc::new(RefCell::new(root)))
+    }
+}
+```
+
+**时间复杂度**: 
+
+**空间复杂度**: 
+
+**follow up**
+
+
+
+### [124. 二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
+
+> 路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
+>
+> 路径和 是路径中各节点值的总和。
+>
+> 给你一个二叉树的根节点 root ，返回其 最大路径和 。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+```c
+class Solution {
+public:
+    int m_res = INT_MIN;
+    int helper(TreeNode *root) {
+        if (!root)
+            return 0;
+        int left = helper(root->left);
+        int right = helper(root->right);
+        m_res = max({left + root->val,right + root->val, root->val, left + right + root->val, m_res});
+        return max({left + root->val, right + root->val, root->val});
+    }
+
+    int maxPathSum(TreeNode *root) {
+        helper(root);
+        return m_res;
+    }
+};
+```
+
+**时间复杂度**: 
+
+**空间复杂度**: 
 
 **follow up**
 
@@ -2125,7 +2217,7 @@ class Solution {
 public:
     int maxProfit(vector<int>& prices) {
         int ans;
-        int hold = prices[1];
+        int hold = prices[0];
 
         for (int i = 1; i < prices.size(); ++i) {
             int benefit = prices[i] - hold;
@@ -2639,6 +2731,83 @@ public:
 **空间复杂度**: O(n)
 
 **follow up**
+
+
+
+### [139. 单词拆分](https://leetcode.cn/problems/word-break/)
+
+> 给你一个字符串 s 和一个字符串列表 wordDict 作为字典。请你判断是否可以利用字典中出现的单词拼接出 s 。
+>
+> 注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
+>
+
+**思路**:
+
+
+
+**代码**:
+
+*超时*
+
+```rust
+impl Solution {
+    fn help_word_break(s: &str, word_dict: &Vec<String>) -> bool {
+        for word in word_dict {
+            if s.is_empty() {
+                return true;
+            }
+
+            if s.starts_with(word) && Solution::help_word_break(&s[word.len()..], word_dict) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    pub fn word_break(s: String, word_dict: Vec<String>) -> bool {
+        Solution::help_word_break(&s[..], &word_dict)
+    }
+}
+```
+
+
+
+```cpp
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> set;
+        for (int i = 0; i < wordDict.size(); ++i) {
+            set.insert(wordDict[i]);
+        }
+
+        vector<bool> dp(s.size() + 1);
+        dp[0] = true;
+
+        for (int i = 1; i <= s.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (dp[j] && set.count(s.substr(j, i - j))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        
+        return dp[s.size()];
+    }
+};
+```
+
+**时间复杂度**: 
+
+**空间复杂度**: 
+
+**follow up**
+
+
+
+
 
 
 
